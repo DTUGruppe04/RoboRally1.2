@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import javafx.scene.control.ChoiceDialog;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -198,6 +199,9 @@ public class GameController {
                 case FAST_FORWARD:
                     this.fastForward(player);
                     break;
+                case OPTION_LEFT_RIGHT:
+                    this.optionLeftOrRight(player);
+                    break;
                 default:
                     // DO NOTHING (for now)
             }
@@ -238,6 +242,22 @@ public class GameController {
             player.setHeading(player.getHeading().prev());
         }
     }
+
+    public void optionLeftOrRight(@NotNull Player player){
+        String options[] = { "Turn left", "Turn right" };
+        ChoiceDialog d = new ChoiceDialog(options[0], options);
+        d.setHeaderText("Choose header direction");
+        // set content text
+        d.setContentText("please select the the way you want to turn");
+        // show the dialog
+        d.showAndWait();
+        if (d.getSelectedItem().equals("Turn left")) {
+            this.turnLeft(player);
+        } else {
+            this.turnRight(player);
+        }
+    }
+
 
     public boolean moveCards(@NotNull CommandCardField source, @NotNull CommandCardField target) {
         CommandCard sourceCard = source.getCard();

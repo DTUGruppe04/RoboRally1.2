@@ -49,7 +49,7 @@ public enum Command {
     // Command(String displayName) {
     //     this.displayName = displayName;
     // }
-    //
+    // This code have been replaced with the code below.
     // replaced by the code below:
 
     final private List<Command> options;

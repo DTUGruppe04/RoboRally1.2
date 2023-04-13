@@ -65,7 +65,11 @@ public class GameController {
 
     }
 
-    // XXX: V2
+    /**
+     * Sets up the programming phase of the game by initializing the board state
+     * and generating random command cards for each player's card field. Also clears
+     * the program fields for each player.
+     */
     public void startProgrammingPhase() {
         board.setPhase(Phase.PROGRAMMING);
         board.setCurrentPlayer(board.getPlayer(0));
@@ -88,14 +92,22 @@ public class GameController {
         }
     }
 
-    // XXX: V2
+    /**
+     * Generates a new CommandCard with a randomly selected Command value.
+     *
+     * @return a new CommandCard with a randomly selected Command value.
+     */
     private CommandCard generateRandomCommandCard() {
         Command[] commands = Command.values();
         int random = (int) (Math.random() * commands.length);
         return new CommandCard(commands[random]);
     }
 
-    // XXX: V2
+    /**
+     * Finishes the programming phase of the game by making the program fields
+     * invisible, making the program field for the current player visible, and
+     * updating the board state for the activation phase.
+     */
     public void finishProgrammingPhase() {
         makeProgramFieldsInvisible();
         makeProgramFieldsVisible(0);
@@ -104,7 +116,11 @@ public class GameController {
         board.setStep(0);
     }
 
-    // XXX: V2
+    /**
+     * Makes the program field with the specified register index visible for all players.
+     *
+     * @param register the index of the program field to make visible.
+     */
     private void makeProgramFieldsVisible(int register) {
         if (register >= 0 && register < Player.NO_REGISTERS) {
             for (int i = 0; i < board.getPlayersNumber(); i++) {
@@ -115,7 +131,9 @@ public class GameController {
         }
     }
 
-    // XXX: V2
+    /**
+     * Makes all program fields invisible for all players.
+     */
     private void makeProgramFieldsInvisible() {
         for (int i = 0; i < board.getPlayersNumber(); i++) {
             Player player = board.getPlayer(i);

@@ -29,6 +29,7 @@ import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 
+import dk.dtu.compute.se.pisd.roborally.view.PremadeMaps;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -76,7 +77,7 @@ public class AppController implements Observer {
 
             // XXX the board should eventually be created programmatically or loaded from a file
             //     here we just create an empty board with the required number of players.
-            Board board = new Board(8,8);
+            Board board = new Board(PremadeMaps.MAP1.mapArray, "testMap");
             gameController = new GameController(board);
             int no = result.get();
             for (int i = 0; i < no; i++) {

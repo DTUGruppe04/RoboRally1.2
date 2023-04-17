@@ -35,13 +35,22 @@ public class Space extends Subject {
 
     public final int x;
     public final int y;
+    public final SpaceType type;
 
     private Player player;
 
+    public Space(Board board, int x, int y, SpaceType spaceType) {
+        this.board = board;
+        this.x = x;
+        this.y = y;
+        this.type = spaceType;
+        player = null;
+    }
     public Space(Board board, int x, int y) {
         this.board = board;
         this.x = x;
         this.y = y;
+        this.type = SpaceType.EMPTY_SPACE;
         player = null;
     }
 
@@ -63,6 +72,10 @@ public class Space extends Subject {
             }
             notifyChange();
         }
+    }
+
+    public SpaceType getType() {
+        return type;
     }
 
     void playerChanged() {

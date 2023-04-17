@@ -200,7 +200,7 @@ public class GameController {
                     this.fastForward(player);
                     break;
                 case OPTION_LEFT_RIGHT:
-                    this.optionLeftOrRight(player);
+                    this.board.setPhase(Phase.PLAYER_INTERACTION);
                     break;
                 default:
                     // DO NOTHING (for now)
@@ -234,6 +234,7 @@ public class GameController {
         if (player != null && player.board == board) {
             player.setHeading(player.getHeading().next());
         }
+        board.setPhase(Phase.ACTIVATION);
     }
 
     // TODO: V2
@@ -241,10 +242,11 @@ public class GameController {
         if (player != null && player.board == board) {
             player.setHeading(player.getHeading().prev());
         }
+        board.setPhase(Phase.ACTIVATION);
     }
 
     public void optionLeftOrRight(@NotNull Player player){
-        String options[] = { "Turn left", "Turn right" };
+        /*String options[] = { "Turn left", "Turn right" };
         ChoiceDialog d = new ChoiceDialog(options[0], options);
         d.setHeaderText("Choose header direction");
         // set content text
@@ -255,7 +257,7 @@ public class GameController {
             this.turnLeft(player);
         } else {
             this.turnRight(player);
-        }
+        }*/
     }
 
 

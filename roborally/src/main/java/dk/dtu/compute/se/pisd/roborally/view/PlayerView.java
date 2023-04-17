@@ -32,6 +32,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * ...
  *
@@ -199,25 +201,20 @@ public class PlayerView extends Tab implements ViewObserver {
                 playerInteractionPanel.getChildren().clear();
 
                 if (player.board.getCurrentPlayer() == player) {
-                    // TODO Assignment P3: these buttons should be shown only when there is
-                    //      an interactive command card, and the buttons should represent
-                    //      the player's choices of the interactive command card. The
-                    //      following is just a mockup showing two options
-                    Button optionButton = new Button("Right");
-                    optionButton.setOnAction( e -> {
-                        gameController.turnRight(player);
-                        gameController.nextPlayer();
-                    });
-                    optionButton.setDisable(false);
-                    playerInteractionPanel.getChildren().add(optionButton);
-
-                    optionButton = new Button("Left");
-                    optionButton.setOnAction( e -> {
-                            gameController.turnLeft(player);
+                    Command currentCommand = player.getProgramField(player.board.getStep()).getCard().command;
+                    List<Command> commandOptions = currentCommand.getOptions();
+                    int counter = 0;
+                    while(!commandOptions.isEmpty()) {
+                        Command currentOption = commandOptions.get(counter);
+                        Button optionButton = new Button(currentOption.displayName);
+                        optionButton.setOnAction( e -> {
+                            gameController.executeCommand(player, currentOption);
                             gameController.nextPlayer();
-                    });
-                    optionButton.setDisable(false);
-                    playerInteractionPanel.getChildren().add(optionButton);
+                        });
+                        optionButton.setDisable(false);
+                        playerInteractionPanel.getChildren().add(optionButton);
+                        counter++;
+                    }
                 }
             }
         }

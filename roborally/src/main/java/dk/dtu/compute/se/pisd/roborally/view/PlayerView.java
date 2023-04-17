@@ -203,9 +203,7 @@ public class PlayerView extends Tab implements ViewObserver {
                 if (player.board.getCurrentPlayer() == player) {
                     Command currentCommand = player.getProgramField(player.board.getStep()).getCard().command;
                     List<Command> commandOptions = currentCommand.getOptions();
-                    int counter = 0;
-                    while(counter < commandOptions.size()) {
-                        Command currentOption = commandOptions.get(counter);
+                    for (Command currentOption: commandOptions) {
                         Button optionButton = new Button(currentOption.displayName);
                         optionButton.setOnAction( e -> {
                             gameController.executeCommand(player, currentOption);
@@ -213,7 +211,6 @@ public class PlayerView extends Tab implements ViewObserver {
                         });
                         optionButton.setDisable(false);
                         playerInteractionPanel.getChildren().add(optionButton);
-                        counter++;
                     }
                 }
             }

@@ -55,17 +55,8 @@ public class SpaceView extends StackPane implements ViewObserver {
         this.setMinHeight(SPACE_HEIGHT);
         this.setMaxHeight(SPACE_HEIGHT);
 
-        switch (space.getType()) {
-            case CHECKPOINT -> {
-                this.setBackground(SpaceType.CHECKPOINT.Background);
-            }
-            case PIT -> {
-                this.setBackground(SpaceType.PIT.Background);
-            }
-            case EMPTY_SPACE -> {
-                this.setBackground(SpaceType.EMPTY_SPACE.Background);
-            }
-        }
+        this.setBackground(space.getType().Background);
+        this.setBorder(space.getType().Borders);
         // updatePlayer();
 
         // This space view should listen to changes of the space

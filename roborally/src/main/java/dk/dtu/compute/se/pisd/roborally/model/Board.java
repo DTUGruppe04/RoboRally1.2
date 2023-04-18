@@ -80,13 +80,7 @@ public class Board extends Subject {
         this.spaces = new Space[width][height];
         for (int x = 0; x < width; x++) {
             for(int y = 0; y < height; y++) {
-                if(boardArray[x][y] == 0) {
-                    createSpace(x,y,SpaceType.EMPTY_SPACE);
-                } else if (boardArray[x][y] == 1) {
-                    createSpace(x,y,SpaceType.CHECKPOINT);
-                } else if (boardArray[x][y] == 2) {
-                    createSpace(x,y,SpaceType.PIT);
-                }
+                createSpace(x,y,SpaceType.get(boardArray[x][y]));
             }
         }
     }

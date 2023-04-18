@@ -64,8 +64,7 @@ public class Board extends Subject {
         spaces = new Space[width][height];
         for (int x = 0; x < width; x++) {
             for(int y = 0; y < height; y++) {
-                Space space = new Space(this, x, y, SpaceType.EMPTY_SPACE);
-                spaces[x][y] = space;
+                createSpace(x,y,SpaceType.EMPTY_SPACE);
             }
         }
         this.stepMode = false;
@@ -79,20 +78,22 @@ public class Board extends Subject {
         this.width = boardArray[0].length;
         this.height = boardArray.length;
         this.spaces = new Space[width][height];
-        Space space;
         for (int x = 0; x < width; x++) {
             for(int y = 0; y < height; y++) {
-                if(boardArray[x][y] == 1) {
-                    space = new Space(this, x, y, SpaceType.CHECKPOINT);
-                    this.spaces[x][y] = space;
-                } else if (boardArray[x][y] == 0) {
-                    space = new Space(this, x, y, SpaceType.EMPTY_SPACE);
-                    this.spaces[x][y] = space;
+                if(boardArray[x][y] == 0) {
+                    createSpace(x,y,SpaceType.EMPTY_SPACE);
+                } else if (boardArray[x][y] == 1) {
+                    createSpace(x,y,SpaceType.CHECKPOINT);
+                } else if (boardArray[x][y] == 2) {
+                    createSpace(x,y,SpaceType.PIT);
                 }
             }
         }
     }
-
+    private void createSpace(int x, int y, SpaceType spaceType) {
+        Space space = new Space(this, x, y, spaceType);
+        this.spaces[x][y] = space;
+    }
     public Integer getGameId() {
         return gameId;
     }

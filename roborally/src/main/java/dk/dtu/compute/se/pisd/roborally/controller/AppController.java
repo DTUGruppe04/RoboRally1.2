@@ -51,17 +51,40 @@ import dk.dtu.compute.se.pisd.roborally.fileaccess.JsonFileHandler;
  */
 public class AppController implements Observer {
 
+    /**
+     The list of available player numbers to choose from when starting a new game.
+     */
     final private List<Integer> PLAYER_NUMBER_OPTIONS = Arrays.asList(2, 3, 4, 5, 6);
+
+    /**
+     The list of available player colors to choose from when starting a new game.
+     */
     final private List<String> PLAYER_COLORS = Arrays.asList("red", "green", "blue", "orange", "grey", "magenta");
 
+    /**
+     The RoboRally object that contains the application's data model.
+     */
     final private RoboRally roboRally;
 
+    /**
+     The GameController object that manages the current game.
+     */
     private GameController gameController;
 
+    /**
+     Creates a new AppController object with the specified RoboRally object.
+     @param roboRally the RoboRally object to use as the application's data model
+     */
     public AppController(@NotNull RoboRally roboRally) {
         this.roboRally = roboRally;
     }
 
+    /**
+     * Starts a new game with the specified number of players.
+     * If a game is already in progress, the user is given the option to save the game or abort the operation.
+     * If the user chooses to save the game, the current game is saved and the new game is started.
+     * If the user chooses to abort the operation, the method returns without starting a new game.
+     */
     public void newGame() {
         ChoiceDialog<Integer> dialog = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
         dialog.setTitle("Player number");
@@ -98,10 +121,19 @@ public class AppController implements Observer {
         }
     }
 
+    /**
+     * Saves the current game state.
+     * This method is not yet implemented.
+     */
     public void saveGame() {
         // XXX needs to be implemented eventually
     }
 
+    /**
+     * Loads a saved game state.
+     * This method is not yet implemented.
+     * If there is no saved game state, a new game is started.
+     */
     public void loadGame() {
         // XXX needs to be implememted eventually
         // for now, we just create a new game
@@ -132,6 +164,12 @@ public class AppController implements Observer {
         return false;
     }
 
+    /**
+     * Exits the application, giving the user the option to save the game or cancel exiting the application.
+     * If the user chooses to save the game, the game is saved and the application is exited.
+     * If the user chooses to cancel exiting the application, the method returns without exiting the application.
+     * If there is no current game, the application is exited without giving the option to save the game.
+     */
     public void exit() {
         if (gameController != null) {
             Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -151,11 +189,22 @@ public class AppController implements Observer {
         }
     }
 
+    /**
+     * Returns true if a game is currently in progress, false otherwise.
+     *
+     * @return true if a game is currently in progress, false otherwise.
+     */
     public boolean isGameRunning() {
         return gameController != null;
     }
 
 
+    /**
+     * This method is called by the subject when a change has occurred.
+     * For now, this method does nothing.
+     *
+     * @param subject the subject that changed
+     */
     @Override
     public void update(Subject subject) {
         // XXX do nothing for now

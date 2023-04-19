@@ -229,46 +229,53 @@ public class GameController {
         }
     }
 
-    // TODO: V2
+    /**
+     * Moves the player forward one space in the direction of their heading.
+     * If the target space is occupied by another player, that player is pushed
+     * to the next space in the same direction if possible.
+     *
+     * @param player the player to move
+     */
     public void moveForward(@NotNull Player player) {
         Space space = player.getSpace();
         Heading heading = player.getHeading();
-        Heading reverseHeading = reverseHeading(heading);
         Space target = board.getNeighbour(space, heading);
-        if (target != null && player != null && player.board == board && space != null && !space.getType().BorderHeadings.contains(heading) && !target.getType().BorderHeadings.contains(reverseHeading)) {
-            if (target.getPlayer() == null) {
-                // XXX note that this removes an other player from the space, when there
-                //     is another player on the target. Eventually, this needs to be
-                //     implemented in a way so that other players are pushed away!
+        // Check that the target space is valid, the player is valid and on the board,
+        // and the movement is allowed based on the borders of the spaces involved.
+        if (target != null && player != null && player.board == board && space != null &&
+                !space.getType().BorderHeadings.contains(heading) &&
+                !target.getType().BorderHeadings.contains(reverseHeading(heading))) {
+            Player targetPlayer = target.getPlayer();
+            if (targetPlayer == null) {
+                // If the target space is empty, move the player to it.
                 target.setPlayer(player);
-            } else if (target != null && target.getPlayer() != null) {
-                Player targetPlayer = target.getPlayer();
+            } else {
+                // If the target space is occupied, try to push the other player
+                // to the next space in the same direction if possible.
                 Space pushSpace = board.getNeighbour(target, heading);
-                if (pushSpace != null) {
+                if (pushSpace != null && !target.getType().BorderHeadings.contains(heading) &&
+                        !pushSpace.getType().BorderHeadings.contains(reverseHeading(heading))) {
                     pushSpace.setPlayer(targetPlayer);
                     target.setPlayer(player);
                 }
             }
         }
     }
+
+    /**
+     * Returns the opposite heading to the given heading.
+     *
+     * @param heading the heading to reverse
+     * @return the opposite heading
+     */
     private Heading reverseHeading(Heading heading) {
-        Heading reverseHeading = null;
-        switch (heading) {
-            case NORTH -> {
-                reverseHeading = Heading.SOUTH;
-            }
-            case SOUTH -> {
-                reverseHeading = Heading.NORTH;
-            }
-            case EAST -> {
-                reverseHeading = Heading.WEST;
-            }
-            case WEST -> {
-                reverseHeading = Heading.EAST;
-            }
-        }
-        return reverseHeading;
-    };
+        return switch (heading) {
+            case NORTH -> Heading.SOUTH;
+            case SOUTH -> Heading.NORTH;
+            case EAST -> Heading.WEST;
+            case WEST -> Heading.EAST;
+        };
+    }
 
     // TODO: V2
     public void fastForward(@NotNull Player player) {

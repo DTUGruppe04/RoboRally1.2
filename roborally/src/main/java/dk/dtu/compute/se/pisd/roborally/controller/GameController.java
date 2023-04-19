@@ -143,25 +143,39 @@ public class GameController {
         }
     }
 
-    // XXX: V2
+    /**
+     * Executes all program fields in normal mode (i.e., not step-by-step mode).
+     * Uses continuePrograms() method to actually execute the programs.
+     */
     public void executePrograms() {
         board.setStepMode(false);
         continuePrograms();
     }
 
-    // XXX: V2
+    /**
+     * Executes the program fields one step at a time, using the executeNextStep() method.
+     * Uses continuePrograms() method to actually execute the programs.
+     */
     public void executeStep() {
         board.setStepMode(true);
         continuePrograms();
     }
 
-    // XXX: V2
+    /**
+     * Continues executing the program fields by calling the executeNextStep() method repeatedly,
+     * until the board's phase is not ACTIVATION or the board is in step mode.
+     */
     private void continuePrograms() {
         do {
             executeNextStep();
         } while (board.getPhase() == Phase.ACTIVATION && !board.isStepMode());
     }
 
+    /**
+     * Moves the game to the next player's turn, updating the current player and the step.
+     * If there are still players left to play, sets the current player to the next one.
+     * Otherwise, if all players have played all their cards, starts the programming phase.
+     */
     public void nextPlayer() {
         Player currentPlayer = board.getCurrentPlayer();
         int step = board.getStep();
@@ -180,7 +194,13 @@ public class GameController {
         }
     }
 
-    // XXX: V2
+    /**
+     * Executes the next step of the game. Gets the current player from the game board and the current step.
+     * If the game phase is in activation, and there is a current player, and the current step is within bounds,
+     * the method will retrieve the command card from the current player's program field, execute the command,
+     * execute the board elements, and move on to the next player unless the game phase is in player interaction.
+     * If a winner is found, the game phase is set to winner.
+     */
     private void executeNextStep() {
         Player currentPlayer = board.getCurrentPlayer();
         int step = board.getStep();
@@ -204,6 +224,9 @@ public class GameController {
         }
     }
 
+    /**
+     * Executes all doAction methods for spaces with players on it
+     */
     private void executeBoardElements() {
         //execute space that has players
         for (Player player : board.getPlayers()) {
@@ -213,7 +236,12 @@ public class GameController {
         //Shoot lasers
     }
 
-    // XXX: V2
+    /**
+     * Executes a command for a player on the board.
+     * @param player the player executing the command (not null)
+     * @param command the command to be executed (not null)
+     * @throws NullPointerException if either player or command is null
+     */
     public void executeCommand(@NotNull Player player, Command command) {
         if (player != null && player.board == board && command != null) {
             // XXX This is a very simplistic way of dealing with some basic cards and
@@ -242,6 +270,12 @@ public class GameController {
 
         }
     }
+
+    /**
+     * Checks for a winner, by checking each players checkpoints, if its the same as the boards amount of checkpoint
+     * the play is set as the winner
+     * @return true if a winner is found false otherwise
+     */
     private boolean checkForWinner() {
         for (Player player : board.getPlayers()) {
             if (player.getCheckpoints() >= board.getAmountOfCheckpoints()) {
@@ -300,13 +334,21 @@ public class GameController {
         };
     }
 
-    // TODO: V2
+
+    /**
+     * Moves the player 2 spaces forward
+     * @param player to be moved
+     */
     public void fastForward(@NotNull Player player) {
         moveForward(player);
         moveForward(player);
     }
 
-    // TODO: V2
+
+    /**
+     * Changes the header direction for the player one to the right
+     * @param player to turn right
+     */
     public void turnRight(@NotNull Player player) {
         if (player != null && player.board == board) {
             player.setHeading(player.getHeading().next());
@@ -314,7 +356,10 @@ public class GameController {
         board.setPhase(Phase.ACTIVATION);
     }
 
-    // TODO: V2
+    /**
+     * Changes the header direction for the player one to the left
+     * @param player to turn left
+     */
     public void turnLeft(@NotNull Player player) {
         if (player != null && player.board == board) {
             player.setHeading(player.getHeading().prev());
@@ -323,6 +368,13 @@ public class GameController {
     }
 
 
+    /**
+     * Moves a command card from a source field to a target field.
+     * @param source the source command card field
+     * @param target the target command card field
+     * @return true if the move was successful, false otherwise
+     * @throws NullPointerException if either source or target are null
+     */
     public boolean moveCards(@NotNull CommandCardField source, @NotNull CommandCardField target) {
         CommandCard sourceCard = source.getCard();
         CommandCard targetCard = target.getCard();

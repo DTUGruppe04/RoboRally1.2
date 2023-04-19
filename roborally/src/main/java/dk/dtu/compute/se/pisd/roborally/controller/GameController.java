@@ -62,7 +62,6 @@ public class GameController {
                 board.setCurrentPlayer(board.getPlayer(playerNumber));
             }
         }
-
     }
 
     // XXX: V2
@@ -215,10 +214,11 @@ public class GameController {
     // TODO: V2
     public void moveForward(@NotNull Player player) {
         Space space = player.getSpace();
-        if (player != null && player.board == board && space != null) {
-            Heading heading = player.getHeading();
-            Space target = board.getNeighbour(space, heading);
-            if (target != null && target.getPlayer() == null) {
+        Heading heading = player.getHeading();
+        Heading reverseHeading = reverseHeading(heading);
+        Space target = board.getNeighbour(space, heading);
+        if (target != null && player != null && player.board == board && space != null && !space.getType().BorderHeadings.contains(heading) && !target.getType().BorderHeadings.contains(reverseHeading)) {
+            if (target.getPlayer() == null) {
                 // XXX note that this removes an other player from the space, when there
                 //     is another player on the target. Eventually, this needs to be
                 //     implemented in a way so that other players are pushed away!
@@ -233,6 +233,24 @@ public class GameController {
             }
         }
     }
+    private Heading reverseHeading(Heading heading) {
+        Heading reverseHeading = null;
+        switch (heading) {
+            case NORTH -> {
+                reverseHeading = Heading.SOUTH;
+            }
+            case SOUTH -> {
+                reverseHeading = Heading.NORTH;
+            }
+            case EAST -> {
+                reverseHeading = Heading.WEST;
+            }
+            case WEST -> {
+                reverseHeading = Heading.EAST;
+            }
+        }
+        return reverseHeading;
+    };
 
     // TODO: V2
     public void fastForward(@NotNull Player player) {

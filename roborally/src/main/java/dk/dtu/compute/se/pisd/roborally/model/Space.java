@@ -22,6 +22,8 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
+import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 
 /**
  * ...
@@ -36,7 +38,6 @@ public class Space extends Subject {
     public final int x;
     public final int y;
     public final SpaceType type;
-
     private Player player;
 
     public Space(Board board, int x, int y, SpaceType spaceType) {
@@ -46,12 +47,16 @@ public class Space extends Subject {
         this.type = spaceType;
         player = null;
     }
-    public Space(Board board, int x, int y) {
+    /*public Space(Board board, int x, int y) {
         this.board = board;
         this.x = x;
         this.y = y;
         this.type = SpaceType.EMPTY_SPACE;
         player = null;
+    }*/
+
+    public void executeFieldAction(GameController gameController) {
+        this.type.fieldAction.doAction(gameController, this);
     }
 
     public Player getPlayer() {
@@ -73,6 +78,8 @@ public class Space extends Subject {
             notifyChange();
         }
     }
+
+
 
     public SpaceType getType() {
         return type;

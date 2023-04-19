@@ -44,6 +44,7 @@ public class Board extends Subject {
 
     public final int height;
 
+
     public final String boardName;
 
     private Integer gameId;
@@ -54,8 +55,13 @@ public class Board extends Subject {
 
     private Player current;
 
+    private Player winner = null;
+
     private Phase phase = INITIALISATION;
 
+
+
+    private int amountOfCheckpoints = 0;
     private int step = 0;
 
     private boolean stepMode;
@@ -84,6 +90,9 @@ public class Board extends Subject {
         for (int x = 0; x < width; x++) {
             for(int y = 0; y < height; y++) {
                 createSpace(x,y,SpaceType.get(boardArray[x][y]));
+                if (SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT1) || SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT2) || SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT3) || SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT4) || SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT5)) {
+                    amountOfCheckpoints++;
+                }
             }
         }
     }
@@ -133,6 +142,10 @@ public class Board extends Subject {
         }
     }
 
+    public List<Player> getPlayers() {
+        return players;
+    }
+
     public Player getCurrentPlayer() {
         return current;
     }
@@ -142,6 +155,10 @@ public class Board extends Subject {
             this.current = player;
             notifyChange();
         }
+    }
+
+    public int getAmountOfCheckpoints() {
+        return amountOfCheckpoints;
     }
 
     public Phase getPhase() {
@@ -224,8 +241,18 @@ public class Board extends Subject {
         // XXX: V2 changed the status so that it shows the phase, the player and the step
         return "Phase: " + getPhase().name() +
                 ", Player = " + getCurrentPlayer().getName() +
-                ", Step: " + getStep();
+                ", Step: " + getStep() +
+                ", Next Checkpoint: " + (getCurrentPlayer().getCheckpoints()+1);
     }
+
+    public Player getWinner() {
+        return winner;
+    }
+
+    public void setWinner(Player winner) {
+        this.winner = winner;
+    }
+
 
 
 }

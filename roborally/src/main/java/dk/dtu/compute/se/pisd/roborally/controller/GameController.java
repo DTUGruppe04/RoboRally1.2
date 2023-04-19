@@ -190,13 +190,27 @@ public class GameController {
                 Command command = card.command;
                 executeCommand(currentPlayer, command);
             }
+            executeBoardElements();
             if (board.getPhase() != Phase.PLAYER_INTERACTION) {
                 nextPlayer();
             }
+
         } else {
             // this should not happen
             assert false;
         }
+        if (checkForWinner()) {
+            this.board.setPhase(Phase.WINNER);
+        }
+    }
+
+    private void executeBoardElements() {
+        //execute space that has players
+        for (Player player : board.getPlayers()) {
+            player.getSpace().executeFieldAction(this);
+        }
+
+        //Shoot lasers
     }
 
     // XXX: V2
@@ -227,6 +241,15 @@ public class GameController {
             }
 
         }
+    }
+    private boolean checkForWinner() {
+        for (Player player : board.getPlayers()) {
+            if (player.getCheckpoints() >= board.getAmountOfCheckpoints()) {
+                board.setWinner(player);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -311,6 +334,7 @@ public class GameController {
             return false;
         }
     }
+
 
     /**
      * A method called when no corresponding controller operation is implemented yet. This

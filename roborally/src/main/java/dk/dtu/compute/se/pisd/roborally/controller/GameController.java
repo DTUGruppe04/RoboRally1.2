@@ -164,9 +164,6 @@ public class GameController {
 
     // XXX: V2
     private void executeNextStep() {
-        if (checkForWinner()) {
-
-        }
         Player currentPlayer = board.getCurrentPlayer();
         int step = board.getStep();
         if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null && step >= 0 && step < Player.NO_REGISTERS) {
@@ -183,6 +180,9 @@ public class GameController {
         } else {
             // this should not happen
             assert false;
+        }
+        if (checkForWinner()) {
+            this.board.setPhase(Phase.WINNER);
         }
     }
 
@@ -228,6 +228,7 @@ public class GameController {
     private boolean checkForWinner() {
         for (Player player : board.getPlayers()) {
             if (player.getCheckpoints() >= board.getAmountOfCheckpoints()) {
+                board.setWinner(player);
                 return true;
             }
         }
@@ -308,6 +309,7 @@ public class GameController {
             return false;
         }
     }
+
 
     /**
      * A method called when no corresponding controller operation is implemented yet. This

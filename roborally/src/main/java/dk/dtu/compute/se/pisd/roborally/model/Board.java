@@ -55,6 +55,8 @@ public class Board extends Subject {
 
     private Player current;
 
+    private Player winner = null;
+
     private Phase phase = INITIALISATION;
 
 
@@ -88,9 +90,9 @@ public class Board extends Subject {
         for (int x = 0; x < width; x++) {
             for(int y = 0; y < height; y++) {
                 createSpace(x,y,SpaceType.get(boardArray[x][y]));
-                /*if (SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT1) || SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT2) || SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT3) || SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT4) || SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT5)) {
+                if (SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT1) || SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT2) || SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT3) || SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT4) || SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT5)) {
                     amountOfCheckpoints++;
-                }*/
+                }
             }
         }
     }
@@ -242,6 +244,15 @@ public class Board extends Subject {
                 ", Step: " + getStep() +
                 ", Next Checkpoint: " + (getCurrentPlayer().getCheckpoints()+1);
     }
+
+    public Player getWinner() {
+        return winner;
+    }
+
+    public void setWinner(Player winner) {
+        this.winner = winner;
+    }
+
 
 
 }

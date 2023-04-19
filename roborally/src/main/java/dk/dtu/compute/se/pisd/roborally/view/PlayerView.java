@@ -218,14 +218,9 @@ public class PlayerView extends Tab implements ViewObserver {
             if (player.board.getPhase() == Phase.WINNER) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("A Winner is found");
-                String s = "Click OK to start a new game, click cancel or close the alert to exit the game";
+                String s = "Exit the game and restart, the winner is " + player.board.getWinner().getName();
                 alert.setContentText(s);
-
-                Optional<ButtonType> result = alert.showAndWait();
-
-                if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
-
-                }
+                alert.showAndWait();
             }
         }
     }

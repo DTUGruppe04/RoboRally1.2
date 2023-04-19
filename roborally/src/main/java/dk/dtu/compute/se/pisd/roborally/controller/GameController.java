@@ -164,6 +164,9 @@ public class GameController {
 
     // XXX: V2
     private void executeNextStep() {
+        if (checkForWinner()) {
+
+        }
         Player currentPlayer = board.getCurrentPlayer();
         int step = board.getStep();
         if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null && step >= 0 && step < Player.NO_REGISTERS) {
@@ -172,13 +175,24 @@ public class GameController {
                 Command command = card.command;
                 executeCommand(currentPlayer, command);
             }
+            executeBoardElements();
             if (board.getPhase() != Phase.PLAYER_INTERACTION) {
                 nextPlayer();
             }
+
         } else {
             // this should not happen
             assert false;
         }
+    }
+
+    private void executeBoardElements() {
+        //execute space that has players
+        for (Player player : board.getPlayers()) {
+            player.getSpace().executeFieldAction(this);
+        }
+
+        //Shoot lasers
     }
 
     // XXX: V2
@@ -211,6 +225,14 @@ public class GameController {
         }
     }
 
+    private boolean checkForWinner() {
+        for (Player player : board.getPlayers()) {
+            if (player.getCheckpoints() >= board.getAmountOfCheckpoints()) {
+                return true;
+            }
+        }
+        return false;
+    }
     // TODO: V2
     public void moveForward(@NotNull Player player) {
         Space space = player.getSpace();

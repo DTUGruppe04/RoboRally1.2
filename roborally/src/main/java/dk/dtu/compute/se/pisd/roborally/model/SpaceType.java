@@ -1,4 +1,8 @@
 package dk.dtu.compute.se.pisd.roborally.model;
+import dk.dtu.compute.se.pisd.roborally.controller.CheckPoint;
+import dk.dtu.compute.se.pisd.roborally.controller.DefaultField;
+import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
+import dk.dtu.compute.se.pisd.roborally.controller.Pit;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -9,8 +13,8 @@ import java.util.List;
 
 public enum SpaceType {
     EMPTY_SPACE(),
-    CHECKPOINT("file:roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/images/Checkpoint.png"),
-    PIT("file:roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/images/pit.png"),
+    CHECKPOINT("file:roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/images/Checkpoint.png", new CheckPoint(1)),
+    PIT("file:roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/images/pit.png", new Pit()),
     BORDER_LEFT(Heading.WEST), BORDER_RIGHT(Heading.EAST), BORDER_UP(Heading.NORTH), BORDER_DOWN(Heading.SOUTH),
     BORDER_CORNER_TOP_LEFT(Heading.NORTH, Heading.WEST), BORDER_CORNER_TOP_RIGHT(Heading.NORTH, Heading.EAST),
     BORDER_CORNER_BOTTOM_LEFT(Heading.SOUTH, Heading.WEST), BORDER_CORNER_BOTTOM_RIGHT(Heading.SOUTH, Heading.EAST)
@@ -18,15 +22,18 @@ public enum SpaceType {
     final public Background Background;
     public Border Borders;
     final public List<Heading> BorderHeadings;
+    final public FieldAction fieldAction;
     private static final SpaceType[] values = values();
+
     public static SpaceType get(int ordinal) { return values[ordinal]; }
     //tile with custom background and optional borders
-    SpaceType(String imagePath, Heading... borderHeadings){
+    SpaceType(String imagePath, FieldAction fieldAction, Heading... borderHeadings){
         Image image = new Image(imagePath);
         BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(100, 100, true, true, true, true));
         Background = new Background(backgroundImage);
         this.BorderHeadings = Collections.unmodifiableList(Arrays.asList(borderHeadings));
         createBorder();
+        this.fieldAction = fieldAction;
     }
     //tile with standard background, and optional borders
     SpaceType(Heading... borderHeadings){
@@ -35,6 +42,7 @@ public enum SpaceType {
         Background = new Background(backgroundImage);
         this.BorderHeadings = Collections.unmodifiableList(Arrays.asList(borderHeadings));
         createBorder();
+        this.fieldAction = new DefaultField();
     }
 
     private void createBorder(){

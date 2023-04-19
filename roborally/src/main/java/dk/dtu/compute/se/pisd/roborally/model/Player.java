@@ -42,6 +42,10 @@ public class Player extends Subject {
     private String name;
     private String color;
 
+
+
+    private int checkpoints;
+
     private Space space;
     private Heading heading = SOUTH;
 
@@ -52,6 +56,7 @@ public class Player extends Subject {
         this.board = board;
         this.name = name;
         this.color = color;
+        this.checkpoints = 0;
 
         this.space = null;
 
@@ -64,6 +69,10 @@ public class Player extends Subject {
         for (int i = 0; i < cards.length; i++) {
             cards[i] = new CommandCardField(this);
         }
+    }
+
+    public void raiseCheckpoints() {
+        checkpoints++;
     }
 
     public String getName() {
@@ -110,7 +119,13 @@ public class Player extends Subject {
             notifyChange();
         }
     }
+    public int getCheckpoints() {
+        return checkpoints;
+    }
 
+    public void setCheckpoints(int checkpoints) {
+        this.checkpoints = checkpoints;
+    }
     public Heading getHeading() {
         return heading;
     }

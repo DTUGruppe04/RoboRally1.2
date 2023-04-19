@@ -47,13 +47,13 @@ public class Space extends Subject {
         this.type = spaceType;
         player = null;
     }
-    /*public Space(Board board, int x, int y) {
+    public Space(Board board, int x, int y) {
         this.board = board;
         this.x = x;
         this.y = y;
         this.type = SpaceType.EMPTY_SPACE;
         player = null;
-    }*/
+    }
 
     public void executeFieldAction(GameController gameController) {
         this.type.fieldAction.doAction(gameController, this);

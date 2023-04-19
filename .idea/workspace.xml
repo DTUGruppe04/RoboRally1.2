@@ -4,14 +4,31 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="edcf9349-5911-468a-9e33-1aaf0f511eeb" name="Changes" comment="" />
-    <list id="82ca97f5-4295-4cdd-9e59-19d2e5f6b437" name="Changes by valde" comment="" />
+    <list default="true" id="0e4c12f2-8b44-4f11-b749-a6f1c45c2edd" name="Changes" comment="Choice changed">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/controller/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/controller/GameController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/view/PlayerView.java" beforeDir="false" afterPath="$PROJECT_DIR$/roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/view/PlayerView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/roborally/target/classes/dk/dtu/compute/se/pisd/roborally/controller/GameController.class" beforeDir="false" afterPath="$PROJECT_DIR$/roborally/target/classes/dk/dtu/compute/se/pisd/roborally/controller/GameController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/roborally/target/classes/dk/dtu/compute/se/pisd/roborally/view/PlayerView.class" beforeDir="false" afterPath="$PROJECT_DIR$/roborally/target/classes/dk/dtu/compute/se/pisd/roborally/view/PlayerView.class" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="DoField+Checkpoint" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -35,7 +52,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Simon/OneDrive/Skrivebord/RoboRally1.2&quot;
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Simon/Desktop/RoboRally1.2&quot;
   }
 }</component>
   <component name="RunManager">
@@ -71,6 +88,7 @@
       <workItem from="1680177316807" duration="3533000" />
       <workItem from="1681386161730" duration="21000" />
       <workItem from="1681388834180" duration="1209000" />
+      <workItem from="1681713207010" duration="925000" />
     </task>
     <servers />
   </component>

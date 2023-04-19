@@ -21,9 +21,12 @@
  */
 package dk.dtu.compute.se.pisd.roborally.model;
 
+import com.google.gson.stream.JsonReader;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,8 +67,7 @@ public class Board extends Subject {
         spaces = new Space[width][height];
         for (int x = 0; x < width; x++) {
             for(int y = 0; y < height; y++) {
-                Space space = new Space(this, x, y);
-                spaces[x][y] = space;
+                createSpace(x,y,SpaceType.EMPTY_SPACE);
             }
         }
         this.stepMode = false;
@@ -74,7 +76,21 @@ public class Board extends Subject {
     public Board(int width, int height) {
         this(width, height, "defaultboard");
     }
-
+    public Board(int[][] boardArray, @NotNull String boardName) {
+        this.boardName = boardName;
+        this.width = boardArray[0].length;
+        this.height = boardArray.length;
+        this.spaces = new Space[width][height];
+        for (int x = 0; x < width; x++) {
+            for(int y = 0; y < height; y++) {
+                createSpace(x,y,SpaceType.get(boardArray[x][y]));
+            }
+        }
+    }
+    private void createSpace(int x, int y, SpaceType spaceType) {
+        Space space = new Space(this, x, y, spaceType);
+        this.spaces[x][y] = space;
+    }
     public Integer getGameId() {
         return gameId;
     }

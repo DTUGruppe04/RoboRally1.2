@@ -62,7 +62,6 @@ public class GameController {
                 board.setCurrentPlayer(board.getPlayer(playerNumber));
             }
         }
-
     }
 
     /**
@@ -163,33 +162,36 @@ public class GameController {
         } while (board.getPhase() == Phase.ACTIVATION && !board.isStepMode());
     }
 
+    public void nextPlayer() {
+        Player currentPlayer = board.getCurrentPlayer();
+        int step = board.getStep();
+        int nextPlayerNumber = board.getPlayerNumber(currentPlayer) + 1;
+        if (nextPlayerNumber < board.getPlayersNumber()) {
+            board.setCurrentPlayer(board.getPlayer(nextPlayerNumber));
+        } else {
+            step++;
+            if (step < Player.NO_REGISTERS) {
+                makeProgramFieldsVisible(step);
+                board.setStep(step);
+                board.setCurrentPlayer(board.getPlayer(0));
+            } else {
+                startProgrammingPhase();
+            }
+        }
+    }
+
     // XXX: V2
     private void executeNextStep() {
         Player currentPlayer = board.getCurrentPlayer();
-        if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
-            int step = board.getStep();
-            if (step >= 0 && step < Player.NO_REGISTERS) {
-                CommandCard card = currentPlayer.getProgramField(step).getCard();
-                if (card != null) {
-                    Command command = card.command;
-                    executeCommand(currentPlayer, command);
-                }
-                int nextPlayerNumber = board.getPlayerNumber(currentPlayer) + 1;
-                if (nextPlayerNumber < board.getPlayersNumber()) {
-                    board.setCurrentPlayer(board.getPlayer(nextPlayerNumber));
-                } else {
-                    step++;
-                    if (step < Player.NO_REGISTERS) {
-                        makeProgramFieldsVisible(step);
-                        board.setStep(step);
-                        board.setCurrentPlayer(board.getPlayer(0));
-                    } else {
-                        startProgrammingPhase();
-                    }
-                }
-            } else {
-                // this should not happen
-                assert false;
+        int step = board.getStep();
+        if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null && step >= 0 && step < Player.NO_REGISTERS) {
+            CommandCard card = currentPlayer.getProgramField(step).getCard();
+            if (card != null) {
+                Command command = card.command;
+                executeCommand(currentPlayer, command);
+            }
+            if (board.getPhase() != Phase.PLAYER_INTERACTION) {
+                nextPlayer();
             }
         } else {
             // this should not happen
@@ -198,48 +200,75 @@ public class GameController {
     }
 
     // XXX: V2
-    private void executeCommand(@NotNull Player player, Command command) {
+    public void executeCommand(@NotNull Player player, Command command) {
         if (player != null && player.board == board && command != null) {
             // XXX This is a very simplistic way of dealing with some basic cards and
             //     their execution. This should eventually be done in a more elegant way
             //     (this concerns the way cards are modelled as well as the way they are executed).
-
-            switch (command) {
-                case FORWARD:
-                    this.moveForward(player);
-                    break;
-                case RIGHT:
-                    this.turnRight(player);
-                    break;
-                case LEFT:
-                    this.turnLeft(player);
-                    break;
-                case FAST_FORWARD:
-                    this.fastForward(player);
-                    break;
-                case OPTION_LEFT_RIGHT:
-                    this.optionLeftOrRight(player);
-                    break;
-                default:
-                    // DO NOTHING (for now)
+            if (!command.isInteractive()) {
+                switch (command) {
+                    case FORWARD:
+                        this.moveForward(player);
+                        break;
+                    case RIGHT:
+                        this.turnRight(player);
+                        break;
+                    case LEFT:
+                        this.turnLeft(player);
+                        break;
+                    case FAST_FORWARD:
+                        this.fastForward(player);
+                        break;
+                    default:
+                        // DO NOTHING (for now)
+                }
+            } else {
+                this.board.setPhase(Phase.PLAYER_INTERACTION);
             }
+
         }
     }
 
     // TODO: V2
     public void moveForward(@NotNull Player player) {
         Space space = player.getSpace();
-        if (player != null && player.board == board && space != null) {
-            Heading heading = player.getHeading();
-            Space target = board.getNeighbour(space, heading);
-            if (target != null) {
+        Heading heading = player.getHeading();
+        Heading reverseHeading = reverseHeading(heading);
+        Space target = board.getNeighbour(space, heading);
+        if (target != null && player != null && player.board == board && space != null && !space.getType().BorderHeadings.contains(heading) && !target.getType().BorderHeadings.contains(reverseHeading)) {
+            if (target.getPlayer() == null) {
                 // XXX note that this removes an other player from the space, when there
                 //     is another player on the target. Eventually, this needs to be
                 //     implemented in a way so that other players are pushed away!
                 target.setPlayer(player);
+            } else if (target != null && target.getPlayer() != null) {
+                Player targetPlayer = target.getPlayer();
+                Space pushSpace = board.getNeighbour(target, heading);
+                if (pushSpace != null) {
+                    pushSpace.setPlayer(targetPlayer);
+                    target.setPlayer(player);
+                }
             }
         }
     }
+    private Heading reverseHeading(Heading heading) {
+        Heading reverseHeading = null;
+        switch (heading) {
+            case NORTH -> {
+                reverseHeading = Heading.SOUTH;
+            }
+            case SOUTH -> {
+                reverseHeading = Heading.NORTH;
+            }
+            case EAST -> {
+                reverseHeading = Heading.WEST;
+            }
+            case WEST -> {
+                reverseHeading = Heading.EAST;
+            }
+        }
+        return reverseHeading;
+    };
 
     // TODO: V2
     public void fastForward(@NotNull Player player) {
@@ -252,6 +281,7 @@ public class GameController {
         if (player != null && player.board == board) {
             player.setHeading(player.getHeading().next());
         }
+        board.setPhase(Phase.ACTIVATION);
     }
 
     // TODO: V2
@@ -259,21 +289,7 @@ public class GameController {
         if (player != null && player.board == board) {
             player.setHeading(player.getHeading().prev());
         }
-    }
-
-    public void optionLeftOrRight(@NotNull Player player){
-        String options[] = { "Turn left", "Turn right" };
-        ChoiceDialog d = new ChoiceDialog(options[0], options);
-        d.setHeaderText("Choose header direction");
-        // set content text
-        d.setContentText("please select the the way you want to turn");
-        // show the dialog
-        d.showAndWait();
-        if (d.getSelectedItem().equals("Turn left")) {
-            this.turnLeft(player);
-        } else {
-            this.turnRight(player);
-        }
+        board.setPhase(Phase.ACTIVATION);
     }
 
 

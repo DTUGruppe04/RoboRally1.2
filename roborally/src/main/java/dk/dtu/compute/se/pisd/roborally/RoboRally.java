@@ -24,12 +24,15 @@ package dk.dtu.compute.se.pisd.roborally;
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.view.BoardView;
+import dk.dtu.compute.se.pisd.roborally.view.PremadeMaps;
 import dk.dtu.compute.se.pisd.roborally.view.RoboRallyMenuBar;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import dk.dtu.compute.se.pisd.roborally.fileaccess.JsonFileHandler;
 
 /**
  * ...
@@ -54,6 +57,12 @@ public class RoboRally extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+
+        //Just for testing. Delete later
+        JsonFileHandler json = new JsonFileHandler();
+
+        json.Save2DArray("roborally/src/main/java/dk/dtu/compute/se/pisd/deafult.json", PremadeMaps.MAP1.mapArray);
+
         stage = primaryStage;
 
         AppController appController = new AppController(this);

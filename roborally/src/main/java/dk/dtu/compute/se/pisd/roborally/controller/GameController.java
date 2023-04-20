@@ -210,7 +210,10 @@ public class GameController {
                 Command command = card.command;
                 executeCommand(currentPlayer, command);
             }
-            executeBoardElements();
+            System.out.println(board.getPlayersNumber() + " " + board.getPlayerNumber(currentPlayer));
+            if ((board.getPlayerNumber(currentPlayer)+1) == board.getPlayersNumber()) {
+                executeBoardElements();
+            }
             if (board.getPhase() != Phase.PLAYER_INTERACTION) {
                 nextPlayer();
             }

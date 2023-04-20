@@ -37,6 +37,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -86,12 +87,31 @@ public class AppController implements Observer {
      * If the user chooses to abort the operation, the method returns without starting a new game.
      */
     public void newGame() {
-        ChoiceDialog<Integer> dialog = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
-        dialog.setTitle("Player number");
-        dialog.setHeaderText("Select number of players");
-        Optional<Integer> result = dialog.showAndWait();
+        ChoiceDialog<Integer> playerNumberDialog = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
+        playerNumberDialog.setTitle("Player number");
+        playerNumberDialog.setHeaderText("Select number of players");
+        Optional<Integer> playerNumberResult = playerNumberDialog.showAndWait();
 
-        if (result.isPresent()) {
+        ArrayList<PremadeMaps> mapChoices = new ArrayList<>();
+        ArrayList<String> mapChoicesName = new ArrayList<>();
+        for (int i = 0; i < PremadeMaps.values().length; i++) {
+           mapChoices.add(PremadeMaps.get(i));
+           mapChoicesName.add(PremadeMaps.get(i).mapName);
+        }
+        ChoiceDialog<String> mapChoiceDialog = new ChoiceDialog<>(mapChoicesName.get(0), mapChoicesName);
+        mapChoiceDialog.setTitle("Map type");
+        mapChoiceDialog.setHeaderText("Select map type");
+        Optional<String> mapChoiceResultName = mapChoiceDialog.showAndWait();
+        PremadeMaps mapChoiceResult = null;
+        if (mapChoiceResultName.isPresent()) {
+            for (PremadeMaps map: mapChoices) {
+                if (map.mapName.equals(mapChoiceResultName.get())) {
+                    mapChoiceResult = map;
+                }
+            }
+        }
+
+        if (playerNumberResult.isPresent() && mapChoiceResultName.isPresent() && mapChoiceResult != null) {
             if (gameController != null) {
                 // The UI should not allow this, but in case this happens anyway.
                 // give the user the option to save the game or abort this operation!
@@ -104,9 +124,9 @@ public class AppController implements Observer {
             //     here we just create an empty board with the required number of players.
 
 
-            Board board = new Board(PremadeMaps.SPRINT_CRAMP.mapArray, "testMap");
+            Board board = new Board(mapChoiceResult.mapArray, mapChoiceResult.mapName);
             gameController = new GameController(board);
-            int no = result.get();
+            int no = playerNumberResult.get();
             for (int i = 0; i < no; i++) {
                 Player player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i + 1));
                 board.addPlayer(player);

@@ -14,6 +14,8 @@ package dk.dtu.compute.se.pisd.roborally.view;
 * 10 = BORDER_CORNER_BOTTOM_RIGHT
 */
 
+import dk.dtu.compute.se.pisd.roborally.model.SpaceType;
+
 public enum PremadeMaps {
     MAP1(new int[][]{
             {0,0,0,0,0,0,0,0},
@@ -23,7 +25,7 @@ public enum PremadeMaps {
             {7,0,8,0,9,0,10,0},
             {0,0,0,0,0,0,0,0},
             {11,0,12,0,13,0,14,0},
-            {0,0,0,0,0,0,0,0}}),
+            {0,0,0,0,0,0,0,0}}, "Test Map"),
 
     CORRIDOR_BLITZ(new int[][]{
             {0,8,0,0,0,0,0,0,13,0},
@@ -35,8 +37,8 @@ public enum PremadeMaps {
             {0,0,0,11,11,11,12,31,2,0},
             {0,0,35,22,0,0,0,37,0,0},
             {6,0,0,0,20,0,0,0,0,10},
-            {0,12,0,0,0,0,0,0,9,0}}),
-    
+            {0,12,0,0,0,0,0,0,9,0}}, "Corridor Blitz"),
+
     SPRINT_CRAMP(new int[][]{
             {0,0,12,0,0,0,0,0,13,0},
             {11,11,12,0,7,7,9,0,13,3},
@@ -47,11 +49,16 @@ public enum PremadeMaps {
             {0,0,0,8,0,0,9,6,6,0},
             {10,10,0,8,0,9,6,0,0,0},
             {0,12,0,8,6,6,0,13,10,10},
-            {0,12,0,0,0,0,0,13,1,0},});
+            {0,12,0,0,0,0,0,13,1,0},}, "Sprint Cramp");
 
     public final int[][] mapArray;
+    public final String mapName;
+    private static final PremadeMaps[] values = values();
 
-    PremadeMaps(int[][] MapArray) {
+    public static PremadeMaps get(int ordinal) { return values[ordinal]; }
+
+    PremadeMaps(int[][] MapArray, String MapName) {
         mapArray = MapArray;
+        mapName = MapName;
     }
 }

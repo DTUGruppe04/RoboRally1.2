@@ -325,7 +325,7 @@ public class GameController {
      * @param heading the heading to reverse
      * @return the opposite heading
      */
-    private Heading reverseHeading(Heading heading) {
+    public Heading reverseHeading(Heading heading) {
         return switch (heading) {
             case NORTH -> Heading.SOUTH;
             case SOUTH -> Heading.NORTH;

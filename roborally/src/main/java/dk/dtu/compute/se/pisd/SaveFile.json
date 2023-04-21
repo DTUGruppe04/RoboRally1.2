@@ -1,0 +1,63 @@
+[
+  {
+    "map": {
+      "PremadeMaps": "MAP1"
+    },
+    "players": {
+      "player1": {
+        "name": "Player 1",
+        "color": "red",
+        "checkpoints": 0,
+        "heading": "SOUTH",
+        "space": {
+          "x": 0,
+          "y": 0
+        },
+        "Program": {
+          "programmingcard0": "null",
+          "programmingcard1": "null",
+          "programmingcard2": "null",
+          "programmingcard3": "null",
+          "programmingcard4": "null"
+        },
+        "Cards": {
+          "commandcard0": "OPTION_LEFT_RIGHT",
+          "commandcard1": "RIGHT",
+          "commandcard2": "FORWARD",
+          "commandcard3": "LEFT",
+          "commandcard4": "RIGHT",
+          "commandcard5": "FAST_FORWARD",
+          "commandcard6": "LEFT",
+          "commandcard7": "FORWARD"
+        }
+      },
+      "player2": {
+        "name": "Player 2",
+        "color": "green",
+        "checkpoints": 0,
+        "heading": "SOUTH",
+        "space": {
+          "x": 1,
+          "y": 1
+        },
+        "Program": {
+          "programmingcard0": "null",
+          "programmingcard1": "null",
+          "programmingcard2": "null",
+          "programmingcard3": "null",
+          "programmingcard4": "null"
+        },
+        "Cards": {
+          "commandcard0": "OPTION_LEFT_RIGHT",
+          "commandcard1": "LEFT",
+          "commandcard2": "RIGHT",
+          "commandcard3": "OPTION_LEFT_RIGHT",
+          "commandcard4": "OPTION_LEFT_RIGHT",
+          "commandcard5": "FAST_FORWARD",
+          "commandcard6": "FAST_FORWARD",
+          "commandcard7": "FORWARD"
+        }
+      }
+    }
+  }
+]

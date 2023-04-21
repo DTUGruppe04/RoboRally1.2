@@ -34,6 +34,8 @@ import javafx.stage.Stage;
 
 import dk.dtu.compute.se.pisd.roborally.fileaccess.JsonFileHandler;
 
+import java.io.IOException;
+
 /**
  * ...
  *
@@ -56,12 +58,8 @@ public class RoboRally extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws IOException {
 
-        //Just for testing. Delete later
-        JsonFileHandler json = new JsonFileHandler();
-
-        json.Save2DArray("roborally/src/main/java/dk/dtu/compute/se/pisd/deafult.json", PremadeMaps.MAP1.mapArray);
 
         stage = primaryStage;
 

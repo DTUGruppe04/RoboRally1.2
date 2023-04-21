@@ -37,6 +37,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -72,11 +73,13 @@ public class AppController implements Observer {
      */
     private GameController gameController;
 
+    private PremadeMaps map;
+    private JsonFileHandler jsonFileHandler;
     /**
      Creates a new AppController object with the specified RoboRally object.
      @param roboRally the RoboRally object to use as the application's data model
      */
-    public AppController(@NotNull RoboRally roboRally) {
+    public AppController(@NotNull RoboRally roboRally) throws IOException {
         this.roboRally = roboRally;
     }
 
@@ -87,6 +90,7 @@ public class AppController implements Observer {
      * If the user chooses to abort the operation, the method returns without starting a new game.
      */
     public void newGame() {
+        this.jsonFileHandler = new JsonFileHandler();
         ChoiceDialog<Integer> playerNumberDialog = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
         playerNumberDialog.setTitle("Player number");
         playerNumberDialog.setHeaderText("Select number of players");
@@ -110,7 +114,7 @@ public class AppController implements Observer {
                 }
             }
         }
-
+        this.map = mapChoiceResult;
         if (playerNumberResult.isPresent() && mapChoiceResultName.isPresent() && mapChoiceResult != null) {
             if (gameController != null) {
                 // The UI should not allow this, but in case this happens anyway.
@@ -143,10 +147,9 @@ public class AppController implements Observer {
 
     /**
      * Saves the current game state.
-     * This method is not yet implemented.
      */
     public void saveGame() {
-        // XXX needs to be implemented eventually
+        jsonFileHandler.saveToSaveFile(this.map, this.gameController.board);
     }
 
     /**

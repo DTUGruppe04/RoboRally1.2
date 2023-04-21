@@ -49,7 +49,11 @@ public class Player extends Subject {
     private Space space;
     private Heading heading = SOUTH;
 
+
+
     private CommandCardField[] program;
+
+
     private CommandCardField[] cards;
 
     public Player(@NotNull Board board, String color, @NotNull String name) {
@@ -148,4 +152,11 @@ public class Player extends Subject {
         return cards[i];
     }
 
+    public CommandCardField[] getProgram() {
+        return program;
+    }
+
+    public CommandCardField[] getCards() {
+        return cards;
+    }
 }

@@ -253,6 +253,10 @@ public class Board extends Subject {
         this.winner = winner;
     }
 
+    public Space[][] getSpaces() {
+        return spaces;
+    }
+
 
 
 }

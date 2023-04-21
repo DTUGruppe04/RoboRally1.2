@@ -87,8 +87,8 @@ public class Board extends Subject {
         this.width = boardArray[0].length;
         this.height = boardArray.length;
         this.spaces = new Space[width][height];
-        for (int x = 0; x < width; x++) {
-            for(int y = 0; y < height; y++) {
+        for (int y = 0; y < width; y++) {
+            for(int x = 0; x < height; x++) {
                 createSpace(x,y,SpaceType.get(boardArray[x][y]));
                 if (SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT1) || SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT2) || SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT3) || SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT4) || SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT5)) {
                     amountOfCheckpoints++;

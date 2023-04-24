@@ -14,7 +14,7 @@ public class JsonFileHandler {
     String SaveFile2 = "roborally/src/main/java/dk/dtu/compute/se/pisd/SaveFiles/SaveFile2.json";
     String SaveFile3 = "roborally/src/main/java/dk/dtu/compute/se/pisd/SaveFiles/SaveFile3.json";
     String SaveFile4 = "roborally/src/main/java/dk/dtu/compute/se/pisd/SaveFiles/SaveFile4.json";
-    String[] saveFiles = new String[]{"Save 1", "Save 2", "Save 3", "Save 4", "Save 5"};
+    String[] saveFiles = new String[]{"Save 1", "Save 2", "Save 3", "Save 4"};
     Gson Gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
     //Constructor Declaration of Class

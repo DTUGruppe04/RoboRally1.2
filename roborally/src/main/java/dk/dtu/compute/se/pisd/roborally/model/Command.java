@@ -52,6 +52,14 @@ public enum Command {
     // replaced by the code below:
 
     final private List<Command> options;
+    public static Command get(String command) {
+        for(Command command1 : values()) {
+            if (command1.toString().equals(command)) {
+                return command1;
+            }
+        }
+        return null;
+    }
 
     Command(String displayName, Command... options) {
         this.displayName = displayName;

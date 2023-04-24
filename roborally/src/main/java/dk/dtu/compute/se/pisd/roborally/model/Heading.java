@@ -38,4 +38,12 @@ public enum Heading {
     public Heading prev() {
         return values()[(this.ordinal() + values().length - 1) % values().length];
     }
+    public static Heading get(String heading) {
+        for(Heading heading1 : values()) {
+            if (heading1.toString().equals(heading)) {
+                return heading1;
+            }
+        }
+        return SOUTH;
+    }
 }

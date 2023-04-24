@@ -57,6 +57,15 @@ public enum PremadeMaps {
 
     public static PremadeMaps get(int ordinal) { return values[ordinal]; }
 
+    public static PremadeMaps get(String mapName) {
+        for (PremadeMaps map : values()) {
+            if (map.mapName.equals(mapName)) {
+                return map;
+            }
+        }
+        return MAP1;
+    }
+
     PremadeMaps(int[][] MapArray, String MapName) {
         mapArray = MapArray;
         mapName = MapName;

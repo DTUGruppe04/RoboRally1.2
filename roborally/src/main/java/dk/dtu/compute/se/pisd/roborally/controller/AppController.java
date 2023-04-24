@@ -21,13 +21,16 @@
  */
 package dk.dtu.compute.se.pisd.roborally.controller;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Observer;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
 
-import dk.dtu.compute.se.pisd.roborally.model.Board;
-import dk.dtu.compute.se.pisd.roborally.model.Player;
+import dk.dtu.compute.se.pisd.roborally.model.*;
 
 import dk.dtu.compute.se.pisd.roborally.view.PremadeMaps;
 import javafx.application.Platform;
@@ -38,10 +41,7 @@ import javafx.scene.control.ChoiceDialog;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import dk.dtu.compute.se.pisd.roborally.fileaccess.JsonFileHandler;
 
@@ -74,7 +74,7 @@ public class AppController implements Observer {
     private GameController gameController;
 
     private PremadeMaps map;
-    private JsonFileHandler jsonFileHandler;
+    private final JsonFileHandler jsonFileHandler = new JsonFileHandler();
     /**
      Creates a new AppController object with the specified RoboRally object.
      @param roboRally the RoboRally object to use as the application's data model
@@ -90,7 +90,6 @@ public class AppController implements Observer {
      * If the user chooses to abort the operation, the method returns without starting a new game.
      */
     public void newGame() {
-        this.jsonFileHandler = new JsonFileHandler();
         ChoiceDialog<Integer> playerNumberDialog = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
         playerNumberDialog.setTitle("Player number");
         playerNumberDialog.setHeaderText("Select number of players");
@@ -149,7 +148,7 @@ public class AppController implements Observer {
      * Saves the current game state.
      */
     public void saveGame() {
-        jsonFileHandler.saveToSaveFile(this.map, this.gameController.board);
+        jsonFileHandler.saveToSaveFile(this.gameController.board);
     }
 
     /**
@@ -158,9 +157,66 @@ public class AppController implements Observer {
      * If there is no saved game state, a new game is started.
      */
     public void loadGame() {
-        // XXX needs to be implememted eventually
-        // for now, we just create a new game
-        if (gameController == null) {
+        //loads string from savefile and creates a JSON object from the json string
+        String test = jsonFileHandler.loadFromSaveFile();
+        JsonParser jsonParser = new JsonParser();
+        JsonObject jsonObject = jsonParser.parse(test).getAsJsonObject();
+        //finds the map in the savefile and creates a new board with the given map
+        PremadeMaps map = PremadeMaps.get(jsonObject.get("boardName").getAsString());
+        Board board = new Board(map.mapArray, map.mapName);
+        //creates a gamecontroller from the new board
+        GameController gameController = new GameController(board);
+        this.gameController = gameController;
+        this.map = map;
+        //creates a JsonArray from the savefile with all the players in the saved game
+        JsonArray jsonArray = jsonObject.getAsJsonArray("players");
+        //iterates through each jsonplayer in the jsonplayerarray
+        for(JsonElement jsonplayer : jsonArray) {
+            //finds the color and name of the given player and creates a new player instance
+            JsonObject tempJsonPlayer = jsonplayer.getAsJsonObject();
+            Player player = new Player(board, tempJsonPlayer.get("color").getAsString(), tempJsonPlayer.get("name").getAsString());
+            //adds the new player to the board, sets the saved heading, amountof checkpoints reached and placement on the board for the given player
+            board.addPlayer(player);
+            player.setHeading(Heading.get(tempJsonPlayer.get("heading").getAsString()));
+            player.setSpace(board.getSpace(tempJsonPlayer.get("space").getAsJsonObject().get("x").getAsInt(),tempJsonPlayer.get("space").getAsJsonObject().get("y").getAsInt()));
+            player.setCheckpoints(tempJsonPlayer.get("checkpoints").getAsInt());
+            //creates two new jsonarray, one for the saves program and one for the saved cards
+            JsonArray tempProgramJson = tempJsonPlayer.getAsJsonArray("program");
+            JsonArray tempCardsJson = tempJsonPlayer.getAsJsonArray("cards");
+            ArrayList<CommandCard> program = new ArrayList<>();
+            ArrayList<CommandCard> cards = new ArrayList<>();
+            //iterates through the saved program and cards, and adds the programming cards to the right commanccardfield in the players program and cards
+            for(JsonElement programJson : tempProgramJson) {
+               if ( programJson.getAsJsonObject().get("card") != null){
+                   program.add(new CommandCard(Objects.requireNonNull(Command.get(programJson.getAsJsonObject().get("card").getAsJsonObject().get("command").getAsString()))));
+               } else {
+                   program.add(null);
+               }
+            }
+            for(JsonElement cardsJson : tempCardsJson) {
+                if ( cardsJson.getAsJsonObject().get("card") != null){
+                    cards.add(new CommandCard(Objects.requireNonNull(Command.get(cardsJson.getAsJsonObject().get("card").getAsJsonObject().get("command").getAsString()))));
+                } else {
+                    cards.add(null);
+                }
+            }
+            for (int j = 0; j < Player.NO_REGISTERS; j++) {
+                CommandCardField field = player.getProgramField(j);
+                field.setCard(program.get(j));
+                field.setVisible(true);
+            }
+            for (int i = 0; i < Player.NO_CARDS; i++) {
+                CommandCardField field = player.getCardField(i);
+                field.setCard(cards.get(i));
+                field.setVisible(true);
+            }
+        }
+        //sets the games phase to the saved phase, sets the currentplayer to player on, sets the step of the game to the current step and opens the game
+        this.gameController.board.setPhase(Phase.get(jsonObject.get("phase").getAsString()));
+        this.gameController.board.setCurrentPlayer(this.gameController.board.getPlayer(0));
+        this.gameController.board.setStep(jsonObject.get("step").getAsInt());
+        roboRally.createBoardView(this.gameController);
+        if (this.gameController == null) {
             newGame();
         }
     }

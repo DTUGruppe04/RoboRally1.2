@@ -1,63 +1,479 @@
-[
-  {
-    "map": {
-      "PremadeMaps": "MAP1"
-    },
-    "players": {
-      "player1": {
-        "name": "Player 1",
-        "color": "red",
-        "checkpoints": 0,
-        "heading": "SOUTH",
-        "space": {
-          "x": 0,
-          "y": 0
-        },
-        "Program": {
-          "programmingcard0": "null",
-          "programmingcard1": "null",
-          "programmingcard2": "null",
-          "programmingcard3": "null",
-          "programmingcard4": "null"
-        },
-        "Cards": {
-          "commandcard0": "OPTION_LEFT_RIGHT",
-          "commandcard1": "RIGHT",
-          "commandcard2": "FORWARD",
-          "commandcard3": "LEFT",
-          "commandcard4": "RIGHT",
-          "commandcard5": "FAST_FORWARD",
-          "commandcard6": "LEFT",
-          "commandcard7": "FORWARD"
-        }
+{
+  "width": 10,
+  "height": 10,
+  "boardName": "Corridor Blitz",
+  "players": [
+    {
+      "name": "Player 1",
+      "color": "red",
+      "checkpoints": 0,
+      "space": {
+        "x": 3,
+        "y": 8,
+        "type": "EMPTY_SPACE"
       },
-      "player2": {
-        "name": "Player 2",
-        "color": "green",
-        "checkpoints": 0,
-        "heading": "SOUTH",
-        "space": {
-          "x": 1,
-          "y": 1
+      "heading": "SOUTH",
+      "program": [
+        {
+          "card": {
+            "command": "FORWARD"
+          },
+          "visible": true
         },
-        "Program": {
-          "programmingcard0": "null",
-          "programmingcard1": "null",
-          "programmingcard2": "null",
-          "programmingcard3": "null",
-          "programmingcard4": "null"
+        {
+          "visible": true
         },
-        "Cards": {
-          "commandcard0": "OPTION_LEFT_RIGHT",
-          "commandcard1": "LEFT",
-          "commandcard2": "RIGHT",
-          "commandcard3": "OPTION_LEFT_RIGHT",
-          "commandcard4": "OPTION_LEFT_RIGHT",
-          "commandcard5": "FAST_FORWARD",
-          "commandcard6": "FAST_FORWARD",
-          "commandcard7": "FORWARD"
+        {
+          "visible": true
+        },
+        {
+          "visible": true
+        },
+        {
+          "visible": true
         }
-      }
+      ],
+      "cards": [
+        {
+          "card": {
+            "command": "FORWARD"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "FAST_FORWARD"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "FORWARD"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "FORWARD"
+          },
+          "visible": true
+        },
+        {
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "RIGHT"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "FAST_FORWARD"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "LEFT"
+          },
+          "visible": true
+        }
+      ]
+    },
+    {
+      "name": "Player 2",
+      "color": "green",
+      "checkpoints": 0,
+      "space": {
+        "x": 8,
+        "y": 6,
+        "type": "EMPTY_SPACE"
+      },
+      "heading": "SOUTH",
+      "program": [
+        {
+          "visible": true
+        },
+        {
+          "visible": true
+        },
+        {
+          "visible": true
+        },
+        {
+          "visible": true
+        },
+        {
+          "visible": true
+        }
+      ],
+      "cards": [
+        {
+          "card": {
+            "command": "FAST_FORWARD"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "LEFT"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "OPTION_LEFT_RIGHT"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "FORWARD"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "LEFT"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "OPTION_LEFT_RIGHT"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "FORWARD"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "OPTION_LEFT_RIGHT"
+          },
+          "visible": true
+        }
+      ]
+    },
+    {
+      "name": "Player 3",
+      "color": "blue",
+      "checkpoints": 0,
+      "space": {
+        "x": 2,
+        "y": 4,
+        "type": "EMPTY_SPACE"
+      },
+      "heading": "SOUTH",
+      "program": [
+        {
+          "card": {
+            "command": "OPTION_LEFT_RIGHT"
+          },
+          "visible": true
+        },
+        {
+          "visible": true
+        },
+        {
+          "visible": true
+        },
+        {
+          "visible": true
+        },
+        {
+          "visible": true
+        }
+      ],
+      "cards": [
+        {
+          "card": {
+            "command": "RIGHT"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "OPTION_LEFT_RIGHT"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "FAST_FORWARD"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "OPTION_LEFT_RIGHT"
+          },
+          "visible": true
+        },
+        {
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "FAST_FORWARD"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "LEFT"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "LEFT"
+          },
+          "visible": true
+        }
+      ]
+    },
+    {
+      "name": "Player 4",
+      "color": "orange",
+      "checkpoints": 0,
+      "space": {
+        "x": 7,
+        "y": 2,
+        "type": "BORDER_RIGHT"
+      },
+      "heading": "SOUTH",
+      "program": [
+        {
+          "visible": true
+        },
+        {
+          "visible": true
+        },
+        {
+          "visible": true
+        },
+        {
+          "visible": true
+        },
+        {
+          "visible": true
+        }
+      ],
+      "cards": [
+        {
+          "card": {
+            "command": "RIGHT"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "OPTION_LEFT_RIGHT"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "FORWARD"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "FORWARD"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "RIGHT"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "FORWARD"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "FORWARD"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "FORWARD"
+          },
+          "visible": true
+        }
+      ]
+    },
+    {
+      "name": "Player 5",
+      "color": "grey",
+      "checkpoints": 0,
+      "space": {
+        "x": 0,
+        "y": 2,
+        "type": "EMPTY_SPACE"
+      },
+      "heading": "SOUTH",
+      "program": [
+        {
+          "visible": true
+        },
+        {
+          "visible": true
+        },
+        {
+          "visible": true
+        },
+        {
+          "visible": true
+        },
+        {
+          "visible": true
+        }
+      ],
+      "cards": [
+        {
+          "card": {
+            "command": "FAST_FORWARD"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "FAST_FORWARD"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "FAST_FORWARD"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "FORWARD"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "RIGHT"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "OPTION_LEFT_RIGHT"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "FAST_FORWARD"
+          },
+          "visible": true
+        },
+        {
+          "card": {
+            "command": "FORWARD"
+          },
+          "visible": true
+        }
+      ]
     }
-  }
-]
+  ],
+  "current": {
+    "name": "Player 1",
+    "color": "red",
+    "checkpoints": 0,
+    "space": {
+      "x": 3,
+      "y": 8,
+      "type": "EMPTY_SPACE"
+    },
+    "heading": "SOUTH",
+    "program": [
+      {
+        "card": {
+          "command": "FORWARD"
+        },
+        "visible": true
+      },
+      {
+        "visible": true
+      },
+      {
+        "visible": true
+      },
+      {
+        "visible": true
+      },
+      {
+        "visible": true
+      }
+    ],
+    "cards": [
+      {
+        "card": {
+          "command": "FORWARD"
+        },
+        "visible": true
+      },
+      {
+        "card": {
+          "command": "FAST_FORWARD"
+        },
+        "visible": true
+      },
+      {
+        "card": {
+          "command": "FORWARD"
+        },
+        "visible": true
+      },
+      {
+        "card": {
+          "command": "FORWARD"
+        },
+        "visible": true
+      },
+      {
+        "visible": true
+      },
+      {
+        "card": {
+          "command": "RIGHT"
+        },
+        "visible": true
+      },
+      {
+        "card": {
+          "command": "FAST_FORWARD"
+        },
+        "visible": true
+      },
+      {
+        "card": {
+          "command": "LEFT"
+        },
+        "visible": true
+      }
+    ]
+  },
+  "phase": "PROGRAMMING",
+  "amountOfCheckpoints": 2,
+  "step": 0,
+  "stepMode": false
+}

@@ -21,12 +21,10 @@
  */
 package dk.dtu.compute.se.pisd.roborally.model;
 
-import com.google.gson.stream.JsonReader;
+import com.google.gson.annotations.Expose;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,30 +38,39 @@ import static dk.dtu.compute.se.pisd.roborally.model.Phase.INITIALISATION;
  */
 public class Board extends Subject {
 
+    @Expose
     public final int width;
 
+    @Expose
     public final int height;
 
-
+    @Expose
     public final String boardName;
 
+    @Expose
     private Integer gameId;
 
     private final Space[][] spaces;
 
+    @Expose
     private final List<Player> players = new ArrayList<>();
 
+    @Expose
     private Player current;
 
+    @Expose
     private Player winner = null;
 
+    @Expose
     private Phase phase = INITIALISATION;
 
-
-
+    @Expose
     private int amountOfCheckpoints = 0;
+
+    @Expose
     private int step = 0;
 
+    @Expose
     private boolean stepMode;
 
     public Board(int width, int height, @NotNull String boardName) {

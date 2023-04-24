@@ -12,6 +12,6 @@ public class PushPanel extends FieldAction{
     }
     @Override
     public void doAction(GameController gameController, Space space) {
-
+        
     }
 }

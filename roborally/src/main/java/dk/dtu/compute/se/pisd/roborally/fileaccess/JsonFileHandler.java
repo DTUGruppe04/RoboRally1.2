@@ -14,7 +14,8 @@ public class JsonFileHandler {
     String SaveFile2 = "roborally/src/main/java/dk/dtu/compute/se/pisd/SaveFiles/SaveFile2.json";
     String SaveFile3 = "roborally/src/main/java/dk/dtu/compute/se/pisd/SaveFiles/SaveFile3.json";
     String SaveFile4 = "roborally/src/main/java/dk/dtu/compute/se/pisd/SaveFiles/SaveFile4.json";
-    String[] saveFiles = new String[]{"Save 1", "Save 2", "Save 3", "Save 4"};
+    String SaveFile5 = "roborally/src/main/java/dk/dtu/compute/se/pisd/SaveFiles/SaveFile5.json";
+    String[] saveFiles = new String[]{"Save 1", "Save 2", "Save 3", "Save 4", "Save 5"};
     Gson Gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
     //Constructor Declaration of Class
@@ -40,6 +41,7 @@ public class JsonFileHandler {
                 case "Save 2" -> SaveFile = SaveFile2;
                 case "Save 3" -> SaveFile = SaveFile3;
                 case "Save 4" -> SaveFile = SaveFile4;
+                case "Save 5" -> SaveFile = SaveFile5;
             }
             try {
                 try (FileWriter SaveWriter = new FileWriter(SaveFile)) {
@@ -65,6 +67,7 @@ public class JsonFileHandler {
                 case "Save 2" -> SaveFile = SaveFile2;
                 case "Save 3" -> SaveFile = SaveFile3;
                 case "Save 4" -> SaveFile = SaveFile4;
+                case "Save 5" -> SaveFile = SaveFile5;
             }
             try (FileReader saveReader = new FileReader(SaveFile)){
 

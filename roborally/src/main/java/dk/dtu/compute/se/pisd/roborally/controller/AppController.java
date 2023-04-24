@@ -158,66 +158,57 @@ public class AppController implements Observer {
      */
     public void loadGame() {
         //loads string from savefile and creates a JSON object from the json string
-        String test = jsonFileHandler.loadFromSaveFile();
-        JsonParser jsonParser = new JsonParser();
-        JsonObject jsonObject = jsonParser.parse(test).getAsJsonObject();
+        JsonObject SaveFile = new JsonParser().parse(jsonFileHandler.loadFromSaveFile()).getAsJsonObject();
         //finds the map in the savefile and creates a new board with the given map
-        PremadeMaps map = PremadeMaps.get(jsonObject.get("boardName").getAsString());
+        PremadeMaps map = PremadeMaps.get(SaveFile.get("boardName").getAsString());
         Board board = new Board(map.mapArray, map.mapName);
         //creates a gamecontroller from the new board
-        GameController gameController = new GameController(board);
-        this.gameController = gameController;
+        this.gameController = new GameController(board);
         this.map = map;
         //creates a JsonArray from the savefile with all the players in the saved game
-        JsonArray jsonArray = jsonObject.getAsJsonArray("players");
+        JsonArray jsonArray = SaveFile.getAsJsonArray("players");
         //iterates through each jsonplayer in the jsonplayerarray
         for(JsonElement jsonplayer : jsonArray) {
-            //finds the color and name of the given player and creates a new player instance
+            //the player as a json object
             JsonObject tempJsonPlayer = jsonplayer.getAsJsonObject();
+            //creates a player
             Player player = new Player(board, tempJsonPlayer.get("color").getAsString(), tempJsonPlayer.get("name").getAsString());
-            //adds the new player to the board, sets the saved heading, amountof checkpoints reached and placement on the board for the given player
+            //adds the new player to the board, sets heading, amount of checkpoints reached and placement on the board for the given player
             board.addPlayer(player);
             player.setHeading(Heading.get(tempJsonPlayer.get("heading").getAsString()));
-            player.setSpace(board.getSpace(tempJsonPlayer.get("space").getAsJsonObject().get("x").getAsInt(),tempJsonPlayer.get("space").getAsJsonObject().get("y").getAsInt()));
+            player.setSpace(board.getSpace(
+                    tempJsonPlayer.get("space").getAsJsonObject().get("x").getAsInt(),
+                    tempJsonPlayer.get("space").getAsJsonObject().get("y").getAsInt()));
             player.setCheckpoints(tempJsonPlayer.get("checkpoints").getAsInt());
-            //creates two new jsonarray, one for the saves program and one for the saved cards
-            JsonArray tempProgramJson = tempJsonPlayer.getAsJsonArray("program");
-            JsonArray tempCardsJson = tempJsonPlayer.getAsJsonArray("cards");
-            ArrayList<CommandCard> program = new ArrayList<>();
-            ArrayList<CommandCard> cards = new ArrayList<>();
-            //iterates through the saved program and cards, and adds the programming cards to the right commanccardfield in the players program and cards
-            for(JsonElement programJson : tempProgramJson) {
-               if ( programJson.getAsJsonObject().get("card") != null){
-                   program.add(new CommandCard(Objects.requireNonNull(Command.get(programJson.getAsJsonObject().get("card").getAsJsonObject().get("command").getAsString()))));
-               } else {
-                   program.add(null);
-               }
-            }
-            for(JsonElement cardsJson : tempCardsJson) {
-                if ( cardsJson.getAsJsonObject().get("card") != null){
-                    cards.add(new CommandCard(Objects.requireNonNull(Command.get(cardsJson.getAsJsonObject().get("card").getAsJsonObject().get("command").getAsString()))));
-                } else {
-                    cards.add(null);
-                }
-            }
-            for (int j = 0; j < Player.NO_REGISTERS; j++) {
-                CommandCardField field = player.getProgramField(j);
-                field.setCard(program.get(j));
-                field.setVisible(true);
-            }
-            for (int i = 0; i < Player.NO_CARDS; i++) {
-                CommandCardField field = player.getCardField(i);
-                field.setCard(cards.get(i));
-                field.setVisible(true);
-            }
+            //iterates through the saved program and cards, and adds the programming cards to the right commandcardfield in the players program and cards
+            getCardAndAddToFieldFromJson(tempJsonPlayer.getAsJsonArray("program"), player, "program");
+            getCardAndAddToFieldFromJson(tempJsonPlayer.getAsJsonArray("cards"), player, "cards");
         }
         //sets the games phase to the saved phase, sets the currentplayer to player on, sets the step of the game to the current step and opens the game
-        this.gameController.board.setPhase(Phase.get(jsonObject.get("phase").getAsString()));
+        this.gameController.board.setPhase(Phase.get(SaveFile.get("phase").getAsString()));
         this.gameController.board.setCurrentPlayer(this.gameController.board.getPlayer(0));
-        this.gameController.board.setStep(jsonObject.get("step").getAsInt());
+        this.gameController.board.setStep(SaveFile.get("step").getAsInt());
         roboRally.createBoardView(this.gameController);
-        if (this.gameController == null) {
-            newGame();
+    }
+
+    private void getCardAndAddToFieldFromJson(JsonArray cardsJson, Player player, String programOrCards) {
+        int cardCounter = 0;
+        CommandCardField field;
+        for (JsonElement cardJson : cardsJson) {
+            if (programOrCards.equals("program")) {
+                field = player.getProgramField(cardCounter);
+            } else {
+                field = player.getCardField(cardCounter);
+            }
+            if (cardJson.getAsJsonObject().get("card") != null) {
+                Command savedCommand = Command.get(cardJson.getAsJsonObject().get("card").getAsJsonObject().get("command").getAsString());
+                CommandCard savedCommandCard = new CommandCard(Objects.requireNonNull(savedCommand));
+                field.setCard(savedCommandCard);
+            } else {
+                field.setCard(null);
+            }
+            field.setVisible(true);
+            cardCounter++;
         }
     }
 

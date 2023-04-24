@@ -3,12 +3,18 @@ package dk.dtu.compute.se.pisd.roborally.fileaccess;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
+import javafx.scene.control.ChoiceDialog;
 
 import java.io.*;
+import java.util.Optional;
 
 public class JsonFileHandler {
 
-    String SaveFile = "roborally/src/main/java/dk/dtu/compute/se/pisd/SaveFile.json";
+    String SaveFile1 = "roborally/src/main/java/dk/dtu/compute/se/pisd/SaveFiles/SaveFile1.json";
+    String SaveFile2 = "roborally/src/main/java/dk/dtu/compute/se/pisd/SaveFiles/SaveFile2.json";
+    String SaveFile3 = "roborally/src/main/java/dk/dtu/compute/se/pisd/SaveFiles/SaveFile3.json";
+    String SaveFile4 = "roborally/src/main/java/dk/dtu/compute/se/pisd/SaveFiles/SaveFile4.json";
+    String[] saveFiles = new String[]{"Save 1", "Save 2", "Save 3", "Save 4", "Save 5"};
     Gson Gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
     //Constructor Declaration of Class
@@ -22,17 +28,44 @@ public class JsonFileHandler {
     }
 
     private void saveToFile(String JSONString) {
-        try {
-            try (FileWriter SaveWriter = new FileWriter(SaveFile)) {
-                SaveWriter.write(JSONString);
+        ChoiceDialog<String> saveFileDialog = new ChoiceDialog<>(saveFiles[0], saveFiles);
+        saveFileDialog.setTitle("Save current game");
+        saveFileDialog.setHeaderText("Which save do you want to save your game on.");
+        Optional<String> saveFileNameOption = saveFileDialog.showAndWait();
+        if (saveFileNameOption.isPresent()) {
+            String saveFileName = saveFileNameOption.get();
+            String SaveFile = SaveFile1;
+            switch (saveFileName) {
+                case "Save 1" -> SaveFile = SaveFile1;
+                case "Save 2" -> SaveFile = SaveFile2;
+                case "Save 3" -> SaveFile = SaveFile3;
+                case "Save 4" -> SaveFile = SaveFile4;
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            try {
+                try (FileWriter SaveWriter = new FileWriter(SaveFile)) {
+                    SaveWriter.write(JSONString);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
     private String readFromSaveFile() {
         String JSONString = "";
+        ChoiceDialog<String> saveFileDialog = new ChoiceDialog<>(saveFiles[0], saveFiles);
+        saveFileDialog.setTitle("Load from save file");
+        saveFileDialog.setHeaderText("Which save game do you want to load");
+        Optional<String> saveFileNameOption = saveFileDialog.showAndWait();
+        if (saveFileNameOption.isPresent()) {
+            String saveFileName = saveFileNameOption.get();
+            String SaveFile = SaveFile1;
+            switch (saveFileName) {
+                case "Save 1" -> SaveFile = SaveFile1;
+                case "Save 2" -> SaveFile = SaveFile2;
+                case "Save 3" -> SaveFile = SaveFile3;
+                case "Save 4" -> SaveFile = SaveFile4;
+            }
             try (FileReader saveReader = new FileReader(SaveFile)){
 
                 BufferedReader bufferedReader = new BufferedReader(saveReader);
@@ -42,6 +75,7 @@ public class JsonFileHandler {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        }
         return JSONString;
     }
 

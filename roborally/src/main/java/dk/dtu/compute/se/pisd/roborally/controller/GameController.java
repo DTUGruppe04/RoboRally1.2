@@ -210,7 +210,10 @@ public class GameController {
                 Command command = card.command;
                 executeCommand(currentPlayer, command);
             }
-            executeBoardElements();
+            System.out.println(board.getPlayersNumber() + " " + board.getPlayerNumber(currentPlayer));
+            if ((board.getPlayerNumber(currentPlayer)+1) == board.getPlayersNumber()) {
+                executeBoardElements();
+            }
             if (board.getPhase() != Phase.PLAYER_INTERACTION) {
                 nextPlayer();
             }
@@ -325,7 +328,7 @@ public class GameController {
      * @param heading the heading to reverse
      * @return the opposite heading
      */
-    private Heading reverseHeading(Heading heading) {
+    public Heading reverseHeading(Heading heading) {
         return switch (heading) {
             case NORTH -> Heading.SOUTH;
             case SOUTH -> Heading.NORTH;

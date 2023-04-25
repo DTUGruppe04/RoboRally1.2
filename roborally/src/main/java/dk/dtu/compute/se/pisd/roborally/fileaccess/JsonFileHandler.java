@@ -1,26 +1,17 @@
 package dk.dtu.compute.se.pisd.roborally.fileaccess;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import javafx.scene.control.ChoiceDialog;
-
 import java.io.*;
 import java.util.Optional;
 
 public class JsonFileHandler {
 
-    String SaveFile1 = "roborally/src/main/java/dk/dtu/compute/se/pisd/SaveFiles/SaveFile1.json";
-    String SaveFile2 = "roborally/src/main/java/dk/dtu/compute/se/pisd/SaveFiles/SaveFile2.json";
-    String SaveFile3 = "roborally/src/main/java/dk/dtu/compute/se/pisd/SaveFiles/SaveFile3.json";
-    String SaveFile4 = "roborally/src/main/java/dk/dtu/compute/se/pisd/SaveFiles/SaveFile4.json";
-    String SaveFile5 = "roborally/src/main/java/dk/dtu/compute/se/pisd/SaveFiles/SaveFile5.json";
-    Gson Gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+    private final Gson Gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
     //Constructor Declaration of Class
-    public JsonFileHandler() {
-
-    }
+    public JsonFileHandler() {}
 
     /**
      * Saves the current game to a JSON file in one of five possible save slots.
@@ -61,13 +52,18 @@ public class JsonFileHandler {
 
     //Used for the read and write, from and to save file methods
     private String saveFileSwitch(String saveFileNameOption) {
-        String SaveFilePath = SaveFile1;
+        String saveFile1 = "roborally/src/main/java/dk/dtu/compute/se/pisd/SaveFiles/SaveFile1.json";
+        String saveFile2 = "roborally/src/main/java/dk/dtu/compute/se/pisd/SaveFiles/SaveFile2.json";
+        String saveFile3 = "roborally/src/main/java/dk/dtu/compute/se/pisd/SaveFiles/SaveFile3.json";
+        String saveFile4 = "roborally/src/main/java/dk/dtu/compute/se/pisd/SaveFiles/SaveFile4.json";
+        String saveFile5 = "roborally/src/main/java/dk/dtu/compute/se/pisd/SaveFiles/SaveFile5.json";
+        String SaveFilePath = saveFile1;
         switch (saveFileNameOption) {
-            case "Save 1" -> SaveFilePath = SaveFile1;
-            case "Save 2" -> SaveFilePath = SaveFile2;
-            case "Save 3" -> SaveFilePath = SaveFile3;
-            case "Save 4" -> SaveFilePath = SaveFile4;
-            case "Save 5" -> SaveFilePath = SaveFile5;
+            case "Save 1" -> SaveFilePath = saveFile1;
+            case "Save 2" -> SaveFilePath = saveFile2;
+            case "Save 3" -> SaveFilePath = saveFile3;
+            case "Save 4" -> SaveFilePath = saveFile4;
+            case "Save 5" -> SaveFilePath = saveFile5;
         }
         return SaveFilePath;
     }

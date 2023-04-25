@@ -84,7 +84,7 @@ public class JsonFileHandler {
     }
 
     /**
-     * Whole JSON file has to be in one line, on line 1
+     * Whole JSON string has to be in one line, on line 1
      * @param readFilePath, the filepath to the JSON file you want to read from
      * @return The JSON from the file as a string
      */

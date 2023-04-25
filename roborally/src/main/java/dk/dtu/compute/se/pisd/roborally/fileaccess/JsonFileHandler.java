@@ -51,7 +51,7 @@ public class JsonFileHandler {
     }
 
     //Used for the read and write, from and to save file methods
-    private String saveFileSwitch(String saveFileNameOption) {
+    String saveFileSwitch(String saveFileNameOption) {
         String saveFile1 = "roborally/src/main/java/dk/dtu/compute/se/pisd/SaveFiles/SaveFile1.json";
         String saveFile2 = "roborally/src/main/java/dk/dtu/compute/se/pisd/SaveFiles/SaveFile2.json";
         String saveFile3 = "roborally/src/main/java/dk/dtu/compute/se/pisd/SaveFiles/SaveFile3.json";
@@ -73,7 +73,7 @@ public class JsonFileHandler {
      * @param JSONString, the JSON String to write to a file
      * @param writeFilePath, the filepath to the file you need to write to
      */
-    private static void writeToJSONFile(String JSONString, String writeFilePath) {
+    static void writeToJSONFile(String JSONString, String writeFilePath) {
         try {
             try (FileWriter fileWriter = new FileWriter(writeFilePath)) {
                 fileWriter.write(JSONString);
@@ -88,7 +88,7 @@ public class JsonFileHandler {
      * @param readFilePath, the filepath to the JSON file you want to read from
      * @return The JSON from the file as a string
      */
-    private static String readFromJSONFile(String readFilePath) {
+    static String readFromJSONFile(String readFilePath) {
         String JSONString;
         try (FileReader fileReader = new FileReader(readFilePath)){
 

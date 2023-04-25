@@ -158,7 +158,7 @@ public class AppController implements Observer {
      */
     public void loadGame() {
         //loads string from savefile and creates a JSON object from the json string
-        JsonObject SaveFile = new JsonParser().parse(jsonFileHandler.loadFromSaveFile()).getAsJsonObject();
+        JsonObject SaveFile = new JsonParser().parse(jsonFileHandler.readFromSaveFile()).getAsJsonObject();
         //finds the map in the savefile and creates a new board with the given map
         PremadeMaps map = PremadeMaps.get(SaveFile.get("boardName").getAsString());
         Board board = new Board(map.mapArray, map.mapName);

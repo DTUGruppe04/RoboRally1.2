@@ -40,7 +40,8 @@ public enum Command {
     LEFT("Turn Left"),
     FAST_FORWARD("Fast Forward"),
     // XXX Assignment P3
-    OPTION_LEFT_RIGHT("Left OR Right", LEFT, RIGHT);
+    OPTION_LEFT_RIGHT("Left OR Right", LEFT, RIGHT),
+    SPAM("Spam Card", LEFT, RIGHT);
 
     final public String displayName;
 

@@ -40,7 +40,7 @@ public class Player extends Subject {
     final public static int NO_REGISTERS = 5;
 
     @Expose
-    final public static int NO_CARDS = 8;
+    final public static int NO_CARDS = 9;
 
     final public Board board;
     @Expose
@@ -55,12 +55,14 @@ public class Player extends Subject {
     @Expose
     private Heading heading = SOUTH;
 
+    private int spamCards = 0;
 
     @Expose
     private CommandCardField[] program;
 
     @Expose
     private CommandCardField[] cards;
+
 
     public Player(@NotNull Board board, String color, @NotNull String name) {
         this.board = board;
@@ -78,7 +80,7 @@ public class Player extends Subject {
         cards = new CommandCardField[NO_CARDS];
         for (int i = 0; i < cards.length; i++) {
             cards[i] = new CommandCardField(this);
-        }
+         }
     }
 
     public void raiseCheckpoints() {
@@ -164,5 +166,27 @@ public class Player extends Subject {
 
     public CommandCardField[] getCards() {
         return cards;
+    }
+
+    public void incSpamCards() {
+        spamCards++;
+    }
+
+    public void decSpamCards() {
+        spamCards--;
+    }
+
+    public void addSpamCards(int number) {
+        spamCards = spamCards + number;
+    }
+
+    //Public Getter Method for SpamCards
+    public int getSpamCards() {
+        return spamCards;
+    }
+
+    //Public Setter Method for SpamCards
+    public void setSpamCards(int number) {
+        number = spamCards;
     }
 }

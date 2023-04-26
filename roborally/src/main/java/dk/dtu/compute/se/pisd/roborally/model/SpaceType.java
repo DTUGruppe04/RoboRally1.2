@@ -43,9 +43,20 @@ public enum SpaceType {
     ONE_LASER_RIGHT("file:roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/images/OneLaserRight.png", new Laser(1), Heading.EAST),
     TWO_LASER_RIGHT("file:roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/images/TwoLaserRight.png", new Laser(2), Heading.EAST),
     THREE_LASER_RIGHT("file:roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/images/ThreeLaserRight.png", new Laser(3), Heading.EAST),
-    BORDER_LEFT(Heading.WEST), BORDER_RIGHT(Heading.EAST), BORDER_UP(Heading.NORTH), BORDER_DOWN(Heading.SOUTH),
-    BORDER_CORNER_TOP_LEFT(Heading.NORTH, Heading.WEST), BORDER_CORNER_TOP_RIGHT(Heading.NORTH, Heading.EAST),
-    BORDER_CORNER_BOTTOM_LEFT(Heading.SOUTH, Heading.WEST), BORDER_CORNER_BOTTOM_RIGHT(Heading.SOUTH, Heading.EAST)
+    BORDER_LEFT(Heading.WEST),
+    BORDER_RIGHT(Heading.EAST),
+    BORDER_UP(Heading.NORTH),
+    BORDER_DOWN(Heading.SOUTH),
+    BORDER_CORNER_TOP_LEFT(Heading.NORTH, Heading.WEST),
+    BORDER_CORNER_TOP_RIGHT(Heading.NORTH, Heading.EAST),
+    BORDER_CORNER_BOTTOM_LEFT(Heading.SOUTH, Heading.WEST),
+    BORDER_CORNER_BOTTOM_RIGHT(Heading.SOUTH, Heading.EAST),
+    ONE_EMPTY_LASER_UP("file:roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/images/OneEmptyLaserUp.png", new DefaultField()),
+    ONE_EMPTY_LASER_RIGHT("file:roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/images/OneEmptyLaserRight.png", new DefaultField()),
+    BORDER_CORNER_LEFT_ONE_EMPTY_LASER_RIGHT("file:roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/images/OneEmptyLaserRight.png", new DefaultField(), Heading.WEST),
+    BORDER_CORNER_RIGHT_ONE_EMPTY_LASER_RIGHT("file:roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/images/OneEmptyLaserRight.png", new DefaultField(), Heading.EAST),
+    BORDER_CORNER_BOTTOM_ONE_EMPTY_LASER_UP("file:roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/images/OneEmptyLaserUp.png", new DefaultField(), Heading.SOUTH),
+    BORDER_CORNER_TOP_ONE_EMPTY_LASER_UP("file:roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/images/OneEmptyLaserUp.png", new DefaultField(), Heading.NORTH)
     ;
     final public Background Background;
     public Border Borders;

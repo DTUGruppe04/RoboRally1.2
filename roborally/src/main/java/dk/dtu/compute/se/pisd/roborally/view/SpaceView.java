@@ -38,8 +38,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class SpaceView extends StackPane implements ViewObserver {
 
-    final public static int SPACE_HEIGHT = 60; // 75;
-    final public static int SPACE_WIDTH = 60; // 75;
+    final public static int PREF_SPACE_HEIGHT = 50; // 75;
+    final public static int PREF_SPACE_WIDTH = 50; // 75;
     public final Space space;
 
 
@@ -47,13 +47,13 @@ public class SpaceView extends StackPane implements ViewObserver {
         this.space = space;
 
         // XXX the following styling should better be done with styles
-        this.setPrefWidth(SPACE_WIDTH);
-        this.setMinWidth(SPACE_WIDTH);
-        this.setMaxWidth(SPACE_WIDTH);
+        this.setPrefWidth(PREF_SPACE_WIDTH);
+        this.setMinWidth(PREF_SPACE_WIDTH);
+        this.setMaxWidth(PREF_SPACE_WIDTH);
 
-        this.setPrefHeight(SPACE_HEIGHT);
-        this.setMinHeight(SPACE_HEIGHT);
-        this.setMaxHeight(SPACE_HEIGHT);
+        this.setPrefHeight(PREF_SPACE_HEIGHT);
+        this.setMinHeight(PREF_SPACE_WIDTH);
+        this.setMaxHeight(PREF_SPACE_HEIGHT);
 
         this.setBackground(space.getType().Background);
         this.setBorder(space.getType().Borders);

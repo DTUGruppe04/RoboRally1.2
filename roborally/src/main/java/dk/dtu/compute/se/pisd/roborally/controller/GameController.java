@@ -240,10 +240,32 @@ public class GameController {
     private void executeBoardElements() {
         //execute space that has players
         for (Player player : board.getPlayers()) {
-            player.getSpace().executeFieldAction(this);
+            if(this.board.isSpaceTypeLaser(player.getSpace().getType())) {
+
+            } else {
+                player.getSpace().executeFieldAction(this);
+            }
+        }
+        //Shoot lasers
+        /*
+        for (int i = 0; i < this.board.getSpaces().length; i++) {
+            for (int j = 0; j < this.board.getSpaces()[i].length; j++) {
+                if(this.board.getSpaces()[i][j].getType() == SpaceType.ONE_LASER_RIGHT){
+                    this.board.getSpaces()[i][j].executeFieldAction(this);
+                }
+            }
         }
 
-        //Shoot lasers
+         */
+
+        for (int i = 0; i < this.board.getSpaces().length; i++) {
+            for (int j = 0; j < this.board.getSpaces()[i].length; j++) {
+                Space currentSpace = this.board.getSpace(i,j);
+                if(this.board.isSpaceTypeLaser(currentSpace.getType())) {
+                    this.board.getSpaces()[i][j].executeFieldAction(this);
+                }
+            }
+        }
     }
 
     /**

@@ -11,51 +11,45 @@ public class Laser extends FieldAction{
 
     private final int LaserAmount;
 
-    public Laser(int laserAmount) {
+    private final Heading LaserDirection;
+
+    public Laser(int laserAmount, Heading laserDirection) {
         LaserAmount = laserAmount;
+        LaserDirection = laserDirection;
+    }
+
+    public boolean isWall(Space space) {
+        return space.getType().BorderHeadings.contains(Heading.SOUTH) ||
+                space.getType().BorderHeadings.contains(Heading.NORTH) ||
+                space.getType().BorderHeadings.contains(Heading.WEST) ||
+                space.getType().BorderHeadings.contains(Heading.EAST);
     }
 
     public void searchTarget(Space space, Heading heading) {
-        boolean keepSearch = true;
-        Space neighbour = space.board.getNeighbour(space, heading);
-        while (keepSearch) {
-            System.out.println("Inside While Loop");
-            if(neighbour.isPlayerOnSpace()) {
-                System.out.println("Added " + LaserAmount + " SpamCards");
-                neighbour.getPlayer().addSpamCards(LaserAmount);
-                keepSearch = false;
+        if(space.isPlayerOnSpace()) {
+            System.out.println("Added " + LaserAmount + " SpamCards");
+            space.getPlayer().addSpamCards(LaserAmount);
+        } else {
+            Space neighbour = space.board.getNeighbour(space, heading);
+            while (true) {
+               // neighbour.getPosition();
+               // System.out.println("Player: " + neighbour.getPlayer());
+               // System.out.println("");
+                if(neighbour.isPlayerOnSpace()) {
+                    System.out.println("Added " + LaserAmount + " SpamCards");
+                    neighbour.getPlayer().addSpamCards(LaserAmount);
+                    break;
+                }
+                if(isWall(neighbour)) {
+                    System.out.println("He hit a wall");
+                    break;
+                }
+                neighbour = space.board.getNeighbour(neighbour, heading);
             }
-            if(neighbour.getType().BorderHeadings.contains(Heading.SOUTH)) {
-                keepSearch = false;
-            }
-            neighbour = space.board.getNeighbour(neighbour, heading);
         }
     }
-
     @Override
     public void doAction(GameController gameController, Space space) {
-        //List<Heading> LaserHeading = space.getType().BorderHeadings;
-
-        Heading heading = gameController.reverseHeading(space.getType().BorderHeadings.get(0));
-        searchTarget(space, heading);
-
-        /*
-        switch (space.getType().BorderHeadings.get(0)) {
-            case NORTH:
-                Heading heading = Heading.SOUTH;
-                break;
-            case EAST:
-                Heading heading = Heading.WEST;
-                break;
-            case SOUTH:
-                Heading heading = Heading.NORTH;
-                break;
-            case WEST:
-                Heading heading = Heading.EAST;
-                break;
-            default:
-                System.out.println("Laser not working.");
-        }
-         */
+        searchTarget(space, LaserDirection);
     }
 }

@@ -30,7 +30,7 @@ public enum SpaceType {
     GEAR_RED("file:roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/images/GearRedRight.png", new GearRed()),
     GEAR_GREEN("file:roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/images/GearGreenLeft.png", new GearGreen()),
     PIT("file:roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/images/pit.png", new Pit()),
-    SPAWN_SPACE("file:roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/images/SpawnSpace.png", new SpawnSpace()),
+    SPAWN_SPACE_PLAYER1("file:roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/images/SpawnSpace.png", new SpawnSpace(0)),
     ONE_LASER_UP("file:roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/images/OneLaserUp.png", new Laser(1), Heading.NORTH),
     TWO_LASER_UP("file:roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/images/TwoLaserUp.png", new Laser(2), Heading.NORTH),
     THREE_LASER_UP("file:roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/images/ThreeLaserUp.png", new Laser(3), Heading.NORTH),
@@ -45,7 +45,12 @@ public enum SpaceType {
     THREE_LASER_RIGHT("file:roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/images/ThreeLaserRight.png", new Laser(3), Heading.EAST),
     BORDER_LEFT(Heading.WEST), BORDER_RIGHT(Heading.EAST), BORDER_UP(Heading.NORTH), BORDER_DOWN(Heading.SOUTH),
     BORDER_CORNER_TOP_LEFT(Heading.NORTH, Heading.WEST), BORDER_CORNER_TOP_RIGHT(Heading.NORTH, Heading.EAST),
-    BORDER_CORNER_BOTTOM_LEFT(Heading.SOUTH, Heading.WEST), BORDER_CORNER_BOTTOM_RIGHT(Heading.SOUTH, Heading.EAST)
+    BORDER_CORNER_BOTTOM_LEFT(Heading.SOUTH, Heading.WEST), BORDER_CORNER_BOTTOM_RIGHT(Heading.SOUTH, Heading.EAST),
+    SPAWN_SPACE_PLAYER2("file:roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/images/SpawnSpace.png", new SpawnSpace(1)),
+    SPAWN_SPACE_PLAYER3("file:roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/images/SpawnSpace.png", new SpawnSpace(2)),
+    SPAWN_SPACE_PLAYER4("file:roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/images/SpawnSpace.png", new SpawnSpace(3)),
+    SPAWN_SPACE_PLAYER5("file:roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/images/SpawnSpace.png", new SpawnSpace(4)),
+    SPAWN_SPACE_PLAYER6("file:roborally/src/main/java/dk/dtu/compute/se/pisd/roborally/images/SpawnSpace.png", new SpawnSpace(5)),
     ;
     final public Background Background;
     public Border Borders;

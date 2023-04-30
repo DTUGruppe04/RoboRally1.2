@@ -18,7 +18,7 @@ import dk.dtu.compute.se.pisd.roborally.model.SpaceType;
 
 public enum PremadeMaps {
     MAP1(new int[][]{
-            {0,0,0,0,0,0,0,0},
+            {21,42,43,44,45,46,0,0},
             {0,0,0,0,0,0,0,0},
             {1,2,3,4,5,0,0,0},
             {6,0,0,0,0,0,0,0},

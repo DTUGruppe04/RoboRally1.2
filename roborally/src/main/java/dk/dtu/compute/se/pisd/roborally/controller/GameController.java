@@ -230,12 +230,18 @@ public class GameController {
     /**
      * Executes all doAction methods for spaces with players on it
      */
-    private void executeBoardElements() {
+    public void executeBoardElements() {
         //execute space that has players
         for (Player player : board.getPlayers()) {
-            player.getSpace().executeFieldAction(this);
-        }
 
+            if (player.getSpace() != null) {
+                player.getSpace().executeFieldAction(this);
+            } else {
+                for (Space spawnSpace : board.getSpawnSpaces()) {
+                    spawnSpace.executeFieldAction(this);
+                }
+            }
+        }
         //Shoot lasers
     }
 

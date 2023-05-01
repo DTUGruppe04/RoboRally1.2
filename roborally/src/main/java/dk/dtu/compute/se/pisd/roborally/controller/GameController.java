@@ -286,6 +286,7 @@ public class GameController {
     /**
      * Executes all doAction methods for spaces with players on it
      */
+
     private void executeBoardElements() {
         //execute space that has players and ignore space if type laser
         for (Player player : board.getPlayers()) {
@@ -308,6 +309,7 @@ public class GameController {
         for (int i = 0; i < this.board.getPlayersNumber(); i++) {
             playerShootLaser(board.getPlayer(i));
         }
+
     }
 
     /**

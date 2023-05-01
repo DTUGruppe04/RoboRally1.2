@@ -34,7 +34,6 @@ import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 public class Space extends Subject {
 
     public final Board board;
-
     @Expose
     public final int x;
     @Expose
@@ -86,10 +85,14 @@ public class Space extends Subject {
         }
     }
 
+
+    public Space getSpace() { return this; }
+
     public void getPosition() {
         System.out.println("Space X: " + x);
         System.out.println("Space Y: "+ y);
     }
+
 
     public SpaceType getType() {
         return type;
@@ -102,4 +105,11 @@ public class Space extends Subject {
         notifyChange();
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
 }

@@ -52,6 +52,10 @@ public class Board extends Subject {
 
     private final Space[][] spaces;
 
+
+
+    private ArrayList<Space> spawnSpaces;
+
     @Expose
     private final List<Player> players = new ArrayList<>();
 
@@ -94,11 +98,19 @@ public class Board extends Subject {
         this.width = boardArray[0].length;
         this.height = boardArray.length;
         this.spaces = new Space[width][height];
+        this.spawnSpaces = new ArrayList<>();
         for (int y = 0; y < width; y++) {
             for(int x = 0; x < height; x++) {
-                createSpace(x,y,SpaceType.get(boardArray[y][x]));
-                if (SpaceType.get(boardArray[y][x]).equals(SpaceType.CHECKPOINT1) || SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT2) || SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT3) || SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT4) || SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT5)) {
+                createSpace(x,y,SpaceType.get(boardArray[x][y]));
+                if (SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT1) || SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT2) ||
+                        SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT3) || SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT4) ||
+                        SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT5)) {
                     amountOfCheckpoints++;
+                }
+                if (SpaceType.get(boardArray[x][y]).equals(SpaceType.SPAWN_SPACE_PLAYER1) || SpaceType.get(boardArray[x][y]).equals(SpaceType.SPAWN_SPACE_PLAYER2) ||
+                        SpaceType.get(boardArray[x][y]).equals(SpaceType.SPAWN_SPACE_PLAYER3) || SpaceType.get(boardArray[x][y]).equals(SpaceType.SPAWN_SPACE_PLAYER4) ||
+                        SpaceType.get(boardArray[x][y]).equals(SpaceType.SPAWN_SPACE_PLAYER5) || SpaceType.get(boardArray[x][y]).equals(SpaceType.SPAWN_SPACE_PLAYER6)) {
+                    spawnSpaces.add(this.getSpace(x,y));
                 }
             }
         }
@@ -273,7 +285,7 @@ public class Board extends Subject {
     public Space[][] getSpaces() {
         return spaces;
     }
-
+    public ArrayList<Space> getSpawnSpaces() { return spawnSpaces; }
 
 
 }

@@ -66,6 +66,10 @@ public class Space extends Subject {
         return player;
     }
 
+    public boolean isPlayerOnSpace() {
+        return getPlayer() != null;
+    }
+
     public void setPlayer(Player player) {
         Player oldPlayer = this.player;
         if (player != oldPlayer &&
@@ -82,7 +86,10 @@ public class Space extends Subject {
         }
     }
 
-
+    public void getPosition() {
+        System.out.println("Space X: " + x);
+        System.out.println("Space Y: "+ y);
+    }
 
     public SpaceType getType() {
         return type;

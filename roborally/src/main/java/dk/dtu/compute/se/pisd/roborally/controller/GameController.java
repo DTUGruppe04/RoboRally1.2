@@ -21,6 +21,7 @@
  */
 package dk.dtu.compute.se.pisd.roborally.controller;
 
+import dk.dtu.compute.se.pisd.roborally.fieldActions.SpawnSpace;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import javafx.scene.control.ChoiceDialog;
 import org.jetbrains.annotations.NotNull;
@@ -287,28 +288,35 @@ public class GameController {
      * Executes all doAction methods for spaces with players on it
      */
 
-    private void executeBoardElements() {
+    public void executeBoardElements() {
         //execute space that has players and ignore space if type laser
-        for (Player player : board.getPlayers()) {
-            if(this.board.isSpaceTypeLaser(player.getSpace().getType())) {
+        if (this.board.getPlayer(0).getSpace() != null) {
+            for (Player player : board.getPlayers()) {
+                if(this.board.isSpaceTypeLaser(player.getSpace().getType())) {
 
-            } else {
-                player.getSpace().executeFieldAction(this);
-            }
-        }
-        //execute only laser elements
-        for (int i = 0; i < this.board.getSpaces().length; i++) {
-            for (int j = 0; j < this.board.getSpaces()[i].length; j++) {
-                Space currentSpace = this.board.getSpace(i,j);
-                if(this.board.isSpaceTypeLaser(currentSpace.getType())) {
-                    this.board.getSpaces()[i][j].executeFieldAction(this);
+                } else {
+                    player.getSpace().executeFieldAction(this);
                 }
             }
+            //execute only laser elements
+            for (int i = 0; i < this.board.getSpaces().length; i++) {
+                for (int j = 0; j < this.board.getSpaces()[i].length; j++) {
+                    Space currentSpace = this.board.getSpace(i,j);
+                    if(this.board.isSpaceTypeLaser(currentSpace.getType())) {
+                        this.board.getSpaces()[i][j].executeFieldAction(this);
+                    }
+                }
+            }
+            //execute player laser shooting
+            for (int i = 0; i < this.board.getPlayersNumber(); i++) {
+                playerShootLaser(board.getPlayer(i));
+            }
+        } else {
+            for (Space spawnSpace : board.getSpawnSpaces()) {
+                spawnSpace.executeFieldAction(this);
+            }
         }
-        //execute player laser shooting
-        for (int i = 0; i < this.board.getPlayersNumber(); i++) {
-            playerShootLaser(board.getPlayer(i));
-        }
+
 
     }
 

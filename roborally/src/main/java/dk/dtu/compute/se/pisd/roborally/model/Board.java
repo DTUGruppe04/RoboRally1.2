@@ -101,15 +101,15 @@ public class Board extends Subject {
         this.spawnSpaces = new ArrayList<>();
         for (int y = 0; y < width; y++) {
             for(int x = 0; x < height; x++) {
-                createSpace(x,y,SpaceType.get(boardArray[x][y]));
-                if (SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT1) || SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT2) ||
-                        SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT3) || SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT4) ||
-                        SpaceType.get(boardArray[x][y]).equals(SpaceType.CHECKPOINT5)) {
+                createSpace(x,y,SpaceType.get(boardArray[y][x]));
+                if (SpaceType.get(boardArray[y][x]).equals(SpaceType.CHECKPOINT1) || SpaceType.get(boardArray[y][x]).equals(SpaceType.CHECKPOINT2) ||
+                        SpaceType.get(boardArray[y][x]).equals(SpaceType.CHECKPOINT3) || SpaceType.get(boardArray[y][x]).equals(SpaceType.CHECKPOINT4) ||
+                        SpaceType.get(boardArray[y][x]).equals(SpaceType.CHECKPOINT5)) {
                     amountOfCheckpoints++;
                 }
-                if (SpaceType.get(boardArray[x][y]).equals(SpaceType.SPAWN_SPACE_PLAYER1) || SpaceType.get(boardArray[x][y]).equals(SpaceType.SPAWN_SPACE_PLAYER2) ||
-                        SpaceType.get(boardArray[x][y]).equals(SpaceType.SPAWN_SPACE_PLAYER3) || SpaceType.get(boardArray[x][y]).equals(SpaceType.SPAWN_SPACE_PLAYER4) ||
-                        SpaceType.get(boardArray[x][y]).equals(SpaceType.SPAWN_SPACE_PLAYER5) || SpaceType.get(boardArray[x][y]).equals(SpaceType.SPAWN_SPACE_PLAYER6)) {
+                if (SpaceType.get(boardArray[y][x]).equals(SpaceType.SPAWN_SPACE_PLAYER1) || SpaceType.get(boardArray[y][x]).equals(SpaceType.SPAWN_SPACE_PLAYER2) ||
+                        SpaceType.get(boardArray[y][x]).equals(SpaceType.SPAWN_SPACE_PLAYER3) || SpaceType.get(boardArray[y][x]).equals(SpaceType.SPAWN_SPACE_PLAYER4) ||
+                        SpaceType.get(boardArray[y][x]).equals(SpaceType.SPAWN_SPACE_PLAYER5) || SpaceType.get(boardArray[y][x]).equals(SpaceType.SPAWN_SPACE_PLAYER6)) {
                     spawnSpaces.add(this.getSpace(x,y));
                 }
             }

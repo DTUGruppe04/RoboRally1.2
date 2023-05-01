@@ -9,7 +9,6 @@ public class Pit extends FieldAction {
         space.getPlayer().setIsInPit(true);
         space.getPlayer().decSpamCards();
         space.getPlayer().decSpamCards();
-        gameController.spawnPlayers();
 
     }
 }

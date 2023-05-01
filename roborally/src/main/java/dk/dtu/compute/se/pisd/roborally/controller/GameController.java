@@ -124,6 +124,7 @@ public class GameController {
         board.setPhase(Phase.PROGRAMMING);
         board.setCurrentPlayer(board.getPlayer(0));
         board.setStep(0);
+        spawnPlayers();
 
         for (int i = 0; i < board.getPlayersNumber(); i++) {
             Player player = board.getPlayer(i);
@@ -263,10 +264,13 @@ public class GameController {
         int step = board.getStep();
         if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null && step >= 0 && step < Player.NO_REGISTERS) {
             CommandCard card = currentPlayer.getProgramField(step).getCard();
-            if (card != null) {
-                Command command = card.command;
-                executeCommand(currentPlayer, command);
+            if (!currentPlayer.getIsInPit()){
+                if (card != null) {
+                    Command command = card.command;
+                    executeCommand(currentPlayer, command);
+                }
             }
+
             System.out.println(board.getPlayersNumber() + " " + board.getPlayerNumber(currentPlayer));
             if ((board.getPlayerNumber(currentPlayer)+1) == board.getPlayersNumber()) {
                 executeBoardElements();

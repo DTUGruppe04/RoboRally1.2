@@ -142,6 +142,16 @@ public class Board extends Subject {
         }
     }
 
+    public boolean isSpaceTypeLaser(SpaceType spaceType) {
+        switch (spaceType) {
+            case ONE_LASER_UP, TWO_LASER_UP, THREE_LASER_UP, ONE_LASER_DOWN, TWO_LASER_DOWN, THREE_LASER_DOWN, ONE_LASER_LEFT, TWO_LASER_LEFT, THREE_LASER_LEFT,
+                    ONE_LASER_RIGHT, TWO_LASER_RIGHT, THREE_LASER_RIGHT:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     public int getPlayersNumber() {
         return players.size();
     }

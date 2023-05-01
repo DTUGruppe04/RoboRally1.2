@@ -24,6 +24,7 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import javafx.scene.control.ChoiceDialog;
 import org.jetbrains.annotations.NotNull;
+import java.util.Random;
 
 /**
  * ...
@@ -46,14 +47,6 @@ public class GameController {
      * @param space the space to which the current player should move
      */
     public void moveCurrentPlayerToSpace(@NotNull Space space)  {
-        // TODO Assignment V1: method should be implemented by the students:
-        //   - the current player should be moved to the given space
-        //     (if it is free()
-        //   - and the current player should be set to the player
-        //     following the current player
-        //   - the counter of moves in the game should be increased by one
-        //     if the player is moved
-
         if (space != null && space.board == board) {
             Player currentPlayer = board.getCurrentPlayer();
             if (currentPlayer != null && space.getPlayer() == null) {
@@ -61,6 +54,63 @@ public class GameController {
                 int playerNumber = (board.getPlayerNumber(currentPlayer) + 1) % board.getPlayersNumber();
                 board.setCurrentPlayer(board.getPlayer(playerNumber));
             }
+        }
+    }
+
+    public boolean isWall(Space space, Heading heading) {
+        switch (heading) {
+            case NORTH, SOUTH -> {
+                return space.getType().BorderHeadings.contains(Heading.NORTH) || space.getType().BorderHeadings.contains(Heading.SOUTH);
+            }
+            case EAST, WEST -> {
+                return space.getType().BorderHeadings.contains(Heading.EAST) || space.getType().BorderHeadings.contains(Heading.WEST);
+            }
+            default -> {
+                return false;
+            }
+        }
+    }
+
+    public boolean isOutOfMap(Space space, Heading heading) {
+        switch (heading) {
+            case NORTH -> {
+                return space.y >= this.board.height - 1;
+            }
+            case SOUTH -> {
+                return space.y <= 0;
+            }
+            case EAST -> {
+                return space.x <= 0;
+            }
+            case WEST -> {
+                return space.x >= this.board.width - 1;
+            }
+            default -> {
+                return false;
+            }
+        }
+    }
+
+    public void playerShootLaser(Player player) {
+        Space playerSpace = player.getSpace();
+        Heading playerHeading = player.getHeading();
+        Space neighborSpace = playerSpace.board.getNeighbour(playerSpace, playerHeading);
+        while (true) {
+            if(isOutOfMap(neighborSpace, playerHeading)) {
+                System.out.println("Laser reached outside of map");
+                break;
+            }
+            if(neighborSpace.isPlayerOnSpace()) {
+                System.out.println("Hit " + neighborSpace.getPlayer() + " and added 1 spam card!");
+                neighborSpace.getPlayer().addSpamCards(1);
+                break;
+            }
+            if(isWall(neighborSpace, playerHeading)) {
+                System.out.println("PLAYER LASER HIT A WALL");
+                break;
+            }
+            neighborSpace.getPosition();
+            neighborSpace = neighborSpace.board.getNeighbour(neighborSpace, playerHeading);
         }
     }
 
@@ -76,13 +126,19 @@ public class GameController {
 
         for (int i = 0; i < board.getPlayersNumber(); i++) {
             Player player = board.getPlayer(i);
+            Command[] commands = Command.values();
             if (player != null) {
                 for (int j = 0; j < Player.NO_REGISTERS; j++) {
                     CommandCardField field = player.getProgramField(j);
                     field.setCard(null);
                     field.setVisible(true);
                 }
-                for (int j = 0; j < Player.NO_CARDS; j++) {
+                for (int j = 0; j < player.getSpamCards(); j++) {
+                    CommandCardField field = player.getCardField(j);
+                    field.setCard(new CommandCard(commands[5]));
+                    field.setVisible(true);
+                }
+                for (int j = player.getSpamCards(); j < Player.NO_CARDS; j++) {
                     CommandCardField field = player.getCardField(j);
                     field.setCard(generateRandomCommandCard());
                     field.setVisible(true);
@@ -98,7 +154,7 @@ public class GameController {
      */
     private CommandCard generateRandomCommandCard() {
         Command[] commands = Command.values();
-        int random = (int) (Math.random() * commands.length);
+        int random = (int) (Math.random() * commands.length - 1); // -1 to make sure it does not genereate spam cards
         return new CommandCard(commands[random]);
     }
 
@@ -230,19 +286,30 @@ public class GameController {
     /**
      * Executes all doAction methods for spaces with players on it
      */
-    public void executeBoardElements() {
-        //execute space that has players
-        for (Player player : board.getPlayers()) {
 
-            if (player.getSpace() != null) {
-                player.getSpace().executeFieldAction(this);
+    private void executeBoardElements() {
+        //execute space that has players and ignore space if type laser
+        for (Player player : board.getPlayers()) {
+            if(this.board.isSpaceTypeLaser(player.getSpace().getType())) {
+
             } else {
-                for (Space spawnSpace : board.getSpawnSpaces()) {
-                    spawnSpace.executeFieldAction(this);
+                player.getSpace().executeFieldAction(this);
+            }
+        }
+        //execute only laser elements
+        for (int i = 0; i < this.board.getSpaces().length; i++) {
+            for (int j = 0; j < this.board.getSpaces()[i].length; j++) {
+                Space currentSpace = this.board.getSpace(i,j);
+                if(this.board.isSpaceTypeLaser(currentSpace.getType())) {
+                    this.board.getSpaces()[i][j].executeFieldAction(this);
                 }
             }
         }
-        //Shoot lasers
+        //execute player laser shooting
+        for (int i = 0; i < this.board.getPlayersNumber(); i++) {
+            playerShootLaser(board.getPlayer(i));
+        }
+
     }
 
     /**
@@ -256,27 +323,25 @@ public class GameController {
             // XXX This is a very simplistic way of dealing with some basic cards and
             //     their execution. This should eventually be done in a more elegant way
             //     (this concerns the way cards are modelled as well as the way they are executed).
-            if (!command.isInteractive()) {
-                switch (command) {
-                    case FORWARD:
-                        this.moveForward(player);
-                        break;
-                    case RIGHT:
-                        this.turnRight(player);
-                        break;
-                    case LEFT:
-                        this.turnLeft(player);
-                        break;
-                    case FAST_FORWARD:
-                        this.fastForward(player);
-                        break;
-                    default:
-                        // DO NOTHING (for now)
-                }
-            } else {
-                this.board.setPhase(Phase.PLAYER_INTERACTION);
+            switch (command) {
+                case FORWARD:
+                    this.moveForward(player);
+                    break;
+                case RIGHT:
+                    this.turnRight(player);
+                    break;
+                case LEFT:
+                    this.turnLeft(player);
+                    break;
+                case FAST_FORWARD:
+                    this.fastForward(player);
+                    break;
+                case SPAM:
+                    this.SPAM(player);
+                    break;
+                default:
+                    this.board.setPhase(Phase.PLAYER_INTERACTION);
             }
-
         }
     }
 
@@ -376,6 +441,37 @@ public class GameController {
         board.setPhase(Phase.ACTIVATION);
     }
 
+
+    /**
+     * Activated the spamcard
+     *
+     * @param player
+     */
+    public void SPAM(@NotNull Player player) {
+        Random rand = new Random();
+        int randomNum = rand.nextInt(5);
+        player.decSpamCards();
+        System.out.println(randomNum);
+        switch (randomNum) {
+            case 0:
+                fastForward(player);
+                break;
+            case 1:
+                turnRight(player);
+                break;
+            case 2:
+                turnLeft(player);
+                break;
+            case 3:
+                moveForward(player);
+                break;
+            case 4:
+                board.setPhase(Phase.PLAYER_INTERACTION);
+                break;
+            default:
+                System.out.println("You fucked up.");
+        }
+    }
 
     /**
      * Moves a command card from a source field to a target field.

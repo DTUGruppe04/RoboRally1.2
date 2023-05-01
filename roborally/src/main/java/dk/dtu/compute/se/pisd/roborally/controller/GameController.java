@@ -47,14 +47,6 @@ public class GameController {
      * @param space the space to which the current player should move
      */
     public void moveCurrentPlayerToSpace(@NotNull Space space)  {
-        // TODO Assignment V1: method should be implemented by the students:
-        //   - the current player should be moved to the given space
-        //     (if it is free()
-        //   - and the current player should be set to the player
-        //     following the current player
-        //   - the counter of moves in the game should be increased by one
-        //     if the player is moved
-
         if (space != null && space.board == board) {
             Player currentPlayer = board.getCurrentPlayer();
             if (currentPlayer != null && space.getPlayer() == null) {
@@ -62,6 +54,63 @@ public class GameController {
                 int playerNumber = (board.getPlayerNumber(currentPlayer) + 1) % board.getPlayersNumber();
                 board.setCurrentPlayer(board.getPlayer(playerNumber));
             }
+        }
+    }
+
+    public boolean isWall(Space space, Heading heading) {
+        switch (heading) {
+            case NORTH, SOUTH -> {
+                return space.getType().BorderHeadings.contains(Heading.NORTH) || space.getType().BorderHeadings.contains(Heading.SOUTH);
+            }
+            case EAST, WEST -> {
+                return space.getType().BorderHeadings.contains(Heading.EAST) || space.getType().BorderHeadings.contains(Heading.WEST);
+            }
+            default -> {
+                return false;
+            }
+        }
+    }
+
+    public boolean isOutOfMap(Space space, Heading heading) {
+        switch (heading) {
+            case NORTH -> {
+                return space.y >= this.board.height - 1;
+            }
+            case SOUTH -> {
+                return space.y <= 0;
+            }
+            case EAST -> {
+                return space.x <= 0;
+            }
+            case WEST -> {
+                return space.x >= this.board.width - 1;
+            }
+            default -> {
+                return false;
+            }
+        }
+    }
+
+    public void playerShootLaser(Player player) {
+        Space playerSpace = player.getSpace();
+        Heading playerHeading = player.getHeading();
+        Space neighborSpace = playerSpace.board.getNeighbour(playerSpace, playerHeading);
+        while (true) {
+            if(isOutOfMap(neighborSpace, playerHeading)) {
+                System.out.println("Laser reached outside of map");
+                break;
+            }
+            if(neighborSpace.isPlayerOnSpace()) {
+                System.out.println("Hit " + neighborSpace.getPlayer() + " and added 1 spam card!");
+                neighborSpace.getPlayer().addSpamCards(1);
+                break;
+            }
+            if(isWall(neighborSpace, playerHeading)) {
+                System.out.println("PLAYER LASER HIT A WALL");
+                break;
+            }
+            neighborSpace.getPosition();
+            neighborSpace = neighborSpace.board.getNeighbour(neighborSpace, playerHeading);
         }
     }
 
@@ -238,7 +287,7 @@ public class GameController {
      * Executes all doAction methods for spaces with players on it
      */
     private void executeBoardElements() {
-        //execute space that has players
+        //execute space that has players and ignore space if type laser
         for (Player player : board.getPlayers()) {
             if(this.board.isSpaceTypeLaser(player.getSpace().getType())) {
 
@@ -246,18 +295,7 @@ public class GameController {
                 player.getSpace().executeFieldAction(this);
             }
         }
-        //Shoot lasers
-        /*
-        for (int i = 0; i < this.board.getSpaces().length; i++) {
-            for (int j = 0; j < this.board.getSpaces()[i].length; j++) {
-                if(this.board.getSpaces()[i][j].getType() == SpaceType.ONE_LASER_RIGHT){
-                    this.board.getSpaces()[i][j].executeFieldAction(this);
-                }
-            }
-        }
-
-         */
-
+        //execute only laser elements
         for (int i = 0; i < this.board.getSpaces().length; i++) {
             for (int j = 0; j < this.board.getSpaces()[i].length; j++) {
                 Space currentSpace = this.board.getSpace(i,j);
@@ -265,6 +303,10 @@ public class GameController {
                     this.board.getSpaces()[i][j].executeFieldAction(this);
                 }
             }
+        }
+        //execute player laser shooting
+        for (int i = 0; i < this.board.getPlayersNumber(); i++) {
+            playerShootLaser(board.getPlayer(i));
         }
     }
 
@@ -398,6 +440,11 @@ public class GameController {
     }
 
 
+    /**
+     * Activated the spamcard
+     *
+     * @param player
+     */
     public void SPAM(@NotNull Player player) {
         Random rand = new Random();
         int randomNum = rand.nextInt(5);

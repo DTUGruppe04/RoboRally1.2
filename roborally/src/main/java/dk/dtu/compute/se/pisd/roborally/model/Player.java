@@ -168,10 +168,6 @@ public class Player extends Subject {
         return cards;
     }
 
-    public void incSpamCards() {
-        spamCards++;
-    }
-
     public void decSpamCards() {
         spamCards--;
     }

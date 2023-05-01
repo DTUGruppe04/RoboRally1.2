@@ -48,6 +48,9 @@ public class Player extends Subject {
     @Expose
     private String color;
 
+
+
+    private boolean isInPit;
     @Expose
     private int checkpoints;
     @Expose
@@ -69,6 +72,7 @@ public class Player extends Subject {
         this.name = name;
         this.color = color;
         this.checkpoints = 0;
+        this.isInPit = true;
 
         this.space = null;
 
@@ -152,6 +156,8 @@ public class Player extends Subject {
         }
     }
 
+    public boolean getIsInPit() { return isInPit; }
+    public void setIsInPit(boolean inPit) { isInPit = inPit; }
     public CommandCardField getProgramField(int i) {
         return program[i];
     }
@@ -169,7 +175,9 @@ public class Player extends Subject {
     }
 
     public void decSpamCards() {
-        spamCards--;
+        if (spamCards>=1) {
+            spamCards--;
+        }
     }
 
     public void addSpamCards(int number) {

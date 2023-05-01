@@ -10,10 +10,14 @@ public class SpawnSpace extends FieldAction{
     @Override
     public void doAction(GameController gameController, Space space) {
         for (int i = 0; i<gameController.board.getPlayersNumber(); i++) {
-            if (i == ownerPlayer) {
-                gameController.board.getPlayer(i).setSpace(space);
-                //space.setPlayer(gameController.board.getPlayer(i));
+            if (gameController.board.getPlayer(i).getIsInPit()) {
+                if (i == ownerPlayer) {
+                    gameController.board.getPlayer(i).setSpace(space);
+                    gameController.board.getPlayer(i).setIsInPit(false);
+                }
             }
         }
     }
+
+    public int getOwnerPlayer() { return this.ownerPlayer; }
 }

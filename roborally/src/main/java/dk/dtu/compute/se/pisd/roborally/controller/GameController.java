@@ -290,35 +290,35 @@ public class GameController {
 
     public void executeBoardElements() {
         //execute space that has players and ignore space if type laser
-        if (this.board.getPlayer(0).getSpace() != null) {
-            for (Player player : board.getPlayers()) {
-                if(this.board.isSpaceTypeLaser(player.getSpace().getType())) {
+        for (Player player : board.getPlayers()) {
+            if(this.board.isSpaceTypeLaser(player.getSpace().getType())) {
 
-                } else {
-                    player.getSpace().executeFieldAction(this);
-                }
-            }
-            //execute only laser elements
-            for (int i = 0; i < this.board.getSpaces().length; i++) {
-                for (int j = 0; j < this.board.getSpaces()[i].length; j++) {
-                    Space currentSpace = this.board.getSpace(i,j);
-                    if(this.board.isSpaceTypeLaser(currentSpace.getType())) {
-                        this.board.getSpaces()[i][j].executeFieldAction(this);
-                    }
-                }
-            }
-            //execute player laser shooting
-            for (int i = 0; i < this.board.getPlayersNumber(); i++) {
-                playerShootLaser(board.getPlayer(i));
-            }
-        } else {
-            for (Space spawnSpace : board.getSpawnSpaces()) {
-                spawnSpace.executeFieldAction(this);
+            } else {
+                player.getSpace().executeFieldAction(this);
             }
         }
-
-
+        //execute only laser elements
+        for (int i = 0; i < this.board.getSpaces().length; i++) {
+            for (int j = 0; j < this.board.getSpaces()[i].length; j++) {
+                Space currentSpace = this.board.getSpace(i,j);
+                if(this.board.isSpaceTypeLaser(currentSpace.getType())) {
+                    this.board.getSpaces()[i][j].executeFieldAction(this);
+                }
+            }
+        }
+        //execute player laser shooting
+        for (int i = 0; i < this.board.getPlayersNumber(); i++) {
+            playerShootLaser(board.getPlayer(i));
+        }
     }
+
+    public void spawnPlayers() {
+        for (Space spawnSpace : board.getSpawnSpaces()) {
+            spawnSpace.executeFieldAction(this);
+        }
+    }
+
+
 
     /**
      * Executes a command for a player on the board.

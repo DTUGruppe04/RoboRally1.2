@@ -182,6 +182,8 @@ public class AppController implements Observer {
                         tempJsonPlayer.get("space").getAsJsonObject().get("x").getAsInt(),
                         tempJsonPlayer.get("space").getAsJsonObject().get("y").getAsInt()));
                 player.setCheckpoints(tempJsonPlayer.get("checkpoints").getAsInt());
+                player.setIsInPit(tempJsonPlayer.get("isInPit").getAsBoolean());
+                player.setSpamCards(tempJsonPlayer.get("spamCards").getAsInt());
                 //iterates through the saved program and cards, and adds the programming cards to the right commandcardfield in the players program and cards
                 getCardAndAddToFieldFromJson(tempJsonPlayer.getAsJsonArray("program"), player, "program");
                 getCardAndAddToFieldFromJson(tempJsonPlayer.getAsJsonArray("cards"), player, "cards");

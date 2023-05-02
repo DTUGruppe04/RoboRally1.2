@@ -50,6 +50,7 @@ public class Player extends Subject {
 
 
 
+    @Expose
     private boolean isInPit;
     @Expose
     private int checkpoints;
@@ -58,6 +59,7 @@ public class Player extends Subject {
     @Expose
     private Heading heading = SOUTH;
 
+    @Expose
     private int spamCards = 0;
 
     @Expose

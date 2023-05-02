@@ -27,7 +27,7 @@ public class Laser extends FieldAction {
                     break;
                 }
                 if(gameController.isWall(neighbour, heading)) {
-                    System.out.println("HIT A WALL");
+                    //System.out.println("HIT A WALL");
                     break;
                 }
                 neighbour = space.board.getNeighbour(neighbour, heading);

@@ -47,9 +47,6 @@ public class Player extends Subject {
     private String name;
     @Expose
     private String color;
-
-
-
     private boolean isInPit;
     @Expose
     private int checkpoints;
@@ -193,10 +190,5 @@ public class Player extends Subject {
     //Public Getter Method for SpamCards
     public int getSpamCards() {
         return spamCards;
-    }
-
-    //Public Setter Method for SpamCards
-    public void setSpamCards(int number) {
-        number = spamCards;
     }
 }

@@ -209,7 +209,7 @@ public class PushPanelTest {
     }
 
     @Test
-    void cannotPushPLayerThroughAWallTest() {
+    void cannotPushPlayerThroughAWallTest() {
         Player player1 = board.getPlayer(0);
         Space space = board.getSpace(7, 0);
 
@@ -231,7 +231,7 @@ public class PushPanelTest {
     }
 
     @Test
-    void pushPlayerIntoLaser() {
+    void pushPlayerIntoLaserTest() {
         Player player1 = board.getPlayer(0);
         Space space = board.getSpace(2, 11);
 
@@ -254,7 +254,7 @@ public class PushPanelTest {
     }
 
     @Test
-    void pushPlayerIntoPit() {
+    void pushPlayerIntoPitTest() {
         Player player1 = board.getPlayer(0);
         Space space = board.getSpace(9, 3);
 

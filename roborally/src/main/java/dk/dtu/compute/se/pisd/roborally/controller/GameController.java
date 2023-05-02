@@ -459,7 +459,7 @@ public class GameController {
         Random rand = new Random();
         int randomNum = rand.nextInt(5);
         player.decSpamCards();
-        System.out.println(randomNum);
+        //System.out.println(randomNum);
         switch (randomNum) {
             case 0:
                 fastForward(player);

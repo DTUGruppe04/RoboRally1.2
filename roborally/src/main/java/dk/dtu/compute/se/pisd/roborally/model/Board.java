@@ -52,8 +52,6 @@ public class Board extends Subject {
 
     private final Space[][] spaces;
 
-
-
     private ArrayList<Space> spawnSpaces;
 
     @Expose

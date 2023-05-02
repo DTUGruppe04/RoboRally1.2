@@ -110,7 +110,7 @@ public class GameController {
                 System.out.println("PLAYER LASER HIT A WALL");
                 break;
             }
-            neighborSpace.getPosition();
+            //neighborSpace.getPosition();
             neighborSpace = neighborSpace.board.getNeighbour(neighborSpace, playerHeading);
         }
     }

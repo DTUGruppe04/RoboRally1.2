@@ -13,7 +13,6 @@
         Project in Software Development (PiSD) taught at
         DTU Compute.
     </description>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>17</maven.compiler.release>

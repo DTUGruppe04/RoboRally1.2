@@ -38,16 +38,16 @@ public class Player extends Subject {
 
     @Expose
     final public static int NO_REGISTERS = 5;
-
     @Expose
-    final public static int NO_CARDS = 8;
+    final public static int NO_CARDS = 9;
 
     final public Board board;
     @Expose
     private String name;
     @Expose
     private String color;
-
+    @Expose
+    private boolean isInPit;
     @Expose
     private int checkpoints;
     @Expose
@@ -55,6 +55,8 @@ public class Player extends Subject {
     @Expose
     private Heading heading = SOUTH;
 
+    @Expose
+    private int spamCards = 0;
 
     @Expose
     private CommandCardField[] program;
@@ -62,11 +64,13 @@ public class Player extends Subject {
     @Expose
     private CommandCardField[] cards;
 
+
     public Player(@NotNull Board board, String color, @NotNull String name) {
         this.board = board;
         this.name = name;
         this.color = color;
         this.checkpoints = 0;
+        this.isInPit = true;
 
         this.space = null;
 
@@ -78,7 +82,7 @@ public class Player extends Subject {
         cards = new CommandCardField[NO_CARDS];
         for (int i = 0; i < cards.length; i++) {
             cards[i] = new CommandCardField(this);
-        }
+         }
     }
 
     public void raiseCheckpoints() {
@@ -150,6 +154,8 @@ public class Player extends Subject {
         }
     }
 
+    public boolean getIsInPit() { return isInPit; }
+    public void setIsInPit(boolean inPit) { isInPit = inPit; }
     public CommandCardField getProgramField(int i) {
         return program[i];
     }
@@ -165,4 +171,26 @@ public class Player extends Subject {
     public CommandCardField[] getCards() {
         return cards;
     }
+
+    public void decSpamCards() {
+        if (spamCards>=1) {
+            spamCards--;
+        }
+    }
+
+    public void addSpamCards(int number) {
+        for (int i = 0; i < number; i++)
+            if (spamCards == 9) {
+                break; //Add reboot or something similar
+            }
+            else {
+                spamCards++;
+            }
+    }
+
+    //Public Getter Method for SpamCards
+    public int getSpamCards() {
+        return spamCards;
+    }
+    public void setSpamCards(int amountOfSpam) { this.spamCards=amountOfSpam; }
 }

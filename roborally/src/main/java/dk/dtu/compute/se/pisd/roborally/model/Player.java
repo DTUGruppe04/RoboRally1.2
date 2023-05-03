@@ -38,7 +38,6 @@ public class Player extends Subject {
 
     @Expose
     final public static int NO_REGISTERS = 5;
-
     @Expose
     final public static int NO_CARDS = 9;
 
@@ -47,9 +46,6 @@ public class Player extends Subject {
     private String name;
     @Expose
     private String color;
-
-
-
     @Expose
     private boolean isInPit;
     @Expose
@@ -195,10 +191,5 @@ public class Player extends Subject {
     //Public Getter Method for SpamCards
     public int getSpamCards() {
         return spamCards;
-    }
-
-    //Public Setter Method for SpamCards
-    public void setSpamCards(int number) {
-        number = spamCards;
     }
 }

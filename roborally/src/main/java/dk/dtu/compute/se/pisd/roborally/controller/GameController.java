@@ -110,7 +110,7 @@ public class GameController {
                 System.out.println("PLAYER LASER HIT A WALL");
                 break;
             }
-            neighborSpace.getPosition();
+            //neighborSpace.getPosition();
             neighborSpace = neighborSpace.board.getNeighbour(neighborSpace, playerHeading);
         }
     }
@@ -463,7 +463,7 @@ public class GameController {
         Random rand = new Random();
         int randomNum = rand.nextInt(5);
         player.decSpamCards();
-        System.out.println(randomNum);
+        //System.out.println(randomNum);
         switch (randomNum) {
             case 0:
                 fastForward(player);

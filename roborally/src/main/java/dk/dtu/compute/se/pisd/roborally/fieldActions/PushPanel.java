@@ -15,7 +15,7 @@ public class PushPanel extends FieldAction{
     public void doAction(GameController gameController, Space space) {
         int step = gameController.board.getStep();
         if (step == 1 || step == 3) {                                   //pushes in register 2 and 4
-            movePlayer(gameController, space, PushDirection);
+            movePlayer(gameController, space, this.PushDirection);
         }
     }
 }

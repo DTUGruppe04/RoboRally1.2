@@ -52,8 +52,6 @@ public class Board extends Subject {
 
     private final Space[][] spaces;
 
-
-
     private ArrayList<Space> spawnSpaces;
 
     @Expose
@@ -90,9 +88,11 @@ public class Board extends Subject {
         this.stepMode = false;
     }
 
+
     public Board(int width, int height) {
         this(width, height, "defaultboard");
     }
+
     public Board(int[][] boardArray, @NotNull String boardName) {
         this.boardName = boardName;
         this.width = boardArray[0].length;

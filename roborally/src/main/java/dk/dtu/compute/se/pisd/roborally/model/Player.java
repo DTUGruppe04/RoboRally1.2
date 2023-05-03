@@ -192,4 +192,5 @@ public class Player extends Subject {
     public int getSpamCards() {
         return spamCards;
     }
+    public void setSpamCards(int amountOfSpam) { this.spamCards=amountOfSpam; }
 }

@@ -17,6 +17,10 @@ package dk.dtu.compute.se.pisd.roborally.view;
 import dk.dtu.compute.se.pisd.roborally.model.SpaceType;
 
 public enum PremadeMaps {
+
+    // To make new maps, simply put the ordinal value of the SpaceTypes you want
+    // into an n x n matrix and give the map a name.
+
     //12x12 testing map (not meant for actual gameplay)
     MAP1(new int[][]{
             {21,48,49,50,51,52,0,16,34,16,0,17},

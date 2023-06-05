@@ -97,17 +97,21 @@ public class GameController {
         Heading playerHeading = player.getHeading();
         Space neighborSpace = playerSpace.board.getNeighbour(playerSpace, playerHeading);
         while (true) {
+            if(isWall(playerSpace, playerHeading)) {
+                System.out.println("PLAYER LASER HIT A WALL ON PLAYER SPACE");
+                break;
+            }
             if(isOutOfMap(neighborSpace, playerHeading)) {
                 System.out.println("Laser reached outside of map");
+                break;
+            }
+            if(isWall(neighborSpace, playerHeading)) {
+                System.out.println("PLAYER LASER HIT A WALL");
                 break;
             }
             if(neighborSpace.isPlayerOnSpace()) {
                 System.out.println("Hit " + neighborSpace.getPlayer() + " and added 1 spam card!");
                 neighborSpace.getPlayer().addSpamCards(1);
-                break;
-            }
-            if(isWall(neighborSpace, playerHeading)) {
-                System.out.println("PLAYER LASER HIT A WALL");
                 break;
             }
             //neighborSpace.getPosition();

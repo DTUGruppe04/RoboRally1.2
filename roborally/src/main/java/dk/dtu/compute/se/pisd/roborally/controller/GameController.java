@@ -58,6 +58,7 @@ public class GameController {
         }
     }
 
+
     public boolean isWall(Space space, Heading heading) {
         switch (heading) {
             case NORTH, SOUTH -> {
@@ -71,6 +72,28 @@ public class GameController {
             }
         }
     }
+
+    /* The new code. Make it crash
+    public boolean isWall(Space space, Heading heading) {
+        boolean a = false;
+        switch (heading) {
+            case NORTH:
+                a = space.getType().BorderHeadings.contains(Heading.NORTH);
+                break;
+            case SOUTH:
+                a = space.getType().BorderHeadings.contains(Heading.SOUTH);
+                break;
+            case WEST:
+                a = space.getType().BorderHeadings.contains(Heading.WEST);
+                break;
+            case EAST:
+                a = space.getType().BorderHeadings.contains(Heading.EAST);
+                break;
+            }
+            return a;
+        }
+
+     */
 
     public boolean isOutOfMap(Space space, Heading heading) {
         switch (heading) {
@@ -92,7 +115,7 @@ public class GameController {
         }
     }
 
-    public void playerShootLaser(Player player) {
+    public void playerShootLaser(@NotNull Player player) {
         Space playerSpace = player.getSpace();
         Heading playerHeading = player.getHeading();
         Space neighborSpace = playerSpace.board.getNeighbour(playerSpace, playerHeading);

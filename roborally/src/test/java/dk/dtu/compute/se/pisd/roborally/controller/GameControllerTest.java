@@ -1,76 +1,82 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
-import dk.dtu.compute.se.pisd.roborally.model.Board;
-import dk.dtu.compute.se.pisd.roborally.model.Heading;
-import dk.dtu.compute.se.pisd.roborally.model.Player;
-import dk.dtu.compute.se.pisd.roborally.model.Space;
-import javafx.application.Application;
+import dk.dtu.compute.se.pisd.roborally.controller.GameController;
+import dk.dtu.compute.se.pisd.roborally.model.*;
+import dk.dtu.compute.se.pisd.roborally.view.PremadeMaps;
+
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.testfx.api.FxAssert;
-import org.testfx.api.FxRobot;
-import org.testfx.framework.junit5.ApplicationExtension;
-import org.testfx.framework.junit5.Start;
-import org.testfx.matcher.control.LabeledMatchers;
 
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
+import java.util.Arrays;
+import java.util.List;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.testfx.framework.junit5.ApplicationExtension;
 
 @ExtendWith(ApplicationExtension.class)
 class GameControllerTest {
-
-    private final int TEST_WIDTH = 8;
-    private final int TEST_HEIGHT = 8;
-
     private GameController gameController;
+    private Board board;
+    final private List<String> PLAYER_COLORS = Arrays.asList("red", "green", "blue", "orange", "grey", "magenta");
 
     @BeforeEach
     void setUp() {
-        Board board = new Board(TEST_WIDTH, TEST_HEIGHT);
+        //Choosing our test map
+        PremadeMaps testMap = PremadeMaps.get("Test Map");
+        board = new Board(testMap.mapArray, testMap.mapName);
         gameController = new GameController(board);
-        for (int i = 0; i < 6; i++) {
-            Player player = new Player(board, null,"Player " + i);
+
+        //Creating 2 players and add them to the board
+        for(int i = 0; i < 2; i++) {
+            Player player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i + 1));
             board.addPlayer(player);
-            player.setSpace(board.getSpace(i, i));
-            player.setHeading(Heading.values()[i % Heading.values().length]);
         }
+        //Spawning the players in the game
         board.setCurrentPlayer(board.getPlayer(0));
+        gameController.spawnPlayers();
     }
 
     @AfterEach
     void tearDown() {
         gameController = null;
+        board = null;
     }
 
     @Test
-    void moveCurrentPlayerToSpace() {
-        Board board = gameController.board;
+    void moveCurrentPlayerToSpaceTest() {
         Player player1 = board.getPlayer(0);
         Player player2 = board.getPlayer(1);
 
-        gameController.moveCurrentPlayerToSpace(board.getSpace(0, 4));
+        Space space1 = board.getSpace(5, 1);
 
-        Assertions.assertEquals(player1, board.getSpace(0, 4).getPlayer(), "Player " + player1.getName() + " should beSpace (0,4)!");
-        Assertions.assertNull(board.getSpace(0, 0).getPlayer(), "Space (0,0) should be empty!");
-        Assertions.assertEquals(player2, board.getCurrentPlayer(), "Current player should be " + player2.getName() +"!");
+        gameController.moveCurrentPlayerToSpace(space1);
+
+        assertEquals(player1, space1.getPlayer());
+        assertFalse(board.getSpace(0,0).isPlayerOnSpace());
+        assertEquals(player2, board.getCurrentPlayer(), "Current player should be " + player2.getName() +"!");
     }
 
     @Test
-    void moveForward() {
-        Board board = gameController.board;
-        Player current = board.getCurrentPlayer();
+    void moveForwardTest() {
+        Player player1 = board.getPlayer(0);
 
-        gameController.moveForward(current);
+        gameController.moveForward(player1);
 
-        Assertions.assertEquals(current, board.getSpace(0, 1).getPlayer(), "Player " + current.getName() + " should beSpace (0,1)!");
-        Assertions.assertEquals(Heading.SOUTH, current.getHeading(), "Player 0 should be heading SOUTH!");
-        Assertions.assertNull(board.getSpace(0, 0).getPlayer(), "Space (0,0) should be empty!");
+        assertEquals(player1, board.getSpace(0,1).getPlayer());
+        assertEquals(Heading.SOUTH, player1.getHeading());
+        assertFalse(board.getSpace(0,0).isPlayerOnSpace());
+    }
+
+    @Test
+    void startingProgrammingPhaseTest() {
+        Player player1 = board.getPlayer(0);
+        Player player2 = board.getPlayer(1);
+
+        gameController.startProgrammingPhase();
+
+        assertEquals(Phase.PROGRAMMING, board.getPhase());
+        assertEquals(player1.getCards().length, 9);
+        assertEquals(player2.getCards().length, 9);
     }
 }

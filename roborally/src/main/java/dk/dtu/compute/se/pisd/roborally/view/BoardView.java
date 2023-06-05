@@ -81,6 +81,34 @@ public class BoardView extends VBox implements ViewObserver {
         board.attach(this);
         update(board);
     }
+    public BoardView(@NotNull GameController gameController, int player) {
+        board = gameController.board;
+
+        mainBoardPane = new GridPane();
+        playersView = new PlayersView(gameController, player);
+        statusLabel = new Label("<no status>");
+
+        this.getChildren().add(mainBoardPane);
+        this.getChildren().add(playersView);
+        this.getChildren().add(statusLabel);
+
+        spaces = new SpaceView[board.width][board.height];
+
+        spaceEventHandler = new SpaceEventHandler(gameController);
+
+        for (int x = 0; x < board.width; x++) {
+            for (int y = 0; y < board.height; y++) {
+                Space space = board.getSpace(x, y);
+                SpaceView spaceView = new SpaceView(space);
+                spaces[x][y] = spaceView;
+                mainBoardPane.add(spaceView, x, y);
+                spaceView.setOnMouseClicked(spaceEventHandler);
+            }
+        }
+
+        board.attach(this);
+        update(board);
+    }
 
     @Override
     public void updateView(Subject subject) {

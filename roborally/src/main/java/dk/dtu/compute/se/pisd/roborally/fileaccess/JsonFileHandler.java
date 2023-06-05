@@ -100,4 +100,15 @@ public class JsonFileHandler {
         return JSONString;
     }
 
+    public void updateOnlineMapConfigWithBoard(Board board){
+        String JSONString = Gson.toJson(board);
+        writeToJSONFile(JSONString, "roborally/src/main/java/dk/dtu/compute/se/pisd/onlineMapConfig.json");
+    }
+    public void updateOnlineMapConfigWithJSONString(String JSONString){
+        writeToJSONFile(JSONString, "roborally/src/main/java/dk/dtu/compute/se/pisd/onlineMapConfig.json");
+    }
+    public String readOnlineMapConfig(){
+        return readFromJSONFile("roborally/src/main/java/dk/dtu/compute/se/pisd/onlineMapConfig.json");
+    }
+
 }

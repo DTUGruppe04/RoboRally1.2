@@ -30,6 +30,8 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
 
+import dk.dtu.compute.se.pisd.roborally.connectionHandlers.Client;
+import dk.dtu.compute.se.pisd.roborally.connectionHandlers.Server;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 
 import dk.dtu.compute.se.pisd.roborally.view.PremadeMaps;
@@ -38,6 +40,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.TextInputDialog;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -75,6 +78,9 @@ public class AppController implements Observer {
 
     private PremadeMaps map;
     private final JsonFileHandler jsonFileHandler = new JsonFileHandler();
+
+    public static Server Server;
+    public static Client client;
     /**
      Creates a new AppController object with the specified RoboRally object.
      @param roboRally the RoboRally object to use as the application's data model
@@ -145,6 +151,85 @@ public class AppController implements Observer {
         }
     }
 
+    public void hostGame(){
+        ChoiceDialog<Integer> playerNumberDialog = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
+        playerNumberDialog.setTitle("Player number");
+        playerNumberDialog.setHeaderText("Select number of players");
+        Optional<Integer> playerNumberResult = playerNumberDialog.showAndWait();
+
+        ArrayList<PremadeMaps> mapChoices = new ArrayList<>();
+        ArrayList<String> mapChoicesName = new ArrayList<>();
+        for (int i = 0; i < PremadeMaps.values().length; i++) {
+            mapChoices.add(PremadeMaps.get(i));
+            mapChoicesName.add(PremadeMaps.get(i).mapName);
+        }
+        ChoiceDialog<String> mapChoiceDialog = new ChoiceDialog<>(mapChoicesName.get(0), mapChoicesName);
+        mapChoiceDialog.setTitle("Map type");
+        mapChoiceDialog.setHeaderText("Select map type");
+        Optional<String> mapChoiceResultName = mapChoiceDialog.showAndWait();
+        PremadeMaps mapChoiceResult = null;
+        if (mapChoiceResultName.isPresent()) {
+            for (PremadeMaps map: mapChoices) {
+                if (map.mapName.equals(mapChoiceResultName.get())) {
+                    mapChoiceResult = map;
+                }
+            }
+        }
+        this.map = mapChoiceResult;
+        if (playerNumberResult.isPresent() && mapChoiceResultName.isPresent() && mapChoiceResult != null) {
+            if (gameController != null) {
+                // The UI should not allow this, but in case this happens anyway.
+                // give the user the option to save the game or abort this operation!
+                if (!stopGame()) {
+                    return;
+                }
+            }
+
+            // XXX the board should eventually be created programmatically or loaded from a file
+            //     here we just create an empty board with the required number of players.
+
+
+            Board board = new Board(mapChoiceResult.mapArray, mapChoiceResult.mapName);
+            gameController = new GameController(board);
+            int no = playerNumberResult.get();
+            for (int i = 0; i < no; i++) {
+                Player player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i + 1));
+                board.addPlayer(player);
+                //player.setSpace(board.getSpace(i % board.width, i));
+            }
+            gameController.spawnPlayers();
+
+
+            // XXX: V2
+            // board.setCurrentPlayer(board.getPlayer(0));
+            gameController.startProgrammingPhase();
+            roboRally.createBoardView(gameController, 0);
+        }
+        int playerNumber = 1;
+        if (playerNumberResult.isPresent()) {
+            playerNumber = playerNumberResult.get();
+        }
+        jsonFileHandler.updateOnlineMapConfigWithBoard(gameController.board);
+        Server = new Server(5000, playerNumber, gameController);
+        Thread ServerStartThread = new Thread(Server, "serverThread");
+        ServerStartThread.start();
+        gameController.onlineGame = true;
+        gameController.gameHost = true;
+    };
+
+    public void joinGame(){
+        TextInputDialog IPDialog = new TextInputDialog();
+        IPDialog.setTitle("Join Server");
+        IPDialog.setHeaderText("Join server using IP");
+        IPDialog.setContentText("Input server IP");
+        Optional<String> serverIP = IPDialog.showAndWait();
+        serverIP.ifPresent(ip -> client = new Client(ip, 5000));
+        System.out.println("test");
+        constructGameFromJSONFile(jsonFileHandler.readOnlineMapConfig());
+        roboRally.createBoardView(this.gameController, client.playerNumber);
+        gameController.onlineGame = true;
+    };
+
     /**
      * Saves the current game state.
      */
@@ -160,7 +245,36 @@ public class AppController implements Observer {
         //loads string from savefile and creates a JSON object from the json string
         String stringSaveFile = jsonFileHandler.readFromSaveFile();
         if (!stringSaveFile.equals("")) {
-            JsonObject SaveFile = new JsonParser().parse(stringSaveFile).getAsJsonObject();
+            constructGameFromJSONFile(stringSaveFile);
+            roboRally.createBoardView(this.gameController);
+        }
+    }
+
+    private void getCardAndAddToFieldFromJson(JsonArray cardsJson, Player player, String programOrCards) {
+        int cardCounter = 0;
+        CommandCardField field;
+        for (JsonElement cardJson : cardsJson) {
+            if (programOrCards.equals("program")) {
+                field = player.getProgramField(cardCounter);
+            } else {
+                field = player.getCardField(cardCounter);
+            }
+            if (cardJson.getAsJsonObject().get("card") != null) {
+                Command savedCommand = Command.get(cardJson.getAsJsonObject().get("card").getAsJsonObject().get("command").getAsString());
+                CommandCard savedCommandCard = new CommandCard(Objects.requireNonNull(savedCommand));
+                field.setCard(savedCommandCard);
+            } else {
+                field.setCard(null);
+            }
+            field.setVisible(true);
+            cardCounter++;
+        }
+    }
+
+    public void constructGameFromJSONFile(String JSONString) {
+        //loads string from savefile and creates a JSON object from the json string
+        if (!JSONString.equals("")) {
+            JsonObject SaveFile = new JsonParser().parse(JSONString).getAsJsonObject();
             //finds the map in the savefile and creates a new board with the given map
             PremadeMaps map = PremadeMaps.get(SaveFile.get("boardName").getAsString());
             Board board = new Board(map.mapArray, map.mapName);
@@ -190,28 +304,6 @@ public class AppController implements Observer {
             this.gameController.board.setPhase(Phase.get(SaveFile.get("phase").getAsString()));
             this.gameController.board.setCurrentPlayer(this.gameController.board.getPlayer(0));
             this.gameController.board.setStep(SaveFile.get("step").getAsInt());
-            roboRally.createBoardView(this.gameController);
-        }
-    }
-
-    private void getCardAndAddToFieldFromJson(JsonArray cardsJson, Player player, String programOrCards) {
-        int cardCounter = 0;
-        CommandCardField field;
-        for (JsonElement cardJson : cardsJson) {
-            if (programOrCards.equals("program")) {
-                field = player.getProgramField(cardCounter);
-            } else {
-                field = player.getCardField(cardCounter);
-            }
-            if (cardJson.getAsJsonObject().get("card") != null) {
-                Command savedCommand = Command.get(cardJson.getAsJsonObject().get("card").getAsJsonObject().get("command").getAsString());
-                CommandCard savedCommandCard = new CommandCard(Objects.requireNonNull(savedCommand));
-                field.setCard(savedCommandCard);
-            } else {
-                field.setCard(null);
-            }
-            field.setVisible(true);
-            cardCounter++;
         }
     }
 
@@ -282,5 +374,4 @@ public class AppController implements Observer {
     public void update(Subject subject) {
         // XXX do nothing for now
     }
-
 }

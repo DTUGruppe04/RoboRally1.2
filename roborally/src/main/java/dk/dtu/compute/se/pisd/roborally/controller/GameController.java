@@ -22,10 +22,14 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.fieldActions.SpawnSpace;
+import dk.dtu.compute.se.pisd.roborally.fileaccess.JsonFileHandler;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import javafx.scene.control.ChoiceDialog;
 import org.jetbrains.annotations.NotNull;
 import java.util.Random;
+
+import static dk.dtu.compute.se.pisd.roborally.controller.AppController.Server;
+import static dk.dtu.compute.se.pisd.roborally.controller.AppController.client;
 
 /**
  * ...
@@ -36,6 +40,9 @@ import java.util.Random;
 public class GameController {
 
     final public Board board;
+    public boolean onlineGame = false;
+    public boolean gameHost = false;
+    private final JsonFileHandler jsonFileHandler = new JsonFileHandler();
 
     public GameController(@NotNull Board board) {
         this.board = board;
@@ -165,13 +172,27 @@ public class GameController {
      * updating the board state for the activation phase.
      */
     public void finishProgrammingPhase() {
+        if (!gameHost && onlineGame) {
+            jsonFileHandler.updateOnlineMapConfigWithBoard(board);
+            client.POST(jsonFileHandler.readOnlineMapConfig());
+            setActivationPhase();
+        }
+        if (gameHost && onlineGame) {
+            Thread finishProgrammingClientResponse = new Thread(Server, "clientResponses");
+            finishProgrammingClientResponse.start();
+        }
+        if (!gameHost && onlineGame) {
+            setActivationPhase();
+        }
+    }
+
+    public void setActivationPhase() {
         makeProgramFieldsInvisible();
         makeProgramFieldsVisible(0);
         board.setPhase(Phase.ACTIVATION);
         board.setCurrentPlayer(board.getPlayer(0));
         board.setStep(0);
     }
-
     /**
      * Makes the program field with the specified register index visible for all players.
      *

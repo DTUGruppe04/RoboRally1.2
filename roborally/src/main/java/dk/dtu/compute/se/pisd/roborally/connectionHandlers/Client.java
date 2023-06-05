@@ -1,5 +1,7 @@
 package dk.dtu.compute.se.pisd.roborally.connectionHandlers;
 
+import dk.dtu.compute.se.pisd.roborally.fileaccess.JsonFileHandler;
+
 import java.io.*;
 import java.net.*;
 
@@ -9,6 +11,8 @@ public class Client {
     private DataInputStream input = null;
     private DataInputStream serverInput = null;
     private DataOutputStream out = null;
+    public int playerNumber;
+    private final JsonFileHandler jsonFileHandler = new JsonFileHandler();
 
     // constructor to put ip address and port
     public Client(String address, int port)
@@ -23,8 +27,11 @@ public class Client {
             serverInput = new DataInputStream(socket.getInputStream());
 
             // sends output to the socket
-            out = new DataOutputStream(
-                    socket.getOutputStream());
+            out = new DataOutputStream(socket.getOutputStream());
+            String playerNumberString = serverInput.readUTF();
+            System.out.println("Connected");
+            playerNumber = Integer.parseInt(playerNumberString);
+            jsonFileHandler.updateOnlineMapConfigWithJSONString(serverInput.readUTF());
         }
         catch (UnknownHostException u) {
             System.out.println(u);
@@ -34,29 +41,12 @@ public class Client {
             System.out.println(i);
             return;
         }
+    }
 
-        // string to read message from input
-        String line = "";
-
-        // keep reading until "Over" is input and outputs servers response
-        while (!line.equals("Over")) {
-            try {
-                line = input.readLine();
-                out.writeUTF(line);
-                System.out.println(serverInput.readUTF());
-            }
-            catch (IOException i) {
-                System.out.println(i);
-            }
-        }
-
-        // close the connection
+    public void POST(String message) {
         try {
-            input.close();
-            out.close();
-            socket.close();
-        }
-        catch (IOException i) {
+            out.writeUTF(message);
+        } catch (IOException i) {
             System.out.println(i);
         }
     }

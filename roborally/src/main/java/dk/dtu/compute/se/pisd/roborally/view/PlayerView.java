@@ -93,7 +93,10 @@ public class PlayerView extends Tab implements ViewObserver {
         //      refactored.
 
         finishButton = new Button("Finish Programming");
-        finishButton.setOnAction( e -> gameController.finishProgrammingPhase());
+        finishButton.setOnAction( e -> {
+            finishButton.setDisable(true);
+            gameController.finishProgrammingPhase();
+        });
 
         executeButton = new Button("Execute Program");
         executeButton.setOnAction( e-> gameController.executePrograms());
@@ -181,9 +184,15 @@ public class PlayerView extends Tab implements ViewObserver {
                         break;
 
                     case ACTIVATION:
-                        finishButton.setDisable(true);
-                        executeButton.setDisable(false);
-                        stepButton.setDisable(false);
+                        if(!gameController.gameHost && gameController.onlineGame) {
+                            finishButton.setDisable(true);
+                            executeButton.setDisable(true);
+                            stepButton.setDisable(true);
+                        } else  {
+                            finishButton.setDisable(true);
+                            executeButton.setDisable(false);
+                            stepButton.setDisable(false);
+                        }
                         break;
 
                     default:

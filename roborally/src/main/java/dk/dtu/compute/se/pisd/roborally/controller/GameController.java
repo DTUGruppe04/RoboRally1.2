@@ -21,11 +21,18 @@
  */
 package dk.dtu.compute.se.pisd.roborally.controller;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import dk.dtu.compute.se.pisd.roborally.fieldActions.SpawnSpace;
 import dk.dtu.compute.se.pisd.roborally.fileaccess.JsonFileHandler;
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import dk.dtu.compute.se.pisd.roborally.view.PremadeMaps;
 import javafx.scene.control.ChoiceDialog;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 import java.util.Random;
 
 import static dk.dtu.compute.se.pisd.roborally.controller.AppController.Server;
@@ -176,6 +183,12 @@ public class GameController {
             jsonFileHandler.updateOnlineMapConfigWithBoard(board);
             client.POST(jsonFileHandler.readOnlineMapConfig());
             setActivationPhase();
+            String serverInput = client.recieveFromServer();
+            while (!serverInput.equals("END ACTIVATION")) {
+                jsonFileHandler.updateOnlineMapConfigWithJSONString(serverInput);
+                updateBoardFromJSON(serverInput);
+                serverInput = client.recieveFromServer();
+            }
         }
         if (gameHost && onlineGame) {
             Thread finishProgrammingClientResponse = new Thread(Server, "clientResponses");
@@ -183,6 +196,55 @@ public class GameController {
         }
         if (!gameHost && onlineGame) {
             setActivationPhase();
+        }
+    }
+
+    private void updateBoardFromJSON(String JSONString) {
+        if (!JSONString.equals("")) {
+            JsonObject SaveFile = new JsonParser().parse(JSONString).getAsJsonObject();
+            //creates a JsonArray from the savefile with all the players in the saved game
+            JsonArray jsonArray = SaveFile.getAsJsonArray("players");
+            //iterates through each jsonplayer in the jsonplayerarray
+            for(JsonElement jsonplayer : jsonArray) {
+                //the player as a json object
+                JsonObject tempJsonPlayer = jsonplayer.getAsJsonObject();
+                //creates a player
+                Player player = new Player(board, tempJsonPlayer.get("color").getAsString(), tempJsonPlayer.get("name").getAsString());
+                //adds the new player to the board, sets heading, amount of checkpoints reached and placement on the board for the given player
+                board.addPlayer(player);
+                player.setHeading(Heading.get(tempJsonPlayer.get("heading").getAsString()));
+                player.setSpace(board.getSpace(
+                        tempJsonPlayer.get("space").getAsJsonObject().get("x").getAsInt(),
+                        tempJsonPlayer.get("space").getAsJsonObject().get("y").getAsInt()));
+                player.setCheckpoints(tempJsonPlayer.get("checkpoints").getAsInt());
+                //iterates through the saved program and cards, and adds the programming cards to the right commandcardfield in the players program and cards
+                getCardAndAddToFieldFromJson(tempJsonPlayer.getAsJsonArray("program"), player, "program");
+                getCardAndAddToFieldFromJson(tempJsonPlayer.getAsJsonArray("cards"), player, "cards");
+            }
+            //sets the games phase to the saved phase, sets the currentplayer to player on, sets the step of the game to the current step and opens the game
+            board.setPhase(Phase.get(SaveFile.get("phase").getAsString()));
+            board.setStep(SaveFile.get("step").getAsInt());
+        }
+    }
+
+    private void getCardAndAddToFieldFromJson(JsonArray cardsJson, Player player, String programOrCards) {
+        int cardCounter = 0;
+        CommandCardField field;
+        for (JsonElement cardJson : cardsJson) {
+            if (programOrCards.equals("program")) {
+                field = player.getProgramField(cardCounter);
+            } else {
+                field = player.getCardField(cardCounter);
+            }
+            if (cardJson.getAsJsonObject().get("card") != null) {
+                Command savedCommand = Command.get(cardJson.getAsJsonObject().get("card").getAsJsonObject().get("command").getAsString());
+                CommandCard savedCommandCard = new CommandCard(Objects.requireNonNull(savedCommand));
+                field.setCard(savedCommandCard);
+            } else {
+                field.setCard(null);
+            }
+            field.setVisible(true);
+            cardCounter++;
         }
     }
 
@@ -247,6 +309,9 @@ public class GameController {
         do {
             executeNextStep();
         } while (board.getPhase() == Phase.ACTIVATION && !board.isStepMode());
+        if (gameHost && onlineGame) {
+            Server.POSTall("END ACTIVATION");
+        }
     }
 
     /**
@@ -302,6 +367,10 @@ public class GameController {
         }
         if (checkForWinner()) {
             this.board.setPhase(Phase.WINNER);
+        }
+        if(gameHost && onlineGame) {
+            jsonFileHandler.updateOnlineMapConfigWithBoard(board);
+            Server.POSTall(jsonFileHandler.readOnlineMapConfig());
         }
     }
 

@@ -50,4 +50,13 @@ public class Client {
             System.out.println(i);
         }
     }
+
+    public String recieveFromServer() {
+        try {
+            return serverInput.readUTF();
+        } catch (IOException i) {
+            System.out.println(i);
+        }
+        return "";
+    }
 }

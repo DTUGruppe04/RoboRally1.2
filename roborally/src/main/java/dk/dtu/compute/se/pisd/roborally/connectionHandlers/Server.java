@@ -130,4 +130,14 @@ public class Server implements Runnable{
             cardCounter++;
         }
     }
+
+    public void POSTall(String message) {
+        try {
+            for (int i = 0; i < clientOutArray.length; i++) {
+                clientOutArray[i].writeUTF(message);
+            }
+        } catch (IOException i) {
+            System.out.println(i);
+        }
+    }
 }

@@ -25,9 +25,8 @@ public class Client implements Runnable{
     private GameController gameController;
 
     // constructor to put ip address and port
-    public Client(String address, int port, GameController gameController)
+    public Client(String address, int port)
     {
-        this.gameController = gameController;
         // establish a connection
         try {
             socket = new Socket(address, port);
@@ -52,6 +51,10 @@ public class Client implements Runnable{
             System.out.println(i);
             return;
         }
+    }
+
+    public void setGameController(GameController gameController) {
+        this.gameController = gameController;
     }
 
     public void POST(String message) {

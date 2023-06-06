@@ -209,9 +209,8 @@ public class GameController {
                 //the player as a json object
                 JsonObject tempJsonPlayer = jsonplayer.getAsJsonObject();
                 //creates a player
-                Player player = new Player(board, tempJsonPlayer.get("color").getAsString(), tempJsonPlayer.get("name").getAsString());
-                //adds the new player to the board, sets heading, amount of checkpoints reached and placement on the board for the given player
-                board.addPlayer(player);
+                int playerNumber = tempJsonPlayer.get("name").getAsString().charAt(tempJsonPlayer.get("name").getAsString().length()-1);
+                Player player = board.getPlayers().get(playerNumber-1);
                 player.setHeading(Heading.get(tempJsonPlayer.get("heading").getAsString()));
                 player.setSpace(board.getSpace(
                         tempJsonPlayer.get("space").getAsJsonObject().get("x").getAsInt(),

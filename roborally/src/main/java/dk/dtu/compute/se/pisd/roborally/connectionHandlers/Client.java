@@ -77,12 +77,12 @@ public class Client implements Runnable{
 
     @Override
     public void run() {
-        String serverInput = "";
+        String serverInput = client.recieveFromServer();;
         while (!serverInput.equals("END ACTIVATION")) {
-            serverInput = client.recieveFromServer();
             jsonFileHandler.updateOnlineMapConfigWithJSONString(serverInput);
             updateBoardFromJSON(jsonFileHandler.readOnlineMapConfig());
             System.out.println(serverInput);
+            serverInput = client.recieveFromServer();
         }
         gameController.startProgrammingPhase();
     }

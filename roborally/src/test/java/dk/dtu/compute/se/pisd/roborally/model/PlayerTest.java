@@ -155,6 +155,25 @@ public class PlayerTest {
     }
 
     @Test
+    void player1HittingPlayer28SpacesAwayTest() {
+        Player player1 = board.getPlayer(0);
+        Player player2 = board.getPlayer(1);
+
+        Space space1 = board.getSpace(0,1);
+        Space space2 = board.getSpace(0,9);
+
+        player1.setSpace(space1);
+        player1.setHeading(Heading.SOUTH);
+
+        player2.setSpace(space2);
+        player2.setHeading(Heading.SOUTH);
+
+        gameController.executeBoardElements();
+
+        assertEquals(1, player2.getSpamCards());
+    }
+
+    @Test
     void player1CannotHitPlayer2ThroughAWallEast() {
         Player player1 = board.getPlayer(0);
         Player player2 = board.getPlayer(1);

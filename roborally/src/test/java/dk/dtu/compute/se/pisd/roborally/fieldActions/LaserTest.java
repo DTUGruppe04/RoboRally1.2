@@ -125,4 +125,28 @@ public class LaserTest {
         assertEquals(1, player1.getSpamCards());
         assertEquals(board.getSpace(4,11), player1.getSpace());
     }
+
+    @Test
+    void laserCannotHitPlayerBehindWall() {
+        Player player1 = board.getPlayer(0);
+
+        player1.setSpace(board.getSpace(7, 10));
+        player1.setHeading(Heading.SOUTH);
+
+        gameController.executeBoardElements();
+
+        assertEquals(0, player1.getSpamCards());
+
+        player1.setSpace(board.getSpace(3,10));
+
+        gameController.executeBoardElements();
+
+        assertEquals(0, player1.getSpamCards());
+
+        player1.setSpace(board.getSpace(8, 10));
+
+        gameController.executeBoardElements();
+
+        assertEquals(0, player1.getSpamCards());
+    }
 }

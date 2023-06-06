@@ -55,6 +55,7 @@ public class Player extends Subject {
     @Expose
     private Heading heading = SOUTH;
 
+    @Expose
     private int spamCards = 0;
 
     @Expose
@@ -190,5 +191,8 @@ public class Player extends Subject {
     //Public Getter Method for SpamCards
     public int getSpamCards() {
         return spamCards;
+    }
+    public void setSpamCards(int spamCards) {
+        this.spamCards = spamCards;
     }
 }

@@ -186,7 +186,7 @@ public class GameController {
             String serverInput = client.recieveFromServer();
             while (!serverInput.equals("END ACTIVATION")) {
                 jsonFileHandler.updateOnlineMapConfigWithJSONString(serverInput);
-                updateBoardFromJSON(serverInput);
+                updateBoardFromJSON(jsonFileHandler.readOnlineMapConfig());
                 serverInput = client.recieveFromServer();
             }
             startProgrammingPhase();

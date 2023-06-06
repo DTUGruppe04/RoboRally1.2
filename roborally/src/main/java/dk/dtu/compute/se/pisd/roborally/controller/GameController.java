@@ -209,7 +209,7 @@ public class GameController {
                 //the player as a json object
                 JsonObject tempJsonPlayer = jsonplayer.getAsJsonObject();
                 //creates a player
-                int playerNumber = tempJsonPlayer.get("name").getAsString().charAt(tempJsonPlayer.get("name").getAsString().length()-1);
+                int playerNumber = tempJsonPlayer.get("name").getAsString().charAt(tempJsonPlayer.get("name").getAsString().length()-1)-48;
                 Player player = board.getPlayers().get(playerNumber-1);
                 player.setHeading(Heading.get(tempJsonPlayer.get("heading").getAsString()));
                 player.setSpace(board.getSpace(
@@ -308,9 +308,6 @@ public class GameController {
         do {
             executeNextStep();
         } while (board.getPhase() == Phase.ACTIVATION && !board.isStepMode());
-        if (gameHost && onlineGame) {
-            Server.POSTall("END ACTIVATION");
-        }
     }
 
     /**
@@ -332,6 +329,9 @@ public class GameController {
                 board.setCurrentPlayer(board.getPlayer(0));
             } else {
                 startProgrammingPhase();
+                if (gameHost && onlineGame) {
+                    Server.POSTall("END ACTIVATION");
+                }
             }
         }
     }

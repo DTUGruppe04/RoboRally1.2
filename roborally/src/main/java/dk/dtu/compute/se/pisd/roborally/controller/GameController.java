@@ -183,68 +183,14 @@ public class GameController {
             jsonFileHandler.updateOnlineMapConfigWithBoard(board);
             client.POST(jsonFileHandler.readOnlineMapConfig());
             setActivationPhase();
-            String serverInput = client.recieveFromServer();
-            while (!serverInput.equals("END ACTIVATION")) {
-                jsonFileHandler.updateOnlineMapConfigWithJSONString(serverInput);
-                updateBoardFromJSON(jsonFileHandler.readOnlineMapConfig());
-                serverInput = client.recieveFromServer();
-            }
-            startProgrammingPhase();
+            Thread clientUpdateBoard = new Thread(client, "clientUpdateBoard");
         }
         if (gameHost && onlineGame) {
             Thread finishProgrammingClientResponse = new Thread(Server, "clientResponses");
             finishProgrammingClientResponse.start();
         }
-        if (!gameHost && onlineGame) {
+        if (!gameHost && !onlineGame) {
             setActivationPhase();
-        }
-    }
-
-    private void updateBoardFromJSON(String JSONString) {
-        if (!JSONString.equals("")) {
-            JsonObject SaveFile = new JsonParser().parse(JSONString).getAsJsonObject();
-            //creates a JsonArray from the savefile with all the players in the saved game
-            JsonArray jsonArray = SaveFile.getAsJsonArray("players");
-            //iterates through each jsonplayer in the jsonplayerarray
-            for(JsonElement jsonplayer : jsonArray) {
-                //the player as a json object
-                JsonObject tempJsonPlayer = jsonplayer.getAsJsonObject();
-                //creates a player
-                int playerNumber = tempJsonPlayer.get("name").getAsString().charAt(tempJsonPlayer.get("name").getAsString().length()-1)-48;
-                Player player = board.getPlayers().get(playerNumber-1);
-                player.setHeading(Heading.get(tempJsonPlayer.get("heading").getAsString()));
-                player.setSpace(board.getSpace(
-                        tempJsonPlayer.get("space").getAsJsonObject().get("x").getAsInt(),
-                        tempJsonPlayer.get("space").getAsJsonObject().get("y").getAsInt()));
-                player.setCheckpoints(tempJsonPlayer.get("checkpoints").getAsInt());
-                //iterates through the saved program and cards, and adds the programming cards to the right commandcardfield in the players program and cards
-                getCardAndAddToFieldFromJson(tempJsonPlayer.getAsJsonArray("program"), player, "program");
-                getCardAndAddToFieldFromJson(tempJsonPlayer.getAsJsonArray("cards"), player, "cards");
-            }
-            //sets the games phase to the saved phase, sets the currentplayer to player on, sets the step of the game to the current step and opens the game
-            board.setPhase(Phase.get(SaveFile.get("phase").getAsString()));
-            board.setStep(SaveFile.get("step").getAsInt());
-        }
-    }
-
-    private void getCardAndAddToFieldFromJson(JsonArray cardsJson, Player player, String programOrCards) {
-        int cardCounter = 0;
-        CommandCardField field;
-        for (JsonElement cardJson : cardsJson) {
-            if (programOrCards.equals("program")) {
-                field = player.getProgramField(cardCounter);
-            } else {
-                field = player.getCardField(cardCounter);
-            }
-            if (cardJson.getAsJsonObject().get("card") != null) {
-                Command savedCommand = Command.get(cardJson.getAsJsonObject().get("card").getAsJsonObject().get("command").getAsString());
-                CommandCard savedCommandCard = new CommandCard(Objects.requireNonNull(savedCommand));
-                field.setCard(savedCommandCard);
-            } else {
-                field.setCard(null);
-            }
-            field.setVisible(true);
-            cardCounter++;
         }
     }
 

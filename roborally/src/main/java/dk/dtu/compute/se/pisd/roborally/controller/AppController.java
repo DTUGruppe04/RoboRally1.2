@@ -223,7 +223,7 @@ public class AppController implements Observer {
         IPDialog.setHeaderText("Join server using IP");
         IPDialog.setContentText("Input server IP");
         Optional<String> serverIP = IPDialog.showAndWait();
-        serverIP.ifPresent(ip -> client = new Client(ip, 5000));
+        serverIP.ifPresent(ip -> client = new Client(ip, 5000, gameController));
         System.out.println("test");
         constructGameFromJSONFile(jsonFileHandler.readOnlineMapConfig());
         roboRally.createBoardView(this.gameController, client.playerNumber);

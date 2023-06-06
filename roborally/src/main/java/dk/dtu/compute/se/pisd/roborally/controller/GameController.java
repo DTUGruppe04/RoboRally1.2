@@ -189,6 +189,7 @@ public class GameController {
                 updateBoardFromJSON(serverInput);
                 serverInput = client.recieveFromServer();
             }
+            startProgrammingPhase();
         }
         if (gameHost && onlineGame) {
             Thread finishProgrammingClientResponse = new Thread(Server, "clientResponses");
@@ -328,10 +329,10 @@ public class GameController {
                 board.setStep(step);
                 board.setCurrentPlayer(board.getPlayer(0));
             } else {
-                startProgrammingPhase();
                 if (gameHost && onlineGame) {
                     Server.POSTall("END ACTIVATION");
                 }
+                startProgrammingPhase();
             }
         }
     }

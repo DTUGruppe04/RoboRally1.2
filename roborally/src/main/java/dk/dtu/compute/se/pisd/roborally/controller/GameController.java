@@ -184,6 +184,7 @@ public class GameController {
             client.POST(jsonFileHandler.readOnlineMapConfig());
             setActivationPhase();
             Thread clientUpdateBoard = new Thread(client, "clientUpdateBoard");
+            clientUpdateBoard.start();
         }
         if (gameHost && onlineGame) {
             Thread finishProgrammingClientResponse = new Thread(Server, "clientResponses");

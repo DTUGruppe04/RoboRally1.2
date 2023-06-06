@@ -59,13 +59,47 @@ public class GameController {
     }
 
 
-    public boolean isWall(Space space, Heading heading) {
+    public boolean isWall(Space space, Heading heading, boolean playerSpace, boolean isStandingLaser) {
         switch (heading) {
-            case NORTH, SOUTH -> {
-                return space.getType().BorderHeadings.contains(Heading.NORTH) || space.getType().BorderHeadings.contains(Heading.SOUTH);
+            case NORTH -> {
+                if (isStandingLaser) {
+                    return space.getType().BorderHeadings.contains(Heading.NORTH) || space.getType().BorderHeadings.contains(Heading.SOUTH);
+                }
+                if (playerSpace) {
+                    return space.getType().BorderHeadings.contains(Heading.NORTH);
+                } else {
+                    return space.getType().BorderHeadings.contains(Heading.SOUTH);
+                }
             }
-            case EAST, WEST -> {
-                return space.getType().BorderHeadings.contains(Heading.EAST) || space.getType().BorderHeadings.contains(Heading.WEST);
+            case SOUTH -> {
+                if (isStandingLaser) {
+                    return space.getType().BorderHeadings.contains(Heading.NORTH) || space.getType().BorderHeadings.contains(Heading.SOUTH);
+                }
+                if (playerSpace) {
+                    return space.getType().BorderHeadings.contains(Heading.SOUTH);
+                } else {
+                    return space.getType().BorderHeadings.contains(Heading.NORTH);
+                }
+            }
+            case EAST -> {
+                if (isStandingLaser) {
+                    return space.getType().BorderHeadings.contains(Heading.EAST) || space.getType().BorderHeadings.contains(Heading.WEST);
+                }
+                if (playerSpace) {
+                    return space.getType().BorderHeadings.contains(Heading.EAST);
+                } else {
+                    return space.getType().BorderHeadings.contains(Heading.WEST);
+                }
+            }
+            case WEST -> {
+                if (isStandingLaser) {
+                    return space.getType().BorderHeadings.contains(Heading.EAST) || space.getType().BorderHeadings.contains(Heading.WEST);
+                }
+                if (playerSpace) {
+                    return space.getType().BorderHeadings.contains(Heading.WEST);
+                } else {
+                    return space.getType().BorderHeadings.contains(Heading.EAST);
+                }
             }
             default -> {
                 return false;
@@ -120,7 +154,7 @@ public class GameController {
         Heading playerHeading = player.getHeading();
         Space neighborSpace = playerSpace.board.getNeighbour(playerSpace, playerHeading);
         while (true) {
-            if(isWall(playerSpace, playerHeading)) {
+            if(isWall(playerSpace, playerHeading, true, false)) {
                 System.out.println("PLAYER LASER HIT A WALL ON PLAYER SPACE");
                 break;
             }
@@ -128,13 +162,17 @@ public class GameController {
                 System.out.println("Laser reached outside of map");
                 break;
             }
-            if(isWall(neighborSpace, playerHeading)) {
+            if(isWall(neighborSpace, playerHeading, false, false)) {
                 System.out.println("PLAYER LASER HIT A WALL");
                 break;
             }
             if(neighborSpace.isPlayerOnSpace()) {
                 System.out.println("Hit " + neighborSpace.getPlayer() + " and added 1 spam card!");
                 neighborSpace.getPlayer().addSpamCards(1);
+                break;
+            }
+            if(isWall(neighborSpace, playerHeading, true, false)) {
+                System.out.println("PLAYER LASER HIT A WALL");
                 break;
             }
             //neighborSpace.getPosition();

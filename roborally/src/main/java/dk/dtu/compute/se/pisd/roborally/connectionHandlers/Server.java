@@ -47,7 +47,6 @@ public class Server implements Runnable{
             System.out.println(i);
         }
     }
-
     public void closeServer() {
         System.out.println("Closing connection");
         // close connection
@@ -108,7 +107,13 @@ public class Server implements Runnable{
                 getCardAndAddToFieldFromJson(tempJsonPlayer.getAsJsonArray("program"), player, "program");
                 getCardAndAddToFieldFromJson(tempJsonPlayer.getAsJsonArray("cards"), player, "cards");
             }
-            gameController.setActivationPhase();
+            if (gameController.board.getPhase() == Phase.PLAYER_INTERACTION) {
+                jsonFileHandler.updateOnlineMapConfigWithBoard(gameController.board);
+                POSTall(jsonFileHandler.readOnlineMapConfig());
+            }
+            gameController.board.setPhase(Phase.ACTIVATION);
+
+
         }
     }
     private void getCardAndAddToFieldFromJson(JsonArray cardsJson, Player player, String programOrCards) {
@@ -137,6 +142,14 @@ public class Server implements Runnable{
             for (int i = 0; i < clientOutArray.length; i++) {
                 clientOutArray[i].writeUTF(message);
             }
+        } catch (IOException i) {
+            System.out.println(i);
+        }
+    }
+
+    public void POSTToPlayer(String message, int playerNumber) {
+        try {
+            clientOutArray[playerNumber].writeUTF(message);
         } catch (IOException i) {
             System.out.println(i);
         }

@@ -20,6 +20,9 @@ public class Client implements Runnable{
     private DataInputStream input = null;
     private DataInputStream serverInput = null;
     private DataOutputStream out = null;
+
+
+    private boolean interactionStop = false;
     public int playerNumber;
     private final JsonFileHandler jsonFileHandler = new JsonFileHandler();
     private GameController gameController;
@@ -77,11 +80,23 @@ public class Client implements Runnable{
 
     @Override
     public void run() {
+
         String serverInput = client.recieveFromServer();
         System.out.println(serverInput);
         while (!serverInput.equals("END ACTIVATION")) {
             jsonFileHandler.updateOnlineMapConfigWithJSONString(serverInput);
+            gameController.executeStep();
+
             updateBoardFromJSON(jsonFileHandler.readOnlineMapConfig());
+            if (gameController.board.getPhase() == Phase.PLAYER_INTERACTION) {
+                while (!interactionStop) {
+
+                }
+                gameController.board.setPhase(Phase.ACTIVATION);
+                jsonFileHandler.updateOnlineMapConfigWithBoard(gameController.board);
+                POST(jsonFileHandler.readOnlineMapConfig());
+                interactionStop = false;
+            }
             serverInput = client.recieveFromServer();
         }
         System.out.println("out of while loop");
@@ -138,4 +153,5 @@ public class Client implements Runnable{
             cardCounter++;
         }
     }
+    public void setInteractionStop(boolean interactionStop) { this.interactionStop = interactionStop; }
 }

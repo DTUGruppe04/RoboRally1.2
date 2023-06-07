@@ -318,6 +318,11 @@ public class GameController {
         if(gameHost && onlineGame) {
             jsonFileHandler.updateOnlineMapConfigWithBoard(board);
             Server.POSTall(jsonFileHandler.readOnlineMapConfig());
+            if (board.getPhase() == Phase.PLAYER_INTERACTION) {
+                Thread serverInputThread = new Thread(Server, "serverInputThread");
+                serverInputThread.start();
+
+            }
         }
     }
 
@@ -385,7 +390,12 @@ public class GameController {
                     this.SPAM(player);
                     break;
                 default:
+                    /*if (gameHost && onlineGame) {
+                        Server.POSTToPlayer("INTERACTION", board.getPlayerNumber(board.getCurrentPlayer()));
+                    }*/
                     this.board.setPhase(Phase.PLAYER_INTERACTION);
+
+
             }
         }
     }

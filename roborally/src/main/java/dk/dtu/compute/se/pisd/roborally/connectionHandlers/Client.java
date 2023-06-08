@@ -82,7 +82,7 @@ public class Client implements Runnable{
     public void run() {
 
         String serverInput = client.recieveFromServer();
-        System.out.println(serverInput);
+        //System.out.println(serverInput);
         while (!serverInput.equals("END ACTIVATION")) {
             jsonFileHandler.updateOnlineMapConfigWithJSONString(serverInput);
             gameController.executeStep();
@@ -96,11 +96,9 @@ public class Client implements Runnable{
                 jsonFileHandler.updateOnlineMapConfigWithBoard(gameController.board);
                 POST(jsonFileHandler.readOnlineMapConfig());
                 interactionStop = false;
-                System.out.println(gameController.board.getCurrentPlayer().getName());
             } else if (gameController.board.getPhase() == Phase.PLAYER_INTERACTION && !gameController.board.getCurrentPlayer().getName().equals("Player 1") ) {
                 jsonFileHandler.updateOnlineMapConfigWithBoard(gameController.board);
                 POST(jsonFileHandler.readOnlineMapConfig());
-                System.out.println(gameController.board.getCurrentPlayer().getName());
             }
             serverInput = client.recieveFromServer();
         }

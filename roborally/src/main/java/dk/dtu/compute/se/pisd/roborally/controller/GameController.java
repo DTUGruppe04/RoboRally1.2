@@ -72,19 +72,76 @@ public class GameController {
         }
     }
 
-    public boolean isWall(Space space, Heading heading) {
+
+    public boolean isWall(Space space, Heading heading, boolean playerSpace, boolean isStandingLaser) {
         switch (heading) {
-            case NORTH, SOUTH -> {
-                return space.getType().BorderHeadings.contains(Heading.NORTH) || space.getType().BorderHeadings.contains(Heading.SOUTH);
+            case NORTH -> {
+                if (isStandingLaser) {
+                    return space.getType().BorderHeadings.contains(Heading.NORTH) || space.getType().BorderHeadings.contains(Heading.SOUTH);
+                }
+                if (playerSpace) {
+                    return space.getType().BorderHeadings.contains(Heading.NORTH);
+                } else {
+                    return space.getType().BorderHeadings.contains(Heading.SOUTH);
+                }
             }
-            case EAST, WEST -> {
-                return space.getType().BorderHeadings.contains(Heading.EAST) || space.getType().BorderHeadings.contains(Heading.WEST);
+            case SOUTH -> {
+                if (isStandingLaser) {
+                    return space.getType().BorderHeadings.contains(Heading.NORTH) || space.getType().BorderHeadings.contains(Heading.SOUTH);
+                }
+                if (playerSpace) {
+                    return space.getType().BorderHeadings.contains(Heading.SOUTH);
+                } else {
+                    return space.getType().BorderHeadings.contains(Heading.NORTH);
+                }
+            }
+            case EAST -> {
+                if (isStandingLaser) {
+                    return space.getType().BorderHeadings.contains(Heading.EAST) || space.getType().BorderHeadings.contains(Heading.WEST);
+                }
+                if (playerSpace) {
+                    return space.getType().BorderHeadings.contains(Heading.EAST);
+                } else {
+                    return space.getType().BorderHeadings.contains(Heading.WEST);
+                }
+            }
+            case WEST -> {
+                if (isStandingLaser) {
+                    return space.getType().BorderHeadings.contains(Heading.EAST) || space.getType().BorderHeadings.contains(Heading.WEST);
+                }
+                if (playerSpace) {
+                    return space.getType().BorderHeadings.contains(Heading.WEST);
+                } else {
+                    return space.getType().BorderHeadings.contains(Heading.EAST);
+                }
             }
             default -> {
                 return false;
             }
         }
     }
+
+    /* The new code. Make it crash
+    public boolean isWall(Space space, Heading heading) {
+        boolean a = false;
+        switch (heading) {
+            case NORTH:
+                a = space.getType().BorderHeadings.contains(Heading.NORTH);
+                break;
+            case SOUTH:
+                a = space.getType().BorderHeadings.contains(Heading.SOUTH);
+                break;
+            case WEST:
+                a = space.getType().BorderHeadings.contains(Heading.WEST);
+                break;
+            case EAST:
+                a = space.getType().BorderHeadings.contains(Heading.EAST);
+                break;
+            }
+            return a;
+        }
+
+     */
 
     public boolean isOutOfMap(Space space, Heading heading) {
         switch (heading) {
@@ -106,13 +163,21 @@ public class GameController {
         }
     }
 
-    public void playerShootLaser(Player player) {
+    public void playerShootLaser(@NotNull Player player) {
         Space playerSpace = player.getSpace();
         Heading playerHeading = player.getHeading();
         Space neighborSpace = playerSpace.board.getNeighbour(playerSpace, playerHeading);
         while (true) {
+            if(isWall(playerSpace, playerHeading, true, false)) {
+                System.out.println("PLAYER LASER HIT A WALL ON PLAYER SPACE");
+                break;
+            }
             if(isOutOfMap(neighborSpace, playerHeading)) {
                 System.out.println("Laser reached outside of map");
+                break;
+            }
+            if(isWall(neighborSpace, playerHeading, false, false)) {
+                System.out.println("PLAYER LASER HIT A WALL");
                 break;
             }
             if(neighborSpace.isPlayerOnSpace()) {
@@ -120,7 +185,7 @@ public class GameController {
                 neighborSpace.getPlayer().addSpamCards(1);
                 break;
             }
-            if(isWall(neighborSpace, playerHeading)) {
+            if(isWall(neighborSpace, playerHeading, true, false)) {
                 System.out.println("PLAYER LASER HIT A WALL");
                 break;
             }

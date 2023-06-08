@@ -108,11 +108,13 @@ public class Server implements Runnable{
                 getCardAndAddToFieldFromJson(tempJsonPlayer.getAsJsonArray("cards"), player, "cards");
             }
             if (gameController.board.getPhase() == Phase.PLAYER_INTERACTION) {
+                gameController.nextPlayer();
+                gameController.board.setPhase(Phase.ACTIVATION);
                 jsonFileHandler.updateOnlineMapConfigWithBoard(gameController.board);
                 POSTall(jsonFileHandler.readOnlineMapConfig());
+            } else {
+                gameController.board.setPhase(Phase.ACTIVATION);
             }
-            gameController.board.setPhase(Phase.ACTIVATION);
-
 
         }
     }

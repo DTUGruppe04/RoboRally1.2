@@ -22,7 +22,7 @@ public class Client implements Runnable{
     private DataOutputStream out = null;
 
 
-    private boolean interactionStop = false;
+    private volatile boolean interactionStop = false;
     public int playerNumber;
     private final JsonFileHandler jsonFileHandler = new JsonFileHandler();
     private GameController gameController;
@@ -86,16 +86,21 @@ public class Client implements Runnable{
         while (!serverInput.equals("END ACTIVATION")) {
             jsonFileHandler.updateOnlineMapConfigWithJSONString(serverInput);
             gameController.executeStep();
-
             updateBoardFromJSON(jsonFileHandler.readOnlineMapConfig());
-            if (gameController.board.getPhase() == Phase.PLAYER_INTERACTION) {
-                while (!interactionStop) {
 
+            if (gameController.board.getPhase() == Phase.PLAYER_INTERACTION && gameController.board.getCurrentPlayer() == gameController.board.getPlayer(playerNumber)) {
+                while (!interactionStop) {
+                    Thread.onSpinWait();
+                    //empty while loop
                 }
-                gameController.board.setPhase(Phase.ACTIVATION);
                 jsonFileHandler.updateOnlineMapConfigWithBoard(gameController.board);
                 POST(jsonFileHandler.readOnlineMapConfig());
                 interactionStop = false;
+                System.out.println(gameController.board.getCurrentPlayer().getName());
+            } else if (gameController.board.getPhase() == Phase.PLAYER_INTERACTION && !gameController.board.getCurrentPlayer().getName().equals("Player 1") ) {
+                jsonFileHandler.updateOnlineMapConfigWithBoard(gameController.board);
+                POST(jsonFileHandler.readOnlineMapConfig());
+                System.out.println(gameController.board.getCurrentPlayer().getName());
             }
             serverInput = client.recieveFromServer();
         }
@@ -130,6 +135,10 @@ public class Client implements Runnable{
             //sets the games phase to the saved phase, sets the currentplayer to player on, sets the step of the game to the current step and opens the game
             gameController.board.setPhase(Phase.get(SaveFile.get("phase").getAsString()));
             gameController.board.setStep(SaveFile.get("step").getAsInt());
+            JsonObject currentPlayer = SaveFile.get("current").getAsJsonObject();
+            int playerNumber = currentPlayer.get("name").getAsString().charAt(currentPlayer.get("name").getAsString().length()-1)-48;
+            Player player = gameController.board.getPlayers().get(playerNumber-1);
+            gameController.board.setCurrentPlayer(player);
         }
     }
 

@@ -181,7 +181,7 @@ public class Player extends Subject {
     public void addSpamCards(int number) {
         for (int i = 0; i < number; i++)
             if (spamCards == 9) {
-                break; //Add reboot or something similar
+                break;
             }
             else {
                 spamCards++;

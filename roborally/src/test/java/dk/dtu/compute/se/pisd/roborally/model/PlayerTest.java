@@ -114,6 +114,7 @@ public class PlayerTest {
         assertEquals(1, player2.getSpamCards());
     }
 
+    //A18.1
     @Test
     void player2HittingPlayer1WithLaserTest() {
         Player player1 = board.getPlayer(0);
@@ -133,7 +134,7 @@ public class PlayerTest {
         assertEquals(1, player1.getSpamCards());
         assertEquals(0, player2.getSpamCards());
     }
-
+    //A18.2
     @Test
     void bothPlayersHittingEachOtherTest() {
         Player player1 = board.getPlayer(0);
@@ -173,6 +174,7 @@ public class PlayerTest {
         assertEquals(1, player2.getSpamCards());
     }
 
+    //A12.2
     @Test
     void player1CannotHitPlayer2ThroughAWallEast() {
         Player player1 = board.getPlayer(0);
@@ -198,6 +200,7 @@ public class PlayerTest {
         assertEquals(0, player2.getSpamCards());
     }
 
+    //A12.2
     @Test
     void player1CannotHitPlayer2ThroughAWallWest() {
         Player player1 = board.getPlayer(0);
@@ -223,6 +226,7 @@ public class PlayerTest {
         assertEquals(0, player2.getSpamCards());
     }
 
+    //A12.2
     @Test
     void player1CannotHitPlayer2ThroughAWallNorth() {
         Player player1 = board.getPlayer(0);
@@ -249,6 +253,7 @@ public class PlayerTest {
         assertEquals(0, player2.getSpamCards());
     }
 
+    //A12.2
     @Test
     void player1CannotHitPlayer2ThroughAWallSouth() {
         Player player1 = board.getPlayer(0);
@@ -274,6 +279,7 @@ public class PlayerTest {
         assertEquals(0, player2.getSpamCards());
     }
 
+    //A12.2
     @Test
     void player1CannotHitPLayer2ThroughACorner() {
         Player player1 = board.getPlayer(0);
@@ -298,6 +304,7 @@ public class PlayerTest {
 
         assertEquals(0, player2.getSpamCards());
     }
+
 
     @Test
     void player1CanHitPlayer2OverGreenBeltTest() {

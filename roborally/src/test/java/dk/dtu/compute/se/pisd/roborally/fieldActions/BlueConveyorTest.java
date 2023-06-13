@@ -43,6 +43,7 @@ public class BlueConveyorTest {
         board = null;
     }
 
+    //A13.1
     @Test
     void pushPlayerToRightTest() {
         Player player1 = board.getPlayer(0);
@@ -57,6 +58,7 @@ public class BlueConveyorTest {
         assertEquals(board.getSpace(6,6).getPlayer(), player1);
     }
 
+    //A13.1
     @Test
     void pushPlayerToLeftTest() {
         Player player1 = board.getPlayer(0);
@@ -71,6 +73,7 @@ public class BlueConveyorTest {
         assertEquals(board.getSpace(0,6).getPlayer(), player1);
     }
 
+    //A13.1
     @Test
     void pushPlayerToDownTest() {
         Player player1 = board.getPlayer(0);
@@ -85,6 +88,7 @@ public class BlueConveyorTest {
         assertEquals(board.getSpace(0,8).getPlayer(), player1);
     }
 
+    //A13.1
     @Test
     void pushPlayerToUpTest() {
         Player player1 = board.getPlayer(0);
@@ -99,6 +103,7 @@ public class BlueConveyorTest {
         assertEquals(board.getSpace(6,2).getPlayer(), player1);
     }
 
+    //A13.2
     @Test
     void cannotPushPlayerThroughAWallTest() {
         Player player1 = board.getPlayer(0);
@@ -113,6 +118,7 @@ public class BlueConveyorTest {
         assertEquals(space.getPlayer(), player1);
     }
 
+    //A13.3
     @Test
     void pushPlayerIntoPitTest() {
         Player player1 = board.getPlayer(0);

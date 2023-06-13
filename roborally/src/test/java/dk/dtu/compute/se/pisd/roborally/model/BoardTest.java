@@ -78,6 +78,7 @@ public class BoardTest {
 
     }
 
+    //A12.1
     @Test
     void walkThroughWallsTest1() {
         Player player1 = board.getPlayer(0);
@@ -91,6 +92,7 @@ public class BoardTest {
         assertEquals(space, player1.getSpace());
     }
 
+    //A12.1
     @Test
     void walkThroughWallsTest2() {
         Player player1 = board.getPlayer(0);
@@ -104,6 +106,8 @@ public class BoardTest {
         assertEquals(space, player1.getSpace());
     }
 
+
+    //A12.1
     @Test
     void walkThroughWallsTest3() {
         Player player1 = board.getPlayer(0);
@@ -117,6 +121,7 @@ public class BoardTest {
         assertEquals(space, player1.getSpace());
     }
 
+    //A12.1
     @Test
     void walkThroughWallsTest4() {
         Player player1 = board.getPlayer(0);
@@ -130,6 +135,7 @@ public class BoardTest {
         assertEquals(space, player1.getSpace());
     }
 
+    //A12.1
     @Test
     void walkThroughNorthWestWallsTest1() {
         Player player1 = board.getPlayer(0);
@@ -152,6 +158,7 @@ public class BoardTest {
         assertEquals(space, player1.getSpace());
     }
 
+    //A12.1
     @Test
     void walkThroughNorthWestWallsTest2() {
         Player player1 = board.getPlayer(0);
@@ -175,6 +182,7 @@ public class BoardTest {
         assertEquals(space, player1.getSpace());
     }
 
+    //A12.1
     @Test
     void walkThroughNorthEastWallsTest1() {
         Player player1 = board.getPlayer(0);
@@ -197,6 +205,7 @@ public class BoardTest {
         assertEquals(space, player1.getSpace());
     }
 
+    //A12.1
     @Test
     void walkThroughNorthEastWallsTest2() {
         Player player1 = board.getPlayer(0);
@@ -220,6 +229,7 @@ public class BoardTest {
         assertEquals(space, player1.getSpace());
     }
 
+    //A12.1
     @Test
     void walkThroughSouthEastWallsTest1() {
         Player player1 = board.getPlayer(0);
@@ -242,6 +252,7 @@ public class BoardTest {
         assertEquals(space, player1.getSpace());
     }
 
+    //A12.1
     @Test
     void walkThroughSouthEastWallsTest2() {
         Player player1 = board.getPlayer(0);
@@ -265,6 +276,7 @@ public class BoardTest {
         assertEquals(space, player1.getSpace());
     }
 
+    //A12.1
     @Test
     void walkThroughSouthWestWallsTest1() {
         Player player1 = board.getPlayer(0);
@@ -287,6 +299,7 @@ public class BoardTest {
         assertEquals(space, player1.getSpace());
     }
 
+    //A12.1
     @Test
     void walkThroughSouthWestWallsTest2() {
         Player player1 = board.getPlayer(0);

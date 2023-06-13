@@ -43,6 +43,7 @@ public class PitTest {
         board = null;
     }
 
+    //A21.1
     @Test
     void playerGoInPit() {
         Player player1 = board.getPlayer(0);

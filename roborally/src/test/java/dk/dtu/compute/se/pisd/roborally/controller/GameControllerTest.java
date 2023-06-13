@@ -68,6 +68,7 @@ class GameControllerTest {
         assertFalse(board.getSpace(0,0).isPlayerOnSpace());
     }
 
+    //A6.1
     @Test
     void startingProgrammingPhaseTest() {
         Player player1 = board.getPlayer(0);

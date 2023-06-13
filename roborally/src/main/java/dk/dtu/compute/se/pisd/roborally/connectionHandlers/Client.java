@@ -20,8 +20,6 @@ public class Client implements Runnable{
     private DataInputStream input = null;
     private DataInputStream serverInput = null;
     private DataOutputStream out = null;
-
-
     private volatile boolean interactionStop = false;
     public int playerNumber;
     private final JsonFileHandler jsonFileHandler = new JsonFileHandler();

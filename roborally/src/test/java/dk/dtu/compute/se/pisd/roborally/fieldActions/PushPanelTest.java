@@ -43,6 +43,7 @@ public class PushPanelTest {
         board = null;
     }
 
+    //K15
     @Test
     void pushPlayerToRightTest() {
         Player player1 = board.getPlayer(0);
@@ -85,6 +86,7 @@ public class PushPanelTest {
         assertEquals(player1.getSpace(), board.getSpace(10, 0));
     }
 
+    //K15
     @Test
     void pushPlayerToLeftTest() {
         Player player1 = board.getPlayer(0);
@@ -126,6 +128,7 @@ public class PushPanelTest {
         assertEquals(player1.getSpace(), board.getSpace(10, 0));
     }
 
+    //K15
     @Test
     void pushPlayerDownTest() {
         Player player1 = board.getPlayer(0);
@@ -167,6 +170,7 @@ public class PushPanelTest {
         assertEquals(player1.getSpace(), board.getSpace(11, 3));
     }
 
+    //K15
     @Test
     void pushPlayerUpTest() {
         Player player1 = board.getPlayer(0);

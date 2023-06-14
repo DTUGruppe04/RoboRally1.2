@@ -15,7 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.framework.junit5.ApplicationExtension;
 
 @ExtendWith(ApplicationExtension.class)
-public class BlueConveyorTest {
+public class LaserTest {
     private GameController gameController;
     private Board board;
     final private List<String> PLAYER_COLORS = Arrays.asList("red", "green", "blue", "orange", "grey", "magenta");
@@ -43,94 +43,110 @@ public class BlueConveyorTest {
         board = null;
     }
 
-    //A13.1
     @Test
-    void pushPlayerToRightTest() {
+    void givePlayerOneSpamCard() {
         Player player1 = board.getPlayer(0);
-        Space space = board.getSpace(4, 6);
+        Space space = board.getSpace(1, 9);
 
         player1.setSpace(space);
-        assertEquals(space.getPlayer(), player1);
+        player1.setHeading(Heading.SOUTH);
 
+        gameController.moveForward(player1);
         gameController.executeBoardElements();
+        gameController.moveForward(player1);
 
-        assertEquals(player1.getSpace(), board.getSpace(6,6));
-        assertEquals(board.getSpace(6,6).getPlayer(), player1);
+        assertEquals(1, player1.getSpamCards());
+        assertEquals(board.getSpace(1, 11), player1.getSpace());
     }
 
-    //A13.1
     @Test
-    void pushPlayerToLeftTest() {
+    void givePlayerTwoSpamCards() {
         Player player1 = board.getPlayer(0);
-        Space space = board.getSpace(2, 6);
+
+        Player player2 = board.getPlayer(1);
+        player2.setHeading(Heading.NORTH);
+
+        Space space = board.getSpace(0,8);
 
         player1.setSpace(space);
-        assertEquals(space.getPlayer(), player1);
+        player1.setHeading(Heading.EAST);
 
+        gameController.moveForward(player1);
         gameController.executeBoardElements();
+        gameController.moveForward(player1);
 
-        assertEquals(player1.getSpace(), board.getSpace(0,6));
-        assertEquals(board.getSpace(0,6).getPlayer(), player1);
+        assertEquals(2, player1.getSpamCards());
+        assertEquals(board.getSpace(2, 8), player1.getSpace());
     }
 
-    //A13.1
     @Test
-    void pushPlayerToDownTest() {
+    void givePlayerThreeSpamCards() {
         Player player1 = board.getPlayer(0);
-        Space space = board.getSpace(0, 6);
+        Space space = board.getSpace(2,8);
 
         player1.setSpace(space);
-        assertEquals(space.getPlayer(), player1);
+        player1.setHeading(Heading.EAST);
 
+        gameController.moveForward(player1);
         gameController.executeBoardElements();
+        gameController.moveForward(player1);
 
-        assertEquals(player1.getSpace(), board.getSpace(0,8));
-        assertEquals(board.getSpace(0,8).getPlayer(), player1);
+        assertEquals(3, player1.getSpamCards());
+        assertEquals(board.getSpace(4, 8), player1.getSpace());
     }
 
-    //A13.1
     @Test
-    void pushPlayerToUpTest() {
+    void playerGoingThroughLaserHead() {
         Player player1 = board.getPlayer(0);
-        Space space = board.getSpace(6, 4);
+        Space space = board.getSpace(0, 9);
 
         player1.setSpace(space);
-        assertEquals(space.getPlayer(), player1);
+        player1.setHeading(Heading.SOUTH);
 
+        gameController.moveForward(player1);
         gameController.executeBoardElements();
+        gameController.moveForward(player1);
 
-        assertEquals(player1.getSpace(), board.getSpace(6,2));
-        assertEquals(board.getSpace(6,2).getPlayer(), player1);
+        assertEquals(1, player1.getSpamCards());
+        assertEquals(board.getSpace(0,11), player1.getSpace());
+    }
+    @Test
+    void playerGoingThroughLaserEnd() {
+        Player player1 = board.getPlayer(0);
+        Space space = board.getSpace(4, 9);
+
+        player1.setSpace(space);
+        player1.setHeading(Heading.SOUTH);
+
+        gameController.moveForward(player1);
+        gameController.executeBoardElements();
+        gameController.moveForward(player1);
+
+        assertEquals(1, player1.getSpamCards());
+        assertEquals(board.getSpace(4,11), player1.getSpace());
     }
 
-    //A13.2
     @Test
-    void cannotPushPlayerThroughAWallTest() {
+    void laserCannotHitPlayerBehindWall() {
         Player player1 = board.getPlayer(0);
-        Space space = board.getSpace(7, 2);
 
-        player1.setSpace(space);
-        assertEquals(space.getPlayer(), player1);
+        player1.setSpace(board.getSpace(7, 10));
+        player1.setHeading(Heading.SOUTH);
 
         gameController.executeBoardElements();
 
-        assertEquals(player1.getSpace(), space);
-        assertEquals(space.getPlayer(), player1);
-    }
+        assertEquals(0, player1.getSpamCards());
 
-    //A13.3
-    @Test
-    void pushPlayerIntoPitTest() {
-        Player player1 = board.getPlayer(0);
-        Space space = board.getSpace(10, 11);
-
-        player1.setSpace(space);
-        assertEquals(space.getPlayer(), player1);
+        player1.setSpace(board.getSpace(3,10));
 
         gameController.executeBoardElements();
 
-        assertEquals(player1.getSpace(), board.getSpace(8, 11));
-        assertEquals(board.getSpace(8, 11).getPlayer(), player1);
-        assertEquals(player1.getSpace().getType(), SpaceType.PIT);
+        assertEquals(0, player1.getSpamCards());
+
+        player1.setSpace(board.getSpace(8, 10));
+
+        gameController.executeBoardElements();
+
+        assertEquals(0, player1.getSpamCards());
     }
 }

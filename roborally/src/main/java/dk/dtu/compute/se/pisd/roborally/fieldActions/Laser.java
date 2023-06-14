@@ -26,7 +26,7 @@ public class Laser extends FieldAction {
                     neighbour.getPlayer().addSpamCards(LaserAmount);
                     break;
                 }
-                if(gameController.isWall(neighbour, heading)) {
+                if(gameController.isWall(neighbour, heading, false, true)) {
                     //System.out.println("HIT A WALL");
                     break;
                 }

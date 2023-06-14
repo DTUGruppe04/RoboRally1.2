@@ -181,7 +181,7 @@ public class Player extends Subject {
     public void addSpamCards(int number) {
         for (int i = 0; i < number; i++)
             if (spamCards == 9) {
-                break; //Add reboot or something similar
+                break;
             }
             else {
                 spamCards++;
@@ -192,5 +192,7 @@ public class Player extends Subject {
     public int getSpamCards() {
         return spamCards;
     }
-    public void setSpamCards(int amountOfSpam) { this.spamCards=amountOfSpam; }
+    public void setSpamCards(int spamCards) {
+        this.spamCards = spamCards;
+    }
 }

@@ -15,7 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.framework.junit5.ApplicationExtension;
 
 @ExtendWith(ApplicationExtension.class)
-public class GearGreenTest {
+public class PitTest {
     private GameController gameController;
     private Board board;
     final private List<String> PLAYER_COLORS = Arrays.asList("red", "green", "blue", "orange", "grey", "magenta");
@@ -28,7 +28,7 @@ public class GearGreenTest {
         gameController = new GameController(board);
 
         //Creating 2 players and add them to the board
-        for(int i = 0; i < 2; i++) {
+        for (int i = 0; i < 2; i++) {
             Player player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i + 1));
             board.addPlayer(player);
         }
@@ -43,20 +43,21 @@ public class GearGreenTest {
         board = null;
     }
 
-    //A16.1
+    //A21.1
     @Test
-    void gearGreenRotatePlayerHeadingLeft() {
+    void playerGoInPit() {
         Player player1 = board.getPlayer(0);
-        Space space = board.getSpace(9, 5);
+        Space startSpace = board.getSpace(0,0);
+        Space space = board.getSpace(9, 1);
 
         player1.setSpace(space);
-        player1.setHeading(Heading.NORTH);
+        player1.setHeading(Heading.SOUTH);
+        player1.addSpamCards(2);
 
-        assertEquals(space.getPlayer(), player1);
-        assertEquals(Heading.NORTH, player1.getHeading());
-
+        gameController.moveForward(player1);
         gameController.executeBoardElements();
 
-        assertEquals(player1.getHeading(), Heading.WEST);
+        assertEquals(0, player1.getSpamCards());
+        assertEquals(startSpace, player1.getSpace());
     }
 }

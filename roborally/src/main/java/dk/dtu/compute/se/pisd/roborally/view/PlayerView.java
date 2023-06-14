@@ -34,6 +34,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Optional;
 
+import static dk.dtu.compute.se.pisd.roborally.controller.AppController.client;
+
 /**
  * ...
  *
@@ -93,7 +95,10 @@ public class PlayerView extends Tab implements ViewObserver {
         //      refactored.
 
         finishButton = new Button("Finish Programming");
-        finishButton.setOnAction( e -> gameController.finishProgrammingPhase());
+        finishButton.setOnAction( e -> {
+            finishButton.setDisable(true);
+            gameController.finishProgrammingPhase();
+        });
 
         executeButton = new Button("Execute Program");
         executeButton.setOnAction( e-> gameController.executePrograms());
@@ -181,9 +186,15 @@ public class PlayerView extends Tab implements ViewObserver {
                         break;
 
                     case ACTIVATION:
-                        finishButton.setDisable(true);
-                        executeButton.setDisable(false);
-                        stepButton.setDisable(false);
+                        if(!gameController.gameHost && gameController.onlineGame) {
+                            finishButton.setDisable(true);
+                            executeButton.setDisable(true);
+                            stepButton.setDisable(true);
+                        } else  {
+                            finishButton.setDisable(true);
+                            executeButton.setDisable(false);
+                            stepButton.setDisable(false);
+                        }
                         break;
 
                     default:
@@ -207,10 +218,14 @@ public class PlayerView extends Tab implements ViewObserver {
                         Button optionButton = new Button(currentOption.displayName);
                         optionButton.setOnAction( e -> {
                             gameController.executeCommand(player, currentOption);
+                            if (!gameController.gameHost && gameController.onlineGame) {
+                                client.setInteractionStop(true);
+                            }
                             gameController.nextPlayer();
                         });
                         optionButton.setDisable(false);
                         playerInteractionPanel.getChildren().add(optionButton);
+
                     }
                 }
             }

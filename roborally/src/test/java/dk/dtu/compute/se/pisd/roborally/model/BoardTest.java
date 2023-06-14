@@ -77,4 +77,249 @@ public class BoardTest {
         );
 
     }
+
+    //A12.1
+    @Test
+    void walkThroughWallsTest1() {
+        Player player1 = board.getPlayer(0);
+        Space space = board.getSpace(5, 8);
+
+        player1.setSpace(space);
+        player1.setHeading(Heading.WEST);
+
+        gameController.moveForward(player1);
+
+        assertEquals(space, player1.getSpace());
+    }
+
+    //A12.1
+    @Test
+    void walkThroughWallsTest2() {
+        Player player1 = board.getPlayer(0);
+        Space space = board.getSpace(4, 8);
+
+        player1.setSpace(space);
+        player1.setHeading(Heading.EAST);
+
+        gameController.moveForward(player1);
+
+        assertEquals(space, player1.getSpace());
+    }
+
+
+    //A12.1
+    @Test
+    void walkThroughWallsTest3() {
+        Player player1 = board.getPlayer(0);
+        Space space = board.getSpace(9, 7);
+
+        player1.setSpace(space);
+        player1.setHeading(Heading.SOUTH);
+
+        gameController.moveForward(player1);
+
+        assertEquals(space, player1.getSpace());
+    }
+
+    //A12.1
+    @Test
+    void walkThroughWallsTest4() {
+        Player player1 = board.getPlayer(0);
+        Space space = board.getSpace(9, 8);
+
+        player1.setSpace(space);
+        player1.setHeading(Heading.NORTH);
+
+        gameController.moveForward(player1);
+
+        assertEquals(space, player1.getSpace());
+    }
+
+    //A12.1
+    @Test
+    void walkThroughNorthWestWallsTest1() {
+        Player player1 = board.getPlayer(0);
+        Space space = board.getSpace(8, 4);
+
+
+        player1.setSpace(space);
+        player1.setHeading(Heading.NORTH);
+
+        gameController.moveForward(player1);
+
+        assertEquals(space, player1.getSpace());
+
+
+        player1.setSpace(space);
+        player1.setHeading(Heading.WEST);
+
+        gameController.moveForward(player1);
+
+        assertEquals(space, player1.getSpace());
+    }
+
+    //A12.1
+    @Test
+    void walkThroughNorthWestWallsTest2() {
+        Player player1 = board.getPlayer(0);
+        Space space = board.getSpace(8, 3);
+
+
+        player1.setSpace(space);
+        player1.setHeading(Heading.SOUTH);
+
+        gameController.moveForward(player1);
+
+        assertEquals(space, player1.getSpace());
+
+        space = board.getSpace(7, 4);
+
+        player1.setSpace(space);
+        player1.setHeading(Heading.EAST);
+
+        gameController.moveForward(player1);
+
+        assertEquals(space, player1.getSpace());
+    }
+
+    //A12.1
+    @Test
+    void walkThroughNorthEastWallsTest1() {
+        Player player1 = board.getPlayer(0);
+        Space space = board.getSpace(10, 4);
+
+
+        player1.setSpace(space);
+        player1.setHeading(Heading.NORTH);
+
+        gameController.moveForward(player1);
+
+        assertEquals(space, player1.getSpace());
+
+
+        player1.setSpace(space);
+        player1.setHeading(Heading.EAST);
+
+        gameController.moveForward(player1);
+
+        assertEquals(space, player1.getSpace());
+    }
+
+    //A12.1
+    @Test
+    void walkThroughNorthEastWallsTest2() {
+        Player player1 = board.getPlayer(0);
+        Space space = board.getSpace(10, 3);
+
+
+        player1.setSpace(space);
+        player1.setHeading(Heading.SOUTH);
+
+        gameController.moveForward(player1);
+
+        assertEquals(space, player1.getSpace());
+
+        space = board.getSpace(11, 4);
+
+        player1.setSpace(space);
+        player1.setHeading(Heading.WEST);
+
+        gameController.moveForward(player1);
+
+        assertEquals(space, player1.getSpace());
+    }
+
+    //A12.1
+    @Test
+    void walkThroughSouthEastWallsTest1() {
+        Player player1 = board.getPlayer(0);
+        Space space = board.getSpace(10, 6);
+
+
+        player1.setSpace(space);
+        player1.setHeading(Heading.SOUTH);
+
+        gameController.moveForward(player1);
+
+        assertEquals(space, player1.getSpace());
+
+
+        player1.setSpace(space);
+        player1.setHeading(Heading.EAST);
+
+        gameController.moveForward(player1);
+
+        assertEquals(space, player1.getSpace());
+    }
+
+    //A12.1
+    @Test
+    void walkThroughSouthEastWallsTest2() {
+        Player player1 = board.getPlayer(0);
+        Space space = board.getSpace(10, 7);
+
+
+        player1.setSpace(space);
+        player1.setHeading(Heading.NORTH);
+
+        gameController.moveForward(player1);
+
+        assertEquals(space, player1.getSpace());
+
+        space = board.getSpace(11, 6);
+
+        player1.setSpace(space);
+        player1.setHeading(Heading.WEST);
+
+        gameController.moveForward(player1);
+
+        assertEquals(space, player1.getSpace());
+    }
+
+    //A12.1
+    @Test
+    void walkThroughSouthWestWallsTest1() {
+        Player player1 = board.getPlayer(0);
+        Space space = board.getSpace(8, 6);
+
+
+        player1.setSpace(space);
+        player1.setHeading(Heading.SOUTH);
+
+        gameController.moveForward(player1);
+
+        assertEquals(space, player1.getSpace());
+
+
+        player1.setSpace(space);
+        player1.setHeading(Heading.WEST);
+
+        gameController.moveForward(player1);
+
+        assertEquals(space, player1.getSpace());
+    }
+
+    //A12.1
+    @Test
+    void walkThroughSouthWestWallsTest2() {
+        Player player1 = board.getPlayer(0);
+        Space space = board.getSpace(8, 7);
+
+
+        player1.setSpace(space);
+        player1.setHeading(Heading.NORTH);
+
+        gameController.moveForward(player1);
+
+        assertEquals(space, player1.getSpace());
+
+        space = board.getSpace(7, 6);
+
+        player1.setSpace(space);
+        player1.setHeading(Heading.EAST);
+
+        gameController.moveForward(player1);
+
+        assertEquals(space, player1.getSpace());
+    }
 }

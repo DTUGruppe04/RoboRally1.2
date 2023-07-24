@@ -35,9 +35,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.Random;
 
-import static dk.dtu.compute.se.pisd.roborally.controller.AppController.Server;
-import static dk.dtu.compute.se.pisd.roborally.controller.AppController.client;
-
 /**
  * ...
  *
@@ -245,20 +242,7 @@ public class GameController {
      * updating the board state for the activation phase.
      */
     public void finishProgrammingPhase() {
-        if (!gameHost && onlineGame) {
-            jsonFileHandler.updateOnlineMapConfigWithBoard(board);
-            client.POST(jsonFileHandler.readOnlineMapConfig());
-            setActivationPhase();
-            Thread clientUpdateBoard = new Thread(client, "clientUpdateBoard");
-            clientUpdateBoard.start();
-        }
-        if (gameHost && onlineGame) {
-            Thread finishProgrammingClientResponse = new Thread(Server, "clientResponses");
-            finishProgrammingClientResponse.start();
-        }
-        if (!gameHost && !onlineGame) {
-            setActivationPhase();
-        }
+        setActivationPhase();
     }
 
     public void setActivationPhase() {
@@ -342,9 +326,6 @@ public class GameController {
                 board.setStep(step);
                 board.setCurrentPlayer(board.getPlayer(0));
             } else {
-                if (gameHost && onlineGame) {
-                    Server.POSTall("END ACTIVATION");
-                }
                 startProgrammingPhase();
             }
         }
@@ -383,14 +364,6 @@ public class GameController {
         }
         if (checkForWinner()) {
             this.board.setPhase(Phase.WINNER);
-        }
-        if(gameHost && onlineGame) {
-            jsonFileHandler.updateOnlineMapConfigWithBoard(board);
-            Server.POSTall(jsonFileHandler.readOnlineMapConfig());
-            if (board.getPhase() == Phase.PLAYER_INTERACTION && !board.getCurrentPlayer().getName().equals("Player 1")) {
-                Thread serverInputThread = new Thread(Server, "serverInputThread");
-                serverInputThread.start();
-            }
         }
     }
 

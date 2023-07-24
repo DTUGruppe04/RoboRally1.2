@@ -34,7 +34,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Optional;
 
-import static dk.dtu.compute.se.pisd.roborally.controller.AppController.client;
 
 /**
  * ...
@@ -218,9 +217,7 @@ public class PlayerView extends Tab implements ViewObserver {
                         Button optionButton = new Button(currentOption.displayName);
                         optionButton.setOnAction( e -> {
                             gameController.executeCommand(player, currentOption);
-                            if (!gameController.gameHost && gameController.onlineGame) {
-                                client.setInteractionStop(true);
-                            }
+
                             gameController.nextPlayer();
                         });
                         optionButton.setDisable(false);

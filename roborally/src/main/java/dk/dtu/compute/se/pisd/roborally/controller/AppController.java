@@ -30,8 +30,6 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
 
-import dk.dtu.compute.se.pisd.roborally.connectionHandlers.Client;
-import dk.dtu.compute.se.pisd.roborally.connectionHandlers.Server;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 
 import dk.dtu.compute.se.pisd.roborally.view.PremadeMaps;
@@ -78,9 +76,6 @@ public class AppController implements Observer {
 
     private PremadeMaps map;
     private final JsonFileHandler jsonFileHandler = new JsonFileHandler();
-
-    public static Server Server;
-    public static Client client;
     /**
      Creates a new AppController object with the specified RoboRally object.
      @param roboRally the RoboRally object to use as the application's data model
@@ -210,11 +205,6 @@ public class AppController implements Observer {
             playerNumber = playerNumberResult.get();
         }
         jsonFileHandler.updateOnlineMapConfigWithBoard(gameController.board);
-        Server = new Server(5000, playerNumber, gameController);
-        Thread ServerStartThread = new Thread(Server, "serverThread");
-        ServerStartThread.start();
-        gameController.onlineGame = true;
-        gameController.gameHost = true;
     };
 
     public void joinGame(){
@@ -223,11 +213,9 @@ public class AppController implements Observer {
         IPDialog.setHeaderText("Join server using IP");
         IPDialog.setContentText("Input server IP");
         Optional<String> serverIP = IPDialog.showAndWait();
-        serverIP.ifPresent(ip -> client = new Client(ip, 5000));
-        constructGameFromJSONFile(jsonFileHandler.readOnlineMapConfig());
-        roboRally.createBoardView(this.gameController, client.playerNumber);
+
         gameController.onlineGame = true;
-        client.setGameController(gameController);
+
     };
 
     /**

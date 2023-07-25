@@ -28,6 +28,7 @@ import com.google.gson.JsonParser;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Observer;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 
+import dk.dtu.compute.se.pisd.roborally.APIhandler.APIhandler;
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
 
 import dk.dtu.compute.se.pisd.roborally.model.*;
@@ -42,6 +43,7 @@ import javafx.scene.control.TextInputDialog;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.*;
 
 import dk.dtu.compute.se.pisd.roborally.fileaccess.JsonFileHandler;
@@ -207,7 +209,8 @@ public class AppController implements Observer {
         jsonFileHandler.updateOnlineMapConfigWithBoard(gameController.board);
     };
 
-    public void joinGame(){
+    public void joinGame() {
+        /*
         TextInputDialog IPDialog = new TextInputDialog();
         IPDialog.setTitle("Join Server");
         IPDialog.setHeaderText("Join server using IP");
@@ -215,7 +218,9 @@ public class AppController implements Observer {
         Optional<String> serverIP = IPDialog.showAndWait();
 
         gameController.onlineGame = true;
-
+*/
+        APIhandler test = new APIhandler();
+        test.test();
     };
 
     /**

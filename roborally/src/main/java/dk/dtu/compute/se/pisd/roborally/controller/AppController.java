@@ -242,8 +242,12 @@ public class AppController implements Observer {
         if (serverIP.isPresent()){
             serverIPFinal = serverIP.get();
         }
+        String jsonString = APIhandler.joinServer(serverIPFinal, serverIDFinal);
+        constructGameFromJSONFile(jsonFileHandler.readOnlineMapConfig());
+        roboRally.createBoardView(this.gameController, 1);
+        gameController.onlineGame = true;
+        client.setGameController(gameController);
         //gameController.onlineGame = true;
-        APIhandler.joinServer(serverIPFinal, serverIDFinal);
     };
 
     /**

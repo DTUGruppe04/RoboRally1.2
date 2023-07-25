@@ -219,7 +219,7 @@ public class AppController implements Observer {
             playerNumber = playerNumberResult.get();
         }
         jsonFileHandler.updateOnlineMapConfigWithBoard(gameController.board);
-        APIhandler.newServer("localhost", serverIDFinal);
+        APIhandler.newServer("localhost", serverIDFinal, playerNumber);
     };
 
     public void joinGame() {
@@ -243,12 +243,15 @@ public class AppController implements Observer {
             serverIPFinal = serverIP.get();
         }
         String jsonString = APIhandler.joinServer(serverIPFinal, serverIDFinal);
-        jsonFileHandler.updateOnlineMapConfigWithJSONString(jsonString);
-        constructGameFromJSONFile(jsonFileHandler.readOnlineMapConfig());
-        roboRally.createBoardView(this.gameController, 1);
-        gameController.onlineGame = true;
-        setGameController(gameController);
-        //gameController.onlineGame = true;
+        String playerNumber = APIhandler.getPlayerNumber(serverIPFinal, serverIDFinal);
+        if (Integer.parseInt(playerNumber) != 0) {
+            jsonFileHandler.updateOnlineMapConfigWithJSONString(jsonString);
+            constructGameFromJSONFile(jsonFileHandler.readOnlineMapConfig());
+            roboRally.createBoardView(this.gameController, Integer.parseInt(playerNumber));
+            gameController.onlineGame = true;
+        } else {
+            System.out.println("Server is full");
+        }
     };
 
     /**

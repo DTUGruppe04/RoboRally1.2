@@ -78,6 +78,7 @@ public class AppController implements Observer {
 
     private PremadeMaps map;
     private final JsonFileHandler jsonFileHandler = new JsonFileHandler();
+    private final APIhandler APIhandler = new APIhandler();
     /**
      Creates a new AppController object with the specified RoboRally object.
      @param roboRally the RoboRally object to use as the application's data model
@@ -172,6 +173,17 @@ public class AppController implements Observer {
                 }
             }
         }
+
+        TextInputDialog IDDialog = new TextInputDialog();
+        IDDialog.setTitle("ID for server");
+        IDDialog.setHeaderText("ID for the server");
+        IDDialog.setContentText("Input the ID for the server");
+        Optional<String> serverID = IDDialog.showAndWait();
+        String serverIPFinal = "0";
+        String serverIDFinal = "0";
+        if (serverID.isPresent()){
+            serverIDFinal = serverID.get();
+        }
         this.map = mapChoiceResult;
         if (playerNumberResult.isPresent() && mapChoiceResultName.isPresent() && mapChoiceResult != null) {
             if (gameController != null) {
@@ -207,20 +219,31 @@ public class AppController implements Observer {
             playerNumber = playerNumberResult.get();
         }
         jsonFileHandler.updateOnlineMapConfigWithBoard(gameController.board);
+        APIhandler.newServer("localhost", serverIDFinal);
     };
 
     public void joinGame() {
-        /*
         TextInputDialog IPDialog = new TextInputDialog();
         IPDialog.setTitle("Join Server");
         IPDialog.setHeaderText("Join server using IP");
         IPDialog.setContentText("Input server IP");
         Optional<String> serverIP = IPDialog.showAndWait();
 
-        gameController.onlineGame = true;
-*/
-        APIhandler test = new APIhandler();
-        test.test();
+        TextInputDialog IDDialog = new TextInputDialog();
+        IDDialog.setTitle("ID for server");
+        IDDialog.setHeaderText("ID for the server");
+        IDDialog.setContentText("Input the ID for the server");
+        Optional<String> serverID = IDDialog.showAndWait();
+        String serverIPFinal = "0";
+        String serverIDFinal = "0";
+        if (serverID.isPresent()){
+            serverIDFinal = serverID.get();
+        }
+        if (serverIP.isPresent()){
+            serverIPFinal = serverIP.get();
+        }
+        //gameController.onlineGame = true;
+        APIhandler.joinServer(serverIPFinal, serverIDFinal);
     };
 
     /**

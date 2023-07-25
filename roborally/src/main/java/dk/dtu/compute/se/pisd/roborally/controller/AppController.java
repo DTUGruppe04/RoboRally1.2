@@ -83,6 +83,9 @@ public class AppController implements Observer {
      Creates a new AppController object with the specified RoboRally object.
      @param roboRally the RoboRally object to use as the application's data model
      */
+    public static String APIIP;
+    public static String playerNumber;
+    public static String serverID;
     public AppController(@NotNull RoboRally roboRally) throws IOException {
         this.roboRally = roboRally;
     }
@@ -244,6 +247,9 @@ public class AppController implements Observer {
         }
         String jsonString = APIhandler.joinServer(serverIPFinal, serverIDFinal);
         String playerNumber = APIhandler.getPlayerNumber(serverIPFinal, serverIDFinal);
+        AppController.APIIP = serverIPFinal;
+        AppController.serverID = serverIDFinal;
+        AppController.playerNumber = playerNumber;
         if (Integer.parseInt(playerNumber) != 0) {
             jsonFileHandler.updateOnlineMapConfigWithJSONString(jsonString);
             constructGameFromJSONFile(jsonFileHandler.readOnlineMapConfig());

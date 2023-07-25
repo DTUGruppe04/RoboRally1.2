@@ -46,4 +46,15 @@ public class APIhandler {
         }
         return "";
     }
+
+    public void updatePlayerOnServer(String APIip, String serverID, String playerNumber){
+        HttpRequest updatePlayer = HttpRequest.newBuilder()
+                .uri(URI.create("http://" + APIip + ":8080/Servers/Player?serverID=" + serverID + "&playerNumber=" + playerNumber))
+                .PUT(HttpRequest.BodyPublishers.ofString(fileHandler.readOnlineMapConfig()))
+                .build();
+        client.sendAsync(updatePlayer, HttpResponse.BodyHandlers.ofString())
+                .thenApply(HttpResponse::body)
+                .thenAccept(System.out::println)
+                .join();
+    }
 }

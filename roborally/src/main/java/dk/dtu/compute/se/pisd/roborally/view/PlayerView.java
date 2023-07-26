@@ -21,6 +21,8 @@
  */
 package dk.dtu.compute.se.pisd.roborally.view;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.APIhandler.APIhandler;
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
@@ -255,7 +257,10 @@ public class PlayerView extends Tab implements ViewObserver {
 
                 if (player.board.getCurrentPlayer() == player) {
                     System.out.println(player.board.getStep());
-
+                    if (gameController.onlineGame) {
+                        JsonObject mapConfig = new JsonParser().parse(jsonFileHandler.readOnlineMapConfig()).getAsJsonObject();
+                        gameController.board.setStep(mapConfig.get("step").getAsInt());
+                    }
                     Command currentCommand = player.getProgramField(player.board.getStep()).getCard().command;
                     List<Command> commandOptions = currentCommand.getOptions();
                     for (Command currentOption: commandOptions) {

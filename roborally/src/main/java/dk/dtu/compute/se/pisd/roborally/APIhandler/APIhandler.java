@@ -12,6 +12,7 @@ import dk.dtu.compute.se.pisd.roborally.model.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
+import java.util.List;
 import java.util.Objects;
 
 public class APIhandler implements Runnable {
@@ -137,25 +138,46 @@ public class APIhandler implements Runnable {
         }
     }
 
-    public boolean isAllPlayerReady() {
+    public boolean areAllPlayersReady() {
+        JsonObject mapConfig = new JsonParser().parse(fileHandler.readOnlineMapConfig()).getAsJsonObject();
+        JsonArray playerArray = mapConfig.getAsJsonArray("players");
+        for (JsonElement player: playerArray) {
+            if(!player.getAsJsonObject().get("ready").getAsBoolean()){
+                return false;
+            }
+        }
+        return true;
+    }
 
-        return false;
+    public void setAllPlayersReady(boolean bool) {
+        for (Player player : gameController.board.getPlayers()) {
+            player.setReady(bool);
+        }
     }
 
     @Override
     public void run() {
         if (!gameController.gameHost) {
             do {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 updateMapConfig(AppController.APIIP, AppController.serverID);
                 updateBoardFromJSON(fileHandler.readFromSaveFile());
             } while (this.gameController.board.getPhase() != Phase.PROGRAMMING || this.gameController.board.getPhase() != Phase.PLAYER_INTERACTION || this.gameController.board.getPhase() != Phase.WINNER);
         } else {
             //check if everyone is in activation phase, if yes: begin the game, if no: keep updating
-            /*do {
+            do {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 updateMapConfig(AppController.APIIP, AppController.serverID);
                 updateBoardFromJSON(fileHandler.readFromSaveFile());
-            } while ();*/
-
+            } while (!areAllPlayersReady());
         }
 
     }

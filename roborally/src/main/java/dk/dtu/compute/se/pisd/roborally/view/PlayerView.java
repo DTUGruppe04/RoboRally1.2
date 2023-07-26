@@ -63,7 +63,6 @@ public class PlayerView extends Tab implements ViewObserver {
     private VBox playerInteractionPanel;
 
     private GameController gameController;
-    private APIhandler APIhandler = new APIhandler();
     private JsonFileHandler jsonFileHandler = new JsonFileHandler();
 
     public PlayerView(@NotNull GameController gameController, @NotNull Player player) {
@@ -100,9 +99,9 @@ public class PlayerView extends Tab implements ViewObserver {
             jsonFileHandler.updateOnlineMapConfigWithBoard(this.gameController.board);
             gameController.finishProgrammingPhase();
             player.setReady(true);
-            if (!this.gameController.gameHost && gameController.onlineGame) {
-                APIhandler.updatePlayerOnServer(AppController.APIIP, AppController.serverID, AppController.playerNumber);
-                Thread getMapConfigThread = new Thread(APIhandler, "clientResponses");
+            if (this.gameController.onlineGame) {
+                AppController.APIhandler.updatePlayerOnServer(AppController.APIIP, AppController.serverID, AppController.playerNumber);
+                Thread getMapConfigThread = new Thread(AppController.APIhandler, "clientResponses");
                 getMapConfigThread.start();
             }
 

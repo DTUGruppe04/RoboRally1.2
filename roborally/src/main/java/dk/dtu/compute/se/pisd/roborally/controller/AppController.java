@@ -78,7 +78,7 @@ public class AppController implements Observer {
 
     private PremadeMaps map;
     private final JsonFileHandler jsonFileHandler = new JsonFileHandler();
-    private APIhandler APIhandler = new APIhandler();
+    public static APIhandler APIhandler = new APIhandler();
     /**
      Creates a new AppController object with the specified RoboRally object.
      @param roboRally the RoboRally object to use as the application's data model

@@ -44,11 +44,8 @@ import java.util.Optional;
  *
  */
 public class PlayerView extends Tab implements ViewObserver {
-
     private Player player;
-
     private VBox top;
-
     private Label programLabel;
     private GridPane programPane;
     private Label cardsLabel;
@@ -102,6 +99,7 @@ public class PlayerView extends Tab implements ViewObserver {
             finishButton.setDisable(true);
             jsonFileHandler.updateOnlineMapConfigWithBoard(this.gameController.board);
             gameController.finishProgrammingPhase();
+            player.setReady(true);
             if (!this.gameController.gameHost && gameController.onlineGame) {
                 APIhandler.updatePlayerOnServer(AppController.APIIP, AppController.serverID, AppController.playerNumber);
                 Thread getMapConfigThread = new Thread(APIhandler, "clientResponses");

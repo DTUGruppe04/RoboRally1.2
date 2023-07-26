@@ -45,6 +45,8 @@ public class Player extends Subject {
     @Expose
     private String name;
     @Expose
+    private boolean ready;
+    @Expose
     private String color;
     @Expose
     private boolean isInPit;
@@ -83,6 +85,14 @@ public class Player extends Subject {
         for (int i = 0; i < cards.length; i++) {
             cards[i] = new CommandCardField(this);
          }
+    }
+
+    public void setReady(boolean bool) {
+        ready = bool;
+    }
+
+    public boolean getReady() {
+        return ready;
     }
 
     public void raiseCheckpoints() {

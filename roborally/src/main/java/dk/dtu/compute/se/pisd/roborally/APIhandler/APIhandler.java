@@ -137,6 +137,11 @@ public class APIhandler implements Runnable {
         }
     }
 
+    public boolean isAllPlayerReady() {
+
+        return false;
+    }
+
     @Override
     public void run() {
         if (!gameController.gameHost) {

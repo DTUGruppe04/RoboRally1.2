@@ -15,7 +15,7 @@ import java.net.http.*;
 import java.util.List;
 import java.util.Objects;
 
-public class APIhandler implements Runnable {
+public class APIhandler {
     JsonFileHandler fileHandler = new JsonFileHandler();
     HttpClient client = HttpClient.newHttpClient();
 
@@ -168,32 +168,5 @@ public class APIhandler implements Runnable {
         }
     }
 
-    @Override
-    public void run() {
-        if (!gameController.gameHost) {
-            do {
-                updateMapConfig(AppController.APIIP, AppController.serverID);
-                updateBoardFromJSON(fileHandler.readOnlineMapConfig());
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            } while (this.gameController.board.getPhase() != Phase.PROGRAMMING || this.gameController.board.getPhase() != Phase.PLAYER_INTERACTION || this.gameController.board.getPhase() != Phase.WINNER);
-        } else {
-            //check if everyone is in activation phase, if yes: begin the game, if no: keep updating
-            do {
-                updateMapConfig(AppController.APIIP, AppController.serverID);
-                updateBoardFromJSON(fileHandler.readOnlineMapConfig());
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            } while (!areAllPlayersReady());
-            gameController.finishProgrammingPhase();
-        }
 
-
-    }
 }

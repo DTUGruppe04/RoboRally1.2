@@ -256,12 +256,19 @@ public class PlayerView extends Tab implements ViewObserver {
                 playerInteractionPanel.getChildren().clear();
 
                 if (player.board.getCurrentPlayer() == player) {
-                    System.out.println(player.board.getStep());
-                    if (gameController.onlineGame) {
+                    Command currentCommand;
+                    System.out.println(gameController.board.getStep());
+                    System.out.println(gameController.board.getCurrentPlayer().getName());
+                    if (gameController.onlineGame && gameController.board.isStepMode()) {
                         JsonObject mapConfig = new JsonParser().parse(jsonFileHandler.readOnlineMapConfig()).getAsJsonObject();
                         gameController.board.setStep(mapConfig.get("step").getAsInt());
+                        JsonObject currentPlayer = mapConfig.get("current").getAsJsonObject();
+                        int playerNumber = currentPlayer.get("name").getAsString().charAt(currentPlayer.get("name").getAsString().length()-1)-48;
+                        Player player = gameController.board.getPlayers().get(playerNumber-1);
+                        currentCommand = player.getProgramField(player.board.getStep()).getCard().command;
+                    } else {
+                        currentCommand = player.getProgramField(player.board.getStep()).getCard().command;
                     }
-                    Command currentCommand = player.getProgramField(player.board.getStep()).getCard().command;
                     List<Command> commandOptions = currentCommand.getOptions();
                     for (Command currentOption: commandOptions) {
                         Button optionButton = new Button(currentOption.displayName);
@@ -281,7 +288,7 @@ public class PlayerView extends Tab implements ViewObserver {
                     }
 
                 }
-                if (gameController.onlineGame) {
+                if (gameController.onlineGame && !playerInteractionPanel.getChildren().contains(refreshButton)) {
                     playerInteractionPanel.getChildren().add(refreshButton);
                 }
 

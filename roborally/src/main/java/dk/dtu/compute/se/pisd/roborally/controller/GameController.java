@@ -168,24 +168,24 @@ public class GameController {
         Space neighborSpace = playerSpace.board.getNeighbour(playerSpace, playerHeading);
         while (true) {
             if(isWall(playerSpace, playerHeading, true, false)) {
-                System.out.println("PLAYER LASER HIT A WALL ON PLAYER SPACE");
+                //System.out.println("PLAYER LASER HIT A WALL ON PLAYER SPACE");
                 break;
             }
             if(isOutOfMap(neighborSpace, playerHeading)) {
-                System.out.println("Laser reached outside of map");
+                //System.out.println("Laser reached outside of map");
                 break;
             }
             if(isWall(neighborSpace, playerHeading, false, false)) {
-                System.out.println("PLAYER LASER HIT A WALL");
+                //System.out.println("PLAYER LASER HIT A WALL");
                 break;
             }
             if(neighborSpace.isPlayerOnSpace()) {
-                System.out.println("Hit " + neighborSpace.getPlayer() + " and added 1 spam card!");
+                //System.out.println("Hit " + neighborSpace.getPlayer() + " and added 1 spam card!");
                 neighborSpace.getPlayer().addSpamCards(1);
                 break;
             }
             if(isWall(neighborSpace, playerHeading, true, false)) {
-                System.out.println("PLAYER LASER HIT A WALL");
+                //System.out.println("PLAYER LASER HIT A WALL");
                 break;
             }
             //neighborSpace.getPosition();
@@ -307,6 +307,7 @@ public class GameController {
     private void continuePrograms() {
         do {
             executeNextStep();
+            System.out.println("tis");
         } while (board.getPhase() == Phase.ACTIVATION && !board.isStepMode());
     }
 
@@ -354,8 +355,6 @@ public class GameController {
                     executeCommand(currentPlayer, command);
                 }
             }
-
-            System.out.println(board.getPlayersNumber() + " " + board.getPlayerNumber(currentPlayer));
             if ((board.getPlayerNumber(currentPlayer)+1) == board.getPlayersNumber()) {
                 executeBoardElements();
             }

@@ -59,6 +59,7 @@ public class PlayerView extends Tab implements ViewObserver {
     private Button finishButton;
     private Button executeButton;
     private Button stepButton;
+    private Button refreshButton;
 
     private VBox playerInteractionPanel;
 
@@ -96,24 +97,30 @@ public class PlayerView extends Tab implements ViewObserver {
         finishButton = new Button("Finish Programming");
         finishButton.setOnAction( e -> {
             finishButton.setDisable(true);
-            jsonFileHandler.updateOnlineMapConfigWithBoard(this.gameController.board);
-            gameController.finishProgrammingPhase();
+
             player.setReady(true);
+            jsonFileHandler.updateOnlineMapConfigWithBoard(this.gameController.board);
             if (this.gameController.onlineGame) {
                 AppController.APIhandler.updatePlayerOnServer(AppController.APIIP, AppController.serverID, AppController.playerNumber);
-                Thread getMapConfigThread = new Thread(AppController.APIhandler, "clientResponses");
-                getMapConfigThread.start();
+                //Thread getMapConfigThread = new Thread(AppController.APIhandler, "clientResponses");
+                //getMapConfigThread.start();
+            } else {
+                gameController.finishProgrammingPhase();
             }
 
         });
 
+        if (gameController.onlineGame) {
+            refreshButton = new Button("Update game");
+            refreshButton.setOnAction( e-> AppController.APIhandler.updateMapConfig(AppController.APIIP, AppController.serverID));
+        }
         executeButton = new Button("Execute Program");
         executeButton.setOnAction( e-> gameController.executePrograms());
 
         stepButton = new Button("Execute Current Register");
         stepButton.setOnAction( e-> gameController.executeStep());
 
-        buttonPanel = new VBox(finishButton, executeButton, stepButton);
+        buttonPanel = new VBox(finishButton, executeButton, stepButton, refreshButton);
         buttonPanel.setAlignment(Pos.CENTER_LEFT);
         buttonPanel.setSpacing(3.0);
         // programPane.add(buttonPanel, Player.NO_REGISTERS, 0); done in update now

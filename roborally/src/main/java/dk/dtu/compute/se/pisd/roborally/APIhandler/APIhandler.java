@@ -66,10 +66,13 @@ public class APIhandler implements Runnable {
                 .uri(URI.create("http://" + APIip + ":8080/Servers/Player?serverID=" + serverID + "&playerNumber=" + playerNumber))
                 .PUT(HttpRequest.BodyPublishers.ofString(fileHandler.readOnlineMapConfig()))
                 .build();
-        client.sendAsync(updatePlayer, HttpResponse.BodyHandlers.ofString())
-                .thenApply(HttpResponse::body)
-                .thenAccept(System.out::println)
-                .join();
+        try {
+            client.send(updatePlayer, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void updateMapConfig(String APIip, String serverID) {
@@ -143,6 +146,7 @@ public class APIhandler implements Runnable {
         JsonArray playerArray = mapConfig.getAsJsonArray("players");
         for (JsonElement player: playerArray) {
             if(!player.getAsJsonObject().get("ready").getAsBoolean()){
+                System.out.println("yes");
                 return false;
             }
         }
@@ -159,26 +163,28 @@ public class APIhandler implements Runnable {
     public void run() {
         if (!gameController.gameHost) {
             do {
+                updateMapConfig(AppController.APIIP, AppController.serverID);
+                updateBoardFromJSON(fileHandler.readOnlineMapConfig());
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                updateMapConfig(AppController.APIIP, AppController.serverID);
-                updateBoardFromJSON(fileHandler.readFromSaveFile());
             } while (this.gameController.board.getPhase() != Phase.PROGRAMMING || this.gameController.board.getPhase() != Phase.PLAYER_INTERACTION || this.gameController.board.getPhase() != Phase.WINNER);
         } else {
             //check if everyone is in activation phase, if yes: begin the game, if no: keep updating
             do {
+                updateMapConfig(AppController.APIIP, AppController.serverID);
+                updateBoardFromJSON(fileHandler.readOnlineMapConfig());
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                updateMapConfig(AppController.APIIP, AppController.serverID);
-                updateBoardFromJSON(fileHandler.readFromSaveFile());
             } while (!areAllPlayersReady());
+            gameController.finishProgrammingPhase();
         }
+
 
     }
 }

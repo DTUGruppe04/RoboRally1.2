@@ -203,6 +203,8 @@ public class AppController implements Observer {
 
             Board board = new Board(mapChoiceResult.mapArray, mapChoiceResult.mapName);
             gameController = new GameController(board);
+            gameController.gameHost = true;
+            gameController.onlineGame = true;
             int no = playerNumberResult.get();
             for (int i = 0; i < no; i++) {
                 Player player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i + 1));
@@ -223,12 +225,12 @@ public class AppController implements Observer {
         }
         jsonFileHandler.updateOnlineMapConfigWithBoard(gameController.board);
         APIhandler.newServer("localhost", serverIDFinal, playerNumber);
-        gameController.gameHost = true;
-        gameController.onlineGame = true;
+
         APIhandler.setGameController(gameController);
     };
 
     public void joinGame() {
+
         TextInputDialog IPDialog = new TextInputDialog();
         IPDialog.setTitle("Join Server");
         IPDialog.setHeaderText("Join server using IP");
@@ -256,8 +258,8 @@ public class AppController implements Observer {
         if (Integer.parseInt(playerNumber) != 0) {
             jsonFileHandler.updateOnlineMapConfigWithJSONString(jsonString);
             constructGameFromJSONFile(jsonFileHandler.readOnlineMapConfig());
-            roboRally.createBoardView(this.gameController, Integer.parseInt(playerNumber));
             gameController.onlineGame = true;
+            roboRally.createBoardView(this.gameController, Integer.parseInt(playerNumber));
             APIhandler.setGameController(gameController);
         } else {
             System.out.println("Server is full");

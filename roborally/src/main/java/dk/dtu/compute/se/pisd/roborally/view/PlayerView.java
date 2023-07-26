@@ -102,8 +102,7 @@ public class PlayerView extends Tab implements ViewObserver {
             jsonFileHandler.updateOnlineMapConfigWithBoard(this.gameController.board);
             if (gameController.onlineGame) {
                 AppController.APIhandler.updatePlayerOnServer(AppController.APIIP, AppController.serverID, AppController.playerNumber);
-                //Thread getMapConfigThread = new Thread(AppController.APIhandler, "clientResponses");
-                //getMapConfigThread.start();
+
             } else {
                 gameController.finishProgrammingPhase();
             }
@@ -114,7 +113,7 @@ public class PlayerView extends Tab implements ViewObserver {
             refreshButton = new Button("Update game");
             refreshButton.setOnAction( e-> {
                 AppController.APIhandler.updateMapConfig(AppController.APIIP, AppController.serverID);
-                if (gameController.gameHost && AppController.APIhandler.areAllPlayersReady()) {
+                if (gameController.gameHost && AppController.APIhandler.areAllPlayersReady() && gameController.board.getStep() == 0) {
                     gameController.finishProgrammingPhase();
                 }
             }
@@ -134,8 +133,8 @@ public class PlayerView extends Tab implements ViewObserver {
         stepButton.setOnAction( e-> {
                     gameController.executeStep();
                     if (gameController.gameHost) {
-                        jsonFileHandler.updateOnlineMapConfigWithBoard(gameController.board);
                         AppController.APIhandler.postMapconfig(AppController.APIIP, AppController.serverID);
+                        jsonFileHandler.updateOnlineMapConfigWithBoard(gameController.board);
                     }
                 });
 

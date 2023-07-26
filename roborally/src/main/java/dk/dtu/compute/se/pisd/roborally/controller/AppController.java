@@ -205,6 +205,9 @@ public class AppController implements Observer {
             gameController = new GameController(board);
             gameController.gameHost = true;
             gameController.onlineGame = true;
+            AppController.APIIP = serverIPFinal;
+            AppController.serverID = serverIDFinal;
+
             int no = playerNumberResult.get();
             for (int i = 0; i < no; i++) {
                 Player player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i + 1));
@@ -212,7 +215,7 @@ public class AppController implements Observer {
                 //player.setSpace(board.getSpace(i % board.width, i));
             }
             gameController.spawnPlayers();
-
+            AppController.playerNumber = String.valueOf(no);
 
             // XXX: V2
             // board.setCurrentPlayer(board.getPlayer(0));

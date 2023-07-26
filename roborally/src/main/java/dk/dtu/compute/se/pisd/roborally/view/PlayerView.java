@@ -267,7 +267,16 @@ public class PlayerView extends Tab implements ViewObserver {
                         Player player = gameController.board.getPlayers().get(playerNumber-1);
                         currentCommand = player.getProgramField(player.board.getStep()).getCard().command;
                     } else {
-                        currentCommand = player.getProgramField(player.board.getStep()).getCard().command;
+                        if (!gameController.gameHost && gameController.onlineGame){
+                            JsonObject mapConfig = new JsonParser().parse(jsonFileHandler.readOnlineMapConfig()).getAsJsonObject();
+                            gameController.board.setStep(mapConfig.get("step").getAsInt());
+                            JsonObject currentPlayer = mapConfig.get("current").getAsJsonObject();
+                            int playerNumber = currentPlayer.get("name").getAsString().charAt(currentPlayer.get("name").getAsString().length()-1)-48;
+                            Player player = gameController.board.getPlayers().get(playerNumber-1);
+                            currentCommand = player.getProgramField(player.board.getStep()).getCard().command;
+                        } else {
+                            currentCommand = player.getProgramField(player.board.getStep()).getCard().command;
+                        }
                     }
                     List<Command> commandOptions = currentCommand.getOptions();
                     for (Command currentOption: commandOptions) {

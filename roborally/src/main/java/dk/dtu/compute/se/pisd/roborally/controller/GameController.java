@@ -328,6 +328,7 @@ public class GameController {
                 board.setStep(step);
                 board.setCurrentPlayer(board.getPlayer(0));
             } else {
+                AppController.APIhandler.setAllPlayersReady(false);
                 startProgrammingPhase();
             }
         }

@@ -73,13 +73,14 @@ public class APIhandler implements Runnable {
     }
 
     public void updateMapConfig(String APIip, String serverID) {
-        HttpRequest getPlayerNumber = HttpRequest.newBuilder()
+        HttpRequest updateMapconfig = HttpRequest.newBuilder()
                 .uri(URI.create("http://" + APIip + ":8080/Servers/mapConfig?serverID=" + serverID))
                 .GET()
                 .build();
         try {
-            HttpResponse<String> response = client.send(getPlayerNumber, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = client.send(updateMapconfig, HttpResponse.BodyHandlers.ofString());
             fileHandler.updateOnlineMapConfigWithJSONString(response.body());
+            updateBoardFromJSON(fileHandler.readOnlineMapConfig());
         } catch(IOException | InterruptedException e) {
             System.out.println(e);
         }

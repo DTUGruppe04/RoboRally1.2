@@ -126,6 +126,7 @@ public class PlayerView extends Tab implements ViewObserver {
             if (gameController.gameHost) {
                 jsonFileHandler.updateOnlineMapConfigWithBoard(gameController.board);
                 AppController.APIhandler.postMapconfig(AppController.APIIP, AppController.serverID);
+
             }
         });
 
@@ -133,8 +134,8 @@ public class PlayerView extends Tab implements ViewObserver {
         stepButton.setOnAction( e-> {
                     gameController.executeStep();
                     if (gameController.gameHost) {
-                        AppController.APIhandler.postMapconfig(AppController.APIIP, AppController.serverID);
                         jsonFileHandler.updateOnlineMapConfigWithBoard(gameController.board);
+                        AppController.APIhandler.postMapconfig(AppController.APIIP, AppController.serverID);
                     }
                 });
 

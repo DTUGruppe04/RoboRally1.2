@@ -208,6 +208,9 @@ public class PlayerView extends Tab implements ViewObserver {
                 if (!programPane.getChildren().contains(buttonPanel)) {
                     programPane.getChildren().remove(playerInteractionPanel);
                     programPane.add(buttonPanel, Player.NO_REGISTERS, 0);
+                    if(gameController.onlineGame && !this.buttonPanel.getChildren().contains(refreshButton)){
+                        this.buttonPanel.getChildren().add(refreshButton);
+                    }
                 }
                 switch (player.board.getPhase()) {
                     case INITIALISATION:

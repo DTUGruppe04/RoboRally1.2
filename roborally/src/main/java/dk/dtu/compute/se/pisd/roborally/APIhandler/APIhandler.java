@@ -66,13 +66,10 @@ public class APIhandler implements Runnable {
                 .uri(URI.create("http://" + APIip + ":8080/Servers/Player?serverID=" + serverID + "&playerNumber=" + playerNumber))
                 .PUT(HttpRequest.BodyPublishers.ofString(fileHandler.readOnlineMapConfig()))
                 .build();
-        try {
-            client.send(updatePlayer, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+            client.sendAsync(updatePlayer, HttpResponse.BodyHandlers.ofString())
+                    .thenApply(HttpResponse::body)
+                    .thenAccept(System.out::println)
+                    .join();
     }
 
     public void updateMapConfig(String APIip, String serverID) {
@@ -86,6 +83,17 @@ public class APIhandler implements Runnable {
         } catch(IOException | InterruptedException e) {
             System.out.println(e);
         }
+    }
+
+    public void postMapconfig(String APIip, String serverID) {
+        HttpRequest mapConfig = HttpRequest.newBuilder()
+                .uri(URI.create("http://" + APIip + ":8080/Servers/mapConfig?serverID=" + serverID))
+                .POST(HttpRequest.BodyPublishers.ofString(fileHandler.readOnlineMapConfig()))
+                .build();
+        client.sendAsync(mapConfig, HttpResponse.BodyHandlers.ofString())
+                .thenApply(HttpResponse::body)
+                .thenAccept(System.out::println)
+                .join();
     }
 
     private void updateBoardFromJSON(String JSONString) {

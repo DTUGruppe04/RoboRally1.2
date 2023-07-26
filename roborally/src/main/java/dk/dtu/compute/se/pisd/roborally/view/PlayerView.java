@@ -100,7 +100,7 @@ public class PlayerView extends Tab implements ViewObserver {
 
             player.setReady(true);
             jsonFileHandler.updateOnlineMapConfigWithBoard(this.gameController.board);
-            if (this.gameController.onlineGame) {
+            if (gameController.onlineGame) {
                 AppController.APIhandler.updatePlayerOnServer(AppController.APIIP, AppController.serverID, AppController.playerNumber);
                 //Thread getMapConfigThread = new Thread(AppController.APIhandler, "clientResponses");
                 //getMapConfigThread.start();
@@ -112,13 +112,33 @@ public class PlayerView extends Tab implements ViewObserver {
 
         if (gameController.onlineGame) {
             refreshButton = new Button("Update game");
-            refreshButton.setOnAction( e-> AppController.APIhandler.updateMapConfig(AppController.APIIP, AppController.serverID));
+            refreshButton.setOnAction( e-> {
+                AppController.APIhandler.updateMapConfig(AppController.APIIP, AppController.serverID);
+                if (gameController.gameHost && AppController.APIhandler.areAllPlayersReady()) {
+                    gameController.finishProgrammingPhase();
+                }
+            }
+            );
+
         }
         executeButton = new Button("Execute Program");
-        executeButton.setOnAction( e-> gameController.executePrograms());
+        executeButton.setOnAction( e-> {
+            gameController.executePrograms();
+            if (gameController.gameHost) {
+                jsonFileHandler.updateOnlineMapConfigWithBoard(gameController.board);
+                AppController.APIhandler.postMapconfig(AppController.APIIP, AppController.serverID);
+            }
+        });
 
         stepButton = new Button("Execute Current Register");
-        stepButton.setOnAction( e-> gameController.executeStep());
+        stepButton.setOnAction( e-> {
+                    gameController.executeStep();
+                    if (gameController.gameHost) {
+                        jsonFileHandler.updateOnlineMapConfigWithBoard(gameController.board);
+                        AppController.APIhandler.postMapconfig(AppController.APIIP, AppController.serverID);
+                    }
+                });
+
 
         buttonPanel = new VBox(finishButton, executeButton, stepButton, refreshButton);
         buttonPanel.setAlignment(Pos.CENTER_LEFT);

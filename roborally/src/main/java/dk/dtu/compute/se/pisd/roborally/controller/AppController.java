@@ -215,7 +215,7 @@ public class AppController implements Observer {
                 //player.setSpace(board.getSpace(i % board.width, i));
             }
             gameController.spawnPlayers();
-            AppController.playerNumber = String.valueOf(no);
+            AppController.playerNumber = "1";
 
             // XXX: V2
             // board.setCurrentPlayer(board.getPlayer(0));
@@ -262,7 +262,7 @@ public class AppController implements Observer {
             jsonFileHandler.updateOnlineMapConfigWithJSONString(jsonString);
             constructGameFromJSONFile(jsonFileHandler.readOnlineMapConfig());
             gameController.onlineGame = true;
-            roboRally.createBoardView(this.gameController, Integer.parseInt(playerNumber));
+            roboRally.createBoardView(this.gameController, Integer.parseInt(playerNumber)-1);
             APIhandler.setGameController(gameController);
         } else {
             System.out.println("Server is full");

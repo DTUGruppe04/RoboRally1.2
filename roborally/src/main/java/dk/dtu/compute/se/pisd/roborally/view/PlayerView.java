@@ -139,8 +139,12 @@ public class PlayerView extends Tab implements ViewObserver {
                     }
                 });
 
+        if (gameController.onlineGame) {
+            buttonPanel = new VBox(finishButton, executeButton, stepButton, refreshButton);
+        } else {
+            buttonPanel = new VBox(finishButton, executeButton, stepButton);
+        }
 
-        buttonPanel = new VBox(finishButton, executeButton, stepButton, refreshButton);
         buttonPanel.setAlignment(Pos.CENTER_LEFT);
         buttonPanel.setSpacing(3.0);
         // programPane.add(buttonPanel, Player.NO_REGISTERS, 0); done in update now
@@ -246,6 +250,8 @@ public class PlayerView extends Tab implements ViewObserver {
                 playerInteractionPanel.getChildren().clear();
 
                 if (player.board.getCurrentPlayer() == player) {
+                    System.out.println(player.board.getStep());
+
                     Command currentCommand = player.getProgramField(player.board.getStep()).getCard().command;
                     List<Command> commandOptions = currentCommand.getOptions();
                     for (Command currentOption: commandOptions) {
@@ -254,12 +260,22 @@ public class PlayerView extends Tab implements ViewObserver {
                             gameController.executeCommand(player, currentOption);
 
                             gameController.nextPlayer();
+                            if (gameController.onlineGame) {
+                                jsonFileHandler.updateOnlineMapConfigWithBoard(gameController.board);
+                                AppController.APIhandler.updateMapConfig(AppController.APIIP, AppController.serverID);
+                            }
+
                         });
                         optionButton.setDisable(false);
                         playerInteractionPanel.getChildren().add(optionButton);
 
                     }
+
                 }
+                if (gameController.onlineGame) {
+                    playerInteractionPanel.getChildren().add(refreshButton);
+                }
+
             }
 
             if (player.board.getPhase() == Phase.WINNER) {

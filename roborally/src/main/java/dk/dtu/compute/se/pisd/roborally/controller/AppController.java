@@ -78,7 +78,7 @@ public class AppController implements Observer {
 
     private PremadeMaps map;
     private final JsonFileHandler jsonFileHandler = new JsonFileHandler();
-    private final APIhandler APIhandler = new APIhandler();
+    private APIhandler APIhandler = new APIhandler();
     /**
      Creates a new AppController object with the specified RoboRally object.
      @param roboRally the RoboRally object to use as the application's data model
@@ -223,6 +223,9 @@ public class AppController implements Observer {
         }
         jsonFileHandler.updateOnlineMapConfigWithBoard(gameController.board);
         APIhandler.newServer("localhost", serverIDFinal, playerNumber);
+        gameController.gameHost = true;
+        gameController.onlineGame = true;
+        APIhandler.setGameController(gameController);
     };
 
     public void joinGame() {
@@ -255,9 +258,11 @@ public class AppController implements Observer {
             constructGameFromJSONFile(jsonFileHandler.readOnlineMapConfig());
             roboRally.createBoardView(this.gameController, Integer.parseInt(playerNumber));
             gameController.onlineGame = true;
+            APIhandler.setGameController(gameController);
         } else {
             System.out.println("Server is full");
         }
+
     };
 
     /**

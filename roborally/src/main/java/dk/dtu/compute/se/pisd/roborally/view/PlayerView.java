@@ -102,7 +102,12 @@ public class PlayerView extends Tab implements ViewObserver {
             finishButton.setDisable(true);
             jsonFileHandler.updateOnlineMapConfigWithBoard(this.gameController.board);
             gameController.finishProgrammingPhase();
-            APIhandler.updatePlayerOnServer(AppController.APIIP, AppController.serverID, AppController.playerNumber);
+            if (!this.gameController.gameHost && gameController.onlineGame) {
+                APIhandler.updatePlayerOnServer(AppController.APIIP, AppController.serverID, AppController.playerNumber);
+                Thread getMapConfigThread = new Thread(APIhandler, "clientResponses");
+                getMapConfigThread.start();
+            }
+
         });
 
         executeButton = new Button("Execute Program");

@@ -284,7 +284,6 @@ public class GameController {
     private void continuePrograms() {
         do {
             executeNextStep();
-            System.out.println("tis");
         } while (board.getPhase() == Phase.ACTIVATION && !board.isStepMode());
     }
 

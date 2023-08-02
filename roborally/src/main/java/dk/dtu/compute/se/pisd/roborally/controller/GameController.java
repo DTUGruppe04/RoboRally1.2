@@ -120,28 +120,6 @@ public class GameController {
         }
     }
 
-    /* The new code. Make it crash
-    public boolean isWall(Space space, Heading heading) {
-        boolean a = false;
-        switch (heading) {
-            case NORTH:
-                a = space.getType().BorderHeadings.contains(Heading.NORTH);
-                break;
-            case SOUTH:
-                a = space.getType().BorderHeadings.contains(Heading.SOUTH);
-                break;
-            case WEST:
-                a = space.getType().BorderHeadings.contains(Heading.WEST);
-                break;
-            case EAST:
-                a = space.getType().BorderHeadings.contains(Heading.EAST);
-                break;
-            }
-            return a;
-        }
-
-     */
-
     public boolean isOutOfMap(Space space, Heading heading) {
         switch (heading) {
             case NORTH -> {
@@ -188,7 +166,6 @@ public class GameController {
                 //System.out.println("PLAYER LASER HIT A WALL");
                 break;
             }
-            //neighborSpace.getPosition();
             neighborSpace = neighborSpace.board.getNeighbour(neighborSpace, playerHeading);
         }
     }
@@ -234,7 +211,7 @@ public class GameController {
      */
     private CommandCard generateRandomCommandCard() {
         Command[] commands = Command.values();
-        int random = (int) (Math.random() * commands.length - 1); // -1 to make sure it does not genereate spam cards
+        int random = (int) (Math.random() * commands.length - 1); // -1 to make sure it does not generate spam cards
         return new CommandCard(commands[random]);
     }
 
